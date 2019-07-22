@@ -1,13 +1,19 @@
+import 'package:event_dot_pizza/screens/meetupAuthScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
+
+class Routes {
+  static final home = "home";
+  static final meetupAuth = "meetupAuth";
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Event.Pizza',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,14 +26,16 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: Routes.home,
+      routes: {
+        Routes.home: (context) => MyHomePage(),
+        Routes.meetupAuth: (context) => MeetupAuthScreen()
+      },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -37,7 +45,7 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
+  final String title = 'Event.Pizza';
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -91,6 +99,10 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            RaisedButton(
+              child: Text('Connect Meetup.com'),
+              onPressed: () => Navigator.pushNamed(context, Routes.meetupAuth),
+            ),
             Text(
               'You have pushed the button this many times:',
             ),
