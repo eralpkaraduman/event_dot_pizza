@@ -23,18 +23,17 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
       '&response_type=token' +
       '&redirect_uri=$REDIRECT_URI';
 
-  String parseAccessTokenFromUrl(String url) {
+  Map<String, String> parseRedirectParams(String url) {
+    Map<String, String> paramsMap = Map();
     if (url.startsWith(REDIRECT_URI)) {
       String query = url.split('#')[1];
       List<String> params = query.split('&');
       for (String params in params) {
         List<String> pair = params.split('=');
-        if (pair[0] == 'access_token') {
-          return pair[1];
-        }
+        paramsMap[pair[0]] = pair[1];
       }
     }
-    return null;
+    return paramsMap;
   }
 
   @override
@@ -58,13 +57,19 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                 });
               },
               navigationDelegate: (NavigationRequest request) {
-                String accessToken = parseAccessTokenFromUrl(request.url);
-                if (accessToken == null) {
-                  return NavigationDecision.navigate;
-                } else {
-                  Navigator.pop(
-                      context, MeetupAuthPageResult(accessToken: accessToken));
+                print(request.url);
+                Map<String, String> params = parseRedirectParams(request.url);
+                if (params.containsKey('error')) {
+                  Navigator.pop(context);
                   return NavigationDecision.prevent;
+                } else if (params.containsKey('access_token')) {
+                  Navigator.pop(
+                      context,
+                      MeetupAuthPageResult(
+                          accessToken: params['access_token']));
+                  return NavigationDecision.prevent;
+                } else {
+                  return NavigationDecision.navigate;
                 }
               },
             ),
