@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:event_dot_pizza/pages/meetupAuthPage.dart';
 import 'package:event_dot_pizza/pages/homePage.dart';
-import 'package:flutter/material.dart';
 
 void main() => runApp(App());
 
