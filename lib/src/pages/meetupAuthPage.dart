@@ -1,14 +1,7 @@
+import 'package:event_dot_pizza/src/platforms/meetupPlatform.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-const String CONSUMER_KEY = '96rf1kn6pobffcejakptjgarrf';
-const String REDIRECT_URI =
-    'event.pizza://handle_authorization_redirect/meetup';
-
-class MeetupAuthPageResult {
-  String accessToken;
-  MeetupAuthPageResult({this.accessToken});
-}
+import 'package:provider/provider.dart';
 
 class MeetupAuthPage extends StatefulWidget {
   @override
@@ -18,14 +11,9 @@ class MeetupAuthPage extends StatefulWidget {
 class _MeetupAuthPageState extends State<MeetupAuthPage> {
   bool _loading = true;
 
-  final String authURI = 'https://secure.meetup.com/oauth2/authorize' +
-      '?client_id=$CONSUMER_KEY' +
-      '&response_type=token' +
-      '&redirect_uri=$REDIRECT_URI';
-
   Map<String, String> parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();
-    if (url.startsWith(REDIRECT_URI)) {
+    if (url.startsWith(MeetupPlatform.REDIRECT_URI)) {
       String query = url.split('#')[1];
       List<String> params = query.split('&');
       for (String params in params) {
@@ -49,7 +37,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
           Opacity(
             opacity: _loading ? 0 : 1,
             child: WebView(
-              initialUrl: authURI,
+              initialUrl: MeetupPlatform.authURI,
               javascriptMode: JavascriptMode.unrestricted,
               onPageFinished: (String url) {
                 setState(() {
@@ -63,10 +51,9 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                   Navigator.pop(context);
                   return NavigationDecision.prevent;
                 } else if (params.containsKey('access_token')) {
-                  Navigator.pop(
-                      context,
-                      MeetupAuthPageResult(
-                          accessToken: params['access_token']));
+                  Provider.of<MeetupPlatform>(context).accessToken =
+                      params['access_token'];
+                  Navigator.pop(context);
                   return NavigationDecision.prevent;
                 } else {
                   return NavigationDecision.navigate;
