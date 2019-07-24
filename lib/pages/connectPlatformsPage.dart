@@ -1,16 +1,16 @@
+import 'package:event_dot_pizza/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:event_dot_pizza/pages/meetupAuthPage.dart';
-import 'package:event_dot_pizza/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String kMeetupAccessToken = 'meetupAccessToken';
 
-class HomePage extends StatefulWidget {
+class ConnectPlatformsPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _ConnectPlatformsPageState createState() => _ConnectPlatformsPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ConnectPlatformsPageState extends State<ConnectPlatformsPage> {
   String _meetupAccessToken;
 
   @override
@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event.Pizza'),
+        title: Text('Connect Platforms'),
       ),
       body: Center(
         child: Column(
