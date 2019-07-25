@@ -1,4 +1,5 @@
-import 'package:event_dot_pizza/src/platforms/meetupPlatform.dart';
+import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
+import 'package:event_dot_pizza/src/platforms/meetupPlatformApi.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
 
   Map<String, String> parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();
-    if (url.startsWith(MeetupPlatform.REDIRECT_URI)) {
+    if (url.startsWith(MeetupPlatformApi.REDIRECT_URI)) {
       String query = url.split('#')[1];
       List<String> params = query.split('&');
       for (String params in params) {
@@ -37,7 +38,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
           Opacity(
             opacity: _loading ? 0 : 1,
             child: WebView(
-              initialUrl: MeetupPlatform.authURI,
+              initialUrl: MeetupPlatformApi.authURI,
               javascriptMode: JavascriptMode.unrestricted,
               onPageFinished: (String url) {
                 setState(() {
@@ -51,7 +52,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                   Navigator.pop(context);
                   return NavigationDecision.prevent;
                 } else if (params.containsKey('access_token')) {
-                  Provider.of<MeetupPlatform>(context).accessToken =
+                  Provider.of<MeetupPlatformSession>(context).accessToken =
                       params['access_token'];
                   Navigator.pop(context);
                   return NavigationDecision.prevent;

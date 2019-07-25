@@ -1,12 +1,12 @@
 import 'package:event_dot_pizza/src/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:event_dot_pizza/src/platforms/meetupPlatform.dart';
+import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
 import 'package:provider/provider.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final meetupPlatform = Provider.of<MeetupPlatform>(context);
+    final meetupPlatform = Provider.of<MeetupPlatformSession>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect Platforms'),
@@ -20,8 +20,8 @@ class ConnectPlatformsPage extends StatelessWidget {
               child: RaisedButton(
                   color: Theme.of(context).errorColor,
                   child: Text('Disconnect Meetup.com'),
-                  onPressed: () =>
-                      Provider.of<MeetupPlatform>(context).accessToken = null),
+                  onPressed: () => Provider.of<MeetupPlatformSession>(context)
+                      .accessToken = null),
             ),
             Visibility(
               visible: !meetupPlatform.isConnected,

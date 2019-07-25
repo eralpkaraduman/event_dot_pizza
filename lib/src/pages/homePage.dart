@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:event_dot_pizza/src/routes.dart';
 import 'package:provider/provider.dart';
-import 'package:event_dot_pizza/src/platforms/meetupPlatform.dart';
+import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final meetupPlatform = Provider.of<MeetupPlatform>(context);
+    final meetupPlatform = Provider.of<MeetupPlatformSession>(context);
     final atLeastOnePlatformIsConnected = meetupPlatform.isConnected;
     return Scaffold(
       appBar: AppBar(
