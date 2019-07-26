@@ -46,7 +46,6 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                 });
               },
               navigationDelegate: (NavigationRequest request) {
-                print(request.url);
                 Map<String, String> params = parseRedirectParams(request.url);
                 if (params.containsKey('error')) {
                   Navigator.pop(context);

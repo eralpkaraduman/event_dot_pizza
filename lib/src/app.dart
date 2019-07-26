@@ -12,8 +12,9 @@ class App extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: Routes.home,
+      initialRoute: Routes.home, // hasSession ? Routes.home : Routes.Welcome
       routes: {
+        // Routes.welcome: (_) => WelcomePage(),
         Routes.home: (_) => HomePage(),
         Routes.connectPlatforms: (_) => ConnectPlatformsPage(),
         Routes.meetupAuth: (_) => MeetupAuthPage()

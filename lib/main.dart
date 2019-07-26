@@ -1,14 +1,17 @@
+import 'package:event_dot_pizza/src/state/appState.dart';
 import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
+import 'package:event_dot_pizza/src/state/otherPlatformSession.dart';
 import 'package:flutter/material.dart';
 import 'package:event_dot_pizza/src/app.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  String meetupPlatformAccessToken =
-      await MeetupPlatformSession.loadAccessTokenFromPrefs();
-  return runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(
-      builder: (_) => MeetupPlatformSession(meetupPlatformAccessToken),
-    )
+  final meetupPlatformSession = await MeetupPlatformSession().loadFromPrefs();
+  final otherPlatformSession = await OtherPlatformSession().loadFromPrefs();
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(builder: (_) => meetupPlatformSession),
+    ChangeNotifierProvider(builder: (_) => otherPlatformSession),
+    ProxyProvider2<MeetupPlatformSession, OtherPlatformSession, AppState>(
+        builder: (context, meetup, other, _) => AppState(meetup, other))
   ], child: App()));
 }
