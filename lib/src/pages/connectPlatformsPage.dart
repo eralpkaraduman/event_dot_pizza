@@ -1,6 +1,6 @@
 import 'package:event_dot_pizza/src/routes.dart';
 import 'package:flutter/material.dart';
-import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
+import 'package:event_dot_pizza/src/state/meetup_platform_session.dart';
 import 'package:provider/provider.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {

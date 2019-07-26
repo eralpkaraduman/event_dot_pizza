@@ -1,4 +1,4 @@
-import 'package:event_dot_pizza/src/state/meetupPlatformSession.dart';
+import 'package:event_dot_pizza/src/state/meetup_platform_session.dart';
 import 'package:event_dot_pizza/src/platforms/meetupPlatformApi.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
