@@ -10,16 +10,18 @@ class MeetupPlatformApi {
       '&response_type=token' +
       '&redirect_uri=$REDIRECT_URI';
 
-  static const upcomingEventsUri =
+  static const _upcomingEventsUri =
       "https://api.meetup.com/find/upcoming_events";
 
   static Future<List<dynamic>> fetchUpcomingEvents(String accessToken) async {
     const lat = '60.192059';
     const lon = '24.945831';
-    http.Response response =
-        await http.get(upcomingEventsUri + '?lat=$lat&lon=$lon');
+    http.Response response = await http.get(
+        _upcomingEventsUri + '?lat=$lat&lon=$lon',
+        headers: {'Authorization': 'Bearer $accessToken'});
     if (response.statusCode == 200) {
-      var events = jsonDecode(response.body) as List<dynamic>;
+      var decodedResponse = jsonDecode(response.body);
+      var events = List<dynamic>.from(decodedResponse['events']);
       print(events);
       return events;
     } else {
