@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:event_dot_pizza/src/utils.dart';
 import 'package:event_dot_pizza/src/state/platform_session.dart';
@@ -10,26 +12,21 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
   String get accessToken => _accessToken;
   set accessToken(value) {
     _accessToken = value;
-    MeetupPlatformSession._saveAccessTokenToPrefs(value);
     notifyListeners();
+    scheduleMicrotask(() => _saveToPrefs());
   }
 
   bool get isConnected => !isNullOrEmpty(accessToken);
 
-  Future<MeetupPlatformSession> loadFromPrefs() async {
-    accessToken = await _loadAccessTokenFromPrefs();
-    return this;
+  Future<void> loadFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    accessToken = prefs.getString(kMeetupAccessToken) ?? null;
   }
 
-  static Future<String> _loadAccessTokenFromPrefs() async {
+  Future<void> _saveToPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(kMeetupAccessToken) ?? null;
-  }
-
-  static void _saveAccessTokenToPrefs(String value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!isNullOrEmpty(value)) {
-      prefs.setString(kMeetupAccessToken, value);
+    if (!isNullOrEmpty(_accessToken)) {
+      prefs.setString(kMeetupAccessToken, _accessToken);
     } else {
       prefs.remove(kMeetupAccessToken);
     }

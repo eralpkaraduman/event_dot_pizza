@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:event_dot_pizza/src/models/event.dart';
 import 'package:http/http.dart' as http;
 
 class MeetupPlatformApi {
@@ -13,20 +14,31 @@ class MeetupPlatformApi {
   static const _upcomingEventsUri =
       "https://api.meetup.com/find/upcoming_events";
 
-  static Future<List<dynamic>> fetchUpcomingEvents(String accessToken) async {
+  static Future<List<Event>> fetchUpcomingEvents(String accessToken) async {
     const lat = '60.192059';
     const lon = '24.945831';
     http.Response response = await http.get(
         _upcomingEventsUri + '?lat=$lat&lon=$lon',
         headers: {'Authorization': 'Bearer $accessToken'});
-    if (response.statusCode == 200) {
-      var decodedResponse = jsonDecode(response.body);
-      var events = List<dynamic>.from(decodedResponse['events']);
-      print(events);
+    if (response.statusCode != 200) {
+      // TODO: standardize error throwing
+      print(
+          'MeetupPlatformApi::fetchUpcomingEvents:StatusCode:${response.statusCode}');
+      throw 'MeetupPlatformApi::fetchUpcomingEvents:StatusCode:${response.statusCode}';
+    }
+
+    try {
+      Map<String, dynamic> decodedResponse = jsonDecode(response.body);
+      List<Event> events = (decodedResponse['events'] as List)
+          .map((data) => Event.fromJson(data))
+          .toList();
       return events;
-    } else {
-      print('MeetupPlatformApi::fetchUpcomingEvents:${response.statusCode}');
-      throw 'MeetupPlatformApi::fetchUpcomingEvents';
+    } catch (e) {
+      // TODO: standardize error throwing
+      print(e);
+      print(
+          'MeetupPlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse');
+      throw 'MeetupPlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse';
     }
   }
 }
