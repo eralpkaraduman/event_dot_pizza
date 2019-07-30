@@ -1,10 +1,11 @@
-import 'package:event_dot_pizza/src/state/meetup_platform_session.dart';
-import 'package:event_dot_pizza/src/platforms/meetupPlatformApi.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
+import '../providers/meetup_platform_session.dart';
+import '../platforms/meetupPlatformApi.dart';
 
 class MeetupAuthPage extends StatefulWidget {
+  static const routeName = "meetupAuth";
   @override
   _MeetupAuthPageState createState() => _MeetupAuthPageState();
 }
@@ -27,6 +28,8 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
 
   @override
   Widget build(BuildContext context) {
+    MeetupPlatformSession meetupPlatform =
+        Provider.of<MeetupPlatformSession>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect Meetup.Com'),
@@ -51,8 +54,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                   Navigator.pop(context);
                   return NavigationDecision.prevent;
                 } else if (params.containsKey('access_token')) {
-                  Provider.of<MeetupPlatformSession>(context).accessToken =
-                      params['access_token'];
+                  meetupPlatform.connect(params['access_token']);
                   Navigator.pop(context);
                   return NavigationDecision.prevent;
                 } else {

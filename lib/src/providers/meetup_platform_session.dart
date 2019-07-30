@@ -1,26 +1,37 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:event_dot_pizza/src/utils.dart';
-import 'package:event_dot_pizza/src/state/platform_session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils.dart';
+import './platform_session.dart';
 
 const String kMeetupAccessToken = 'meetupAccessToken';
 
 class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
   String _accessToken;
   String get accessToken => _accessToken;
-  set accessToken(value) {
-    _accessToken = value;
+  bool get isConnected => !isNullOrEmpty(accessToken);
+
+  MeetupPlatformSession() {
+    print('Provider:MeetupPlatformSession:Updated');
+  }
+
+  connect(String accessToken) {
+    _accessToken = accessToken;
     notifyListeners();
     scheduleMicrotask(() => _saveToPrefs());
   }
 
-  bool get isConnected => !isNullOrEmpty(accessToken);
+  disconnect() {
+    _accessToken = null;
+    notifyListeners();
+    scheduleMicrotask(() => _saveToPrefs());
+  }
 
-  Future<void> loadFromPrefs() async {
+  Future<void> tryToLoadFromPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    accessToken = prefs.getString(kMeetupAccessToken) ?? null;
+    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this
+    _accessToken = prefs.getString(kMeetupAccessToken);
+    notifyListeners();
   }
 
   Future<void> _saveToPrefs() async {

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:event_dot_pizza/src/models/event.dart';
 import 'package:http/http.dart' as http;
+import '../models/event.dart';
 
 class MeetupPlatformApi {
   static const String CONSUMER_KEY = '96rf1kn6pobffcejakptjgarrf';
