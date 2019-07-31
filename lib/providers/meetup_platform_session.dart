@@ -27,15 +27,20 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
     scheduleMicrotask(() => _saveToPrefs());
   }
 
-  Future<void> tryToLoadFromPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<bool> tryToConnectFromPrefs() async {
+    print('tryToConnectFromPrefs');
     await Future.delayed(const Duration(seconds: 1)); // TODO: remove this
+    if (isConnected) return true;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey(kMeetupAccessToken)) {
+      return false;
+    }
     _accessToken = prefs.getString(kMeetupAccessToken);
     notifyListeners();
   }
 
   Future<void> _saveToPrefs() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!isNullOrEmpty(_accessToken)) {
       prefs.setString(kMeetupAccessToken, _accessToken);
     } else {

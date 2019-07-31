@@ -3,5 +3,5 @@ abstract class PlatformSession {
   bool get isConnected;
   connect(String accessToken);
   disconnect();
-  Future<void> tryToLoadFromPrefs();
+  Future<void> tryToConnectFromPrefs();
 }

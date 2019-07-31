@@ -1,6 +1,6 @@
-import 'package:event_dot_pizza/src/pages/meetupAuthPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import './meetupAuthPage.dart';
 import '../providers/meetup_platform_session.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {

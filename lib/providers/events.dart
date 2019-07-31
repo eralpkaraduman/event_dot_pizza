@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import './platform_events.dart';
 import '../models/event.dart';
-import '../providers/platform_events.dart';
 
 class Events extends ChangeNotifier {
   List<Event> _events = [];
@@ -10,9 +10,9 @@ class Events extends ChangeNotifier {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  Events(List<PlatformEvents> plaforms) {
+  Events({List<PlatformEvents> platforms}) {
     print('Provider:Events:Updated');
-    plaforms.forEach((platform) {
+    platforms.forEach((platform) {
       _events = [...platform.events, ...events];
       _refreshing = _refreshing || platform.refreshing;
     });

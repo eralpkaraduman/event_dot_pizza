@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:event_dot_pizza/src/pages/connectPlatformsPage.dart';
+import './connectPlatformsPage.dart';
 
 class WelcomePage extends StatelessWidget {
   static const routeName = "welcome";
