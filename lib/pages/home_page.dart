@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './connectPlatformsPage.dart';
+import './connect_platforms_page.dart';
 import '../widgets/event_list.dart';
 import '../providers/meetup_platform_events.dart';
 

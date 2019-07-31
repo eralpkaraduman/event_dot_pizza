@@ -4,9 +4,9 @@ import './providers/meetup_platform_events.dart';
 import './providers/meetup_platform_session.dart';
 import './providers/events.dart';
 import './providers/session.dart';
-import './pages/connectPlatformsPage.dart';
-import './pages/homePage.dart';
-import './pages/meetupAuthPage.dart';
+import './pages/connect_platforms_page.dart';
+import './pages/home_page.dart';
+import './pages/meetup_auth_page.dart';
 import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
 

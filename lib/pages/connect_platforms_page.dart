@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './meetupAuthPage.dart';
+import './meetup_auth_page.dart';
 import '../providers/meetup_platform_session.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {

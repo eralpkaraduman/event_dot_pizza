@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import './connectPlatformsPage.dart';
+import './connect_platforms_page.dart';
 
 class WelcomePage extends StatelessWidget {
   static const routeName = "welcome";
