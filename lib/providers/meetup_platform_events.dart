@@ -1,4 +1,3 @@
-import 'package:event_dot_pizza/utils.dart';
 import 'package:flutter/material.dart';
 import '../platforms/meetupPlatformApi.dart';
 import '../providers/platform_events.dart';
@@ -19,10 +18,14 @@ class MeetupPlatformEvents with ChangeNotifier implements PlatformEvents {
     this._events = events;
   }
 
+  /// Refreshes Meetup Platform Events.
+  ///
+  /// Calling this before app wasnt built yet will cause problems.
+  /// Because it calls `notifyListeners()` right away.
+  /// It is better if this is called inside `scheduleMicrotask()` callback.
   Future<void> refresh() async {
     _refreshing = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 1)); // TODO: remove this
     try {
       _events = await MeetupPlatformApi.fetchUpcomingEvents(_accessToken);
     } catch (e) {}

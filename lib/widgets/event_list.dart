@@ -19,7 +19,7 @@ class EventList extends StatelessWidget {
             Text(events.refreshing ? 'refreshing' : 'not refreshing'),
             Text('List Of Events'),
             RaisedButton(
-              onPressed: () => onRefresh(),
+              onPressed: onRefresh,
               child: Text('Refresh'),
             )
           ],

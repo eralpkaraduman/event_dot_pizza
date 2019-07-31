@@ -42,16 +42,20 @@ class App extends StatelessWidget {
           ),
           home: session.anyPlatformConnected
               ? HomePage()
-              : FutureBuilder(
-                  future: Future.wait([
-                    platform0.tryToConnectFromPrefs(),
-                    // platform1.tryToConnectFromPrefs(),
-                  ]),
-                  builder: (_, snap) =>
-                      snap.connectionState == ConnectionState.waiting
-                          ? SplashPage()
-                          : WelcomePage(),
-                ),
+              : FutureBuilder(future: () async {
+                  print('App:Initilizing');
+                  print('App:WaitingForNoReason');
+                  await Future.delayed(const Duration(seconds: 1));
+                  print('App:RecoveringStoredSession');
+                  await platform0.tryToConnectFromPrefs();
+                  print('App:InitilizationComplete');
+                }(), builder: (_, snap) {
+                  if (snap.connectionState == ConnectionState.waiting) {
+                    return SplashPage();
+                  } else {
+                    return WelcomePage();
+                  }
+                }),
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             MeetupAuthPage.routeName: (_) => MeetupAuthPage()
