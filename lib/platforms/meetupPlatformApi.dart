@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:event_dot_pizza/utils.dart';
 import 'package:http/http.dart' as http;
 import '../models/event.dart';
 
@@ -15,11 +16,21 @@ class MeetupPlatformApi {
       "https://api.meetup.com/find/upcoming_events";
 
   static Future<List<Event>> fetchUpcomingEvents(String accessToken) async {
-    const lat = '60.192059';
+    if (isNullOrEmpty(accessToken)) {
+      // TODO: standardize error throwing
+      throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
+    }
+    const lat = '60.192059'; // TODO: use actual location instead
     const lon = '24.945831';
     http.Response response = await http.get(
         _upcomingEventsUri + '?lat=$lat&lon=$lon',
         headers: {'Authorization': 'Bearer $accessToken'});
+
+    if (response.statusCode == 401) {
+      // TODO: standardize error throwing
+      throw 'MeetupPlatformApi:FetchUpcomingEvents:Unauthorized';
+    }
+
     if (response.statusCode != 200) {
       // TODO: standardize error throwing
       print(

@@ -28,7 +28,10 @@ class MeetupPlatformEvents with ChangeNotifier implements PlatformEvents {
     notifyListeners();
     try {
       _events = await MeetupPlatformApi.fetchUpcomingEvents(_accessToken);
-    } catch (e) {}
+    } catch (e) {
+      print('Provider:MeetupPlatformEvents:FailedToRefresh');
+      print(e);
+    }
     _refreshing = false;
     notifyListeners();
   }
