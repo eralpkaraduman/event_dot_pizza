@@ -1,14 +1,17 @@
-import 'package:event_dot_pizza/providers/meetup_platform_events.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import '../providers/events.dart';
 
 class EventList extends StatelessWidget {
+  final Function onRefresh;
+
+  EventList({this.onRefresh});
+
   @override
   Widget build(BuildContext context) {
     print('EventList:build');
-    return Consumer2<Events, MeetupPlatformEvents>(
-      builder: (_, events, platform0, __) => Center(
+    return Consumer<Events>(
+      builder: (_, events, __) => Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -16,10 +19,7 @@ class EventList extends StatelessWidget {
             Text(events.refreshing ? 'refreshing' : 'not refreshing'),
             Text('List Of Events'),
             RaisedButton(
-              onPressed: () {
-                platform0.refresh();
-                // platform1.refresh();
-              },
+              onPressed: () => onRefresh(),
               child: Text('Refresh'),
             )
           ],
