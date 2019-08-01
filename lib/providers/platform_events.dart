@@ -1,4 +1,4 @@
-import '../models/event.dart';
+import './event.dart';
 
 abstract class PlatformEvents {
   bool get refreshing;

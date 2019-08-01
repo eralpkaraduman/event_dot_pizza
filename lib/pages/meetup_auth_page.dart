@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
 import '../providers/meetup_platform_session.dart';
-import '../platforms/meetupPlatformApi.dart';
+import '../platforms/meetup_platform_api.dart';
 
 class MeetupAuthPage extends StatefulWidget {
   static const routeName = "meetupAuth";

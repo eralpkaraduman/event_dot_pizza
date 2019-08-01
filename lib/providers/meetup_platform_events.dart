@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../platforms/meetupPlatformApi.dart';
+import '../platforms/meetup_platform_api.dart';
 import '../providers/platform_events.dart';
-import '../models/event.dart';
+import '../providers/event.dart';
 
 const String kMeetupAccessToken = 'meetupAccessToken';
 

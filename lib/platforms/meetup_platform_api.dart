@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:event_dot_pizza/utils.dart';
 import 'package:http/http.dart' as http;
-import '../models/event.dart';
+import '../utils.dart';
+import '../providers/meetup_platform_event.dart';
 
 class MeetupPlatformApi {
   static const String CONSUMER_KEY = '96rf1kn6pobffcejakptjgarrf';
@@ -15,7 +15,8 @@ class MeetupPlatformApi {
   static const _upcomingEventsUri =
       "https://api.meetup.com/find/upcoming_events";
 
-  static Future<List<Event>> fetchUpcomingEvents(String accessToken) async {
+  static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents(
+      String accessToken) async {
     if (isNullOrEmpty(accessToken)) {
       // TODO: standardize error throwing
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
@@ -40,8 +41,8 @@ class MeetupPlatformApi {
 
     try {
       Map<String, dynamic> decodedResponse = jsonDecode(response.body);
-      List<Event> events = (decodedResponse['events'] as List)
-          .map((data) => Event.fromJson(data))
+      List<MeetupPlatformEvent> events = (decodedResponse['events'] as List)
+          .map((data) => MeetupPlatformEvent.fromJson(data))
           .toList();
       return events;
     } catch (e) {

@@ -27,7 +27,7 @@ class _EventsPageState extends State<EventsPage> {
     print('EventsPage:Build');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event.Pizza'),
+        title: Text('Event.Pizza 🍕'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
