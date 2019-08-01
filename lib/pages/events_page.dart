@@ -6,12 +6,12 @@ import './connect_platforms_page.dart';
 import '../widgets/event_list.dart';
 import '../providers/meetup_platform_events.dart';
 
-class HomePage extends StatefulWidget {
+class EventsPage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _EventsPageState createState() => _EventsPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _EventsPageState extends State<EventsPage> {
   @override
   void initState() {
     super.initState();
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('HomePage:Build');
+    print('EventsPage:Build');
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza'),

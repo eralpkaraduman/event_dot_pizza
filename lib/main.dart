@@ -5,7 +5,7 @@ import './providers/meetup_platform_session.dart';
 import './providers/events.dart';
 import './providers/session.dart';
 import './pages/connect_platforms_page.dart';
-import './pages/home_page.dart';
+import './pages/events_page.dart';
 import './pages/meetup_auth_page.dart';
 import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
@@ -41,7 +41,7 @@ class App extends StatelessWidget {
             accentColor: Colors.blueAccent,
           ),
           home: session.anyPlatformConnected
-              ? HomePage()
+              ? EventsPage()
               : FutureBuilder(future: () async {
                   print('App:Initilizing');
                   print('App:WaitingForNoReason');
