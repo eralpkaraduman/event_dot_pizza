@@ -9,6 +9,7 @@ import './pages/events_page.dart';
 import './pages/meetup_auth_page.dart';
 import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
+import './pages/event_detail_page.dart';
 
 void main() => runApp(App());
 
@@ -58,7 +59,8 @@ class App extends StatelessWidget {
                 }),
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
-            MeetupAuthPage.routeName: (_) => MeetupAuthPage()
+            MeetupAuthPage.routeName: (_) => MeetupAuthPage(),
+            EventDetailPage.routeName: (_) => EventDetailPage()
           },
         ),
       ),

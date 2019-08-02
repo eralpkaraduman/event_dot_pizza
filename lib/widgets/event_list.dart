@@ -51,11 +51,3 @@ class EventList extends StatelessWidget {
     );
   }
 }
-
-// {
-//   return Container(
-//     child: Center(
-//       child: Text('item $index'),
-//     ),
-//   );
-// },

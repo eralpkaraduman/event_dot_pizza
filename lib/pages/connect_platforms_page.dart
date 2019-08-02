@@ -5,6 +5,7 @@ import '../providers/meetup_platform_session.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {
   static const routeName = "connectPlatforms";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/event.dart';
+import '../pages/event_detail_page.dart';
 
 class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final event = Provider.of<Event>(context, listen: false);
     return InkWell(
-      onTap: () => print(event.link),
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          EventDetailPage.routeName,
+          arguments: EventDetailPageArguments(
+            id: event.id,
+            platform: event.platform,
+          ),
+        );
+      },
       child: ConstrainedBox(
         constraints: const BoxConstraints(minHeight: 44.0),
         child: Container(
