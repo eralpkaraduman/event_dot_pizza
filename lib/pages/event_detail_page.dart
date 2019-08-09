@@ -24,10 +24,20 @@ class EventDetailPage extends StatelessWidget {
     // TODO: handle when event wasnt found
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Detail'),
+        title: Text(
+          event.name,
+          overflow: TextOverflow.ellipsis,
+          softWrap: true,
+          maxLines: 2,
+        ),
       ),
-      body: Center(
-        child: Text(event.name),
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(event.description),
+          ),
+        ),
       ),
     );
   }

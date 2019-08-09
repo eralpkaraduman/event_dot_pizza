@@ -1,4 +1,5 @@
 import './event.dart';
+import '../utils.dart';
 
 class MeetupPlatformEvent extends Event {
   static const platformName = 'meetup';
@@ -10,7 +11,7 @@ class MeetupPlatformEvent extends Event {
       id: json['id'] as String,
       name: json['name'] as String,
       link: json['link'] as String,
-      description: json['description'] as String,
+      description: parseHtmlText(json['description'].toString()),
     );
   }
 }

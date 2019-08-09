@@ -9,6 +9,7 @@ class EventListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('flutter: EventListHeader:build');
     return Consumer<Events>(
       builder: (_, eventsData, __) => Container(
           color: Theme.of(context).secondaryHeaderColor,
