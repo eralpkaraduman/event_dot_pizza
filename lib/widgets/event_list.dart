@@ -10,43 +10,20 @@ class EventList extends StatelessWidget {
   EventList({this.onRefresh});
 
   @override
+  // TODO: Implement pull to refresh https://api.flutter.dev/flutter/material/RefreshIndicator-class.html
   Widget build(BuildContext context) {
     print('EventList:build');
     return Consumer<Events>(
-      builder: (_, eventsData, __) => Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Container(
-            color: Theme.of(context).secondaryHeaderColor,
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Text('num events: ${eventsData.events.length}'),
-                Text(eventsData.refreshing ? 'refreshing' : 'not refreshing'),
-                Text('List Of Events'),
-                RaisedButton(
-                  onPressed: onRefresh,
-                  child: Text('Refresh'),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              itemCount: eventsData.events.length,
-              separatorBuilder: (_, __) => const Divider(
-                height: 1,
-              ),
-              itemBuilder: (_, index) => ChangeNotifierProvider<Event>.value(
-                value: eventsData.events[index],
-                child: EventListItem(),
-              ),
-            ),
-          ),
-        ],
+      builder: (_, eventsData, __) => ListView.separated(
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        itemCount: eventsData.events.length,
+        separatorBuilder: (_, __) => const Divider(
+          height: 1,
+        ),
+        itemBuilder: (_, index) => ChangeNotifierProvider<Event>.value(
+          value: eventsData.events[index],
+          child: EventListItem(),
+        ),
       ),
     );
   }
