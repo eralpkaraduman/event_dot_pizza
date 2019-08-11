@@ -9,18 +9,20 @@ class WelcomePage extends StatelessWidget {
         appBar: AppBar(
           title: Text('Event.Pizza'),
         ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Welcome!'),
-              Text('You need to connect them platforms.'),
-              RaisedButton(
-                child: Text('Connect Platforms'),
-                onPressed: () => Navigator.pushNamed(
-                    context, ConnectPlatformsPage.routeName),
-              )
-            ],
+        body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Welcome!'),
+                Text('You need to connect them platforms.'),
+                RaisedButton(
+                  child: Text('Connect Platforms'),
+                  onPressed: () => Navigator.pushNamed(
+                      context, ConnectPlatformsPage.routeName),
+                )
+              ],
+            ),
           ),
         ));
   }

@@ -4,8 +4,10 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('Hold On...'),
+      body: SafeArea(
+        child: Center(
+          child: Text('Hold On...'),
+        ),
       ),
     );
   }

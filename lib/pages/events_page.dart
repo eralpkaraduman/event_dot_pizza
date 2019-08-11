@@ -37,13 +37,15 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          EventListHeader(onRefresh: _refresh),
-          Expanded(child: EventList(onRefresh: _refresh))
-        ],
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            EventListHeader(onRefresh: _refresh),
+            Expanded(child: EventList(onRefresh: _refresh))
+          ],
+        ),
       ),
     );
   }

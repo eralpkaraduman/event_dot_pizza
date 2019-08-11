@@ -12,27 +12,29 @@ class ConnectPlatformsPage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Connect Platforms'),
       ),
-      body: Center(
-        child: Consumer<MeetupPlatformSession>(
-          builder: (context, meetupPlatform, _) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Visibility(
-                visible: meetupPlatform.isConnected,
-                child: RaisedButton(
-                    color: Theme.of(context).errorColor,
-                    child: Text('Disconnect Meetup.com'),
-                    onPressed: () => meetupPlatform.disconnect()),
-              ),
-              Visibility(
-                visible: !meetupPlatform.isConnected,
-                child: RaisedButton(
-                  child: Text('Connect Meetup.com'),
-                  onPressed: () =>
-                      Navigator.pushNamed(context, MeetupAuthPage.routeName),
+      body: SafeArea(
+        child: Center(
+          child: Consumer<MeetupPlatformSession>(
+            builder: (context, meetupPlatform, _) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Visibility(
+                  visible: meetupPlatform.isConnected,
+                  child: RaisedButton(
+                      color: Theme.of(context).errorColor,
+                      child: Text('Disconnect Meetup.com'),
+                      onPressed: () => meetupPlatform.disconnect()),
                 ),
-              )
-            ],
+                Visibility(
+                  visible: !meetupPlatform.isConnected,
+                  child: RaisedButton(
+                    child: Text('Connect Meetup.com'),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, MeetupAuthPage.routeName),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

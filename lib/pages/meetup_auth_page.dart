@@ -35,40 +35,41 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
         title: Text('Connect Meetup.Com'),
       ),
       body: SafeArea(
-          child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          Opacity(
-            opacity: _loading ? 0 : 1,
-            child: WebView(
-              initialUrl: MeetupPlatformApi.authURI,
-              javascriptMode: JavascriptMode.unrestricted,
-              onPageFinished: (String url) {
-                setState(() {
-                  _loading = false;
-                });
-              },
-              navigationDelegate: (NavigationRequest request) {
-                Map<String, String> params = parseRedirectParams(request.url);
-                if (params.containsKey('error')) {
-                  Navigator.pop(context);
-                  return NavigationDecision.prevent;
-                } else if (params.containsKey('access_token')) {
-                  meetupPlatform.connect(params['access_token']);
-                  Navigator.pop(context);
-                  return NavigationDecision.prevent;
-                } else {
-                  return NavigationDecision.navigate;
-                }
-              },
+        child: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            Opacity(
+              opacity: _loading ? 0 : 1,
+              child: WebView(
+                initialUrl: MeetupPlatformApi.authURI,
+                javascriptMode: JavascriptMode.unrestricted,
+                onPageFinished: (String url) {
+                  setState(() {
+                    _loading = false;
+                  });
+                },
+                navigationDelegate: (NavigationRequest request) {
+                  Map<String, String> params = parseRedirectParams(request.url);
+                  if (params.containsKey('error')) {
+                    Navigator.pop(context);
+                    return NavigationDecision.prevent;
+                  } else if (params.containsKey('access_token')) {
+                    meetupPlatform.connect(params['access_token']);
+                    Navigator.pop(context);
+                    return NavigationDecision.prevent;
+                  } else {
+                    return NavigationDecision.navigate;
+                  }
+                },
+              ),
             ),
-          ),
-          Visibility(
-            visible: _loading,
-            child: CircularProgressIndicator(),
-          )
-        ],
-      )),
+            Visibility(
+              visible: _loading,
+              child: CircularProgressIndicator(),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
