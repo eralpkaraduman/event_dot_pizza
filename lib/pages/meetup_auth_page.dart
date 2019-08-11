@@ -1,3 +1,4 @@
+import 'package:event_dot_pizza/pages/events_page.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +56,10 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
                     return NavigationDecision.prevent;
                   } else if (params.containsKey('access_token')) {
                     meetupPlatform.connect(params['access_token']);
-                    Navigator.pop(context);
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(Navigator.defaultRouteName),
+                    );
                     return NavigationDecision.prevent;
                   } else {
                     return NavigationDecision.navigate;

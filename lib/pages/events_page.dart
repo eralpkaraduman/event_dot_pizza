@@ -8,6 +8,7 @@ import '../widgets/event_list_header.dart';
 import '../providers/meetup_platform_events.dart';
 
 class EventsPage extends StatefulWidget {
+  static const routeName = "events";
   @override
   _EventsPageState createState() => _EventsPageState();
 }
@@ -37,14 +38,24 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            EventListHeader(onRefresh: _refresh),
-            Expanded(child: EventList(onRefresh: _refresh))
-          ],
+      body: Container(
+        decoration: new BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+        ),
+        child: SafeArea(
+          child: Container(
+            decoration: new BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                EventListHeader(onRefresh: _refresh),
+                Expanded(child: EventList(onRefresh: _refresh))
+              ],
+            ),
+          ),
         ),
       ),
     );

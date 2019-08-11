@@ -20,13 +20,12 @@ class EventListHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text('num events: ${eventsData.events.length}'),
-                  Text(eventsData.refreshing ? 'refreshing' : 'not refreshing'),
-                  Text('List Of Events'),
                   RaisedButton(
                     onPressed: eventsData.refreshing ? null : onRefresh,
                     child: Text('Refresh'),
                   ),
+                  Text(
+                      'num events: ${eventsData.events.length}, ${eventsData.refreshing ? 'refreshing' : 'not refreshing'}'),
                 ],
               ),
               Container(
