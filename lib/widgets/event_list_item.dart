@@ -16,6 +16,20 @@ class EventListItem extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
+      subtitle: Text(
+        'Venue Name Here',
+        style: const TextStyle(
+          fontSize: 18,
+        ),
+      ),
+      isThreeLine: false,
+      trailing: Text(
+        '🍕',
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       onTap: () {
         Navigator.of(context).pushNamed(
           EventDetailPage.routeName,
