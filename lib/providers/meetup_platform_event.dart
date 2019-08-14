@@ -9,14 +9,24 @@ class MeetupPlatformEvent extends Event {
     String name,
     String link,
     String description,
-  }) : super(platformId, PlatformType.Meetup, name, link, description);
+    String venueName,
+  }) : super(
+          platformId,
+          PlatformType.Meetup,
+          name,
+          link,
+          description,
+          venueName,
+        );
 
   factory MeetupPlatformEvent.fromJson(Map<String, dynamic> json) {
+    Map<String, dynamic> venueJson = json['venue'] ?? {};
     return MeetupPlatformEvent(
-      platformId: json['id'] as String,
-      name: json['name'] as String,
-      link: json['link'] as String,
+      platformId: json['id'].toString(),
+      name: json['name'].toString(),
+      link: json['link'].toString(),
       description: parseHtmlText(json['description'].toString()),
+      venueName: venueJson['name']?.toString() ?? 'Unknown Venue',
     );
   }
 }

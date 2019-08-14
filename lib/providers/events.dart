@@ -8,6 +8,7 @@ class Events extends ChangeNotifier {
   List<Event> _allEvents = [];
   List<Event> _events = [];
   List<Event> get events => [..._events];
+  List<Event> get allEvents => [..._allEvents];
 
   bool _refreshing = false;
   bool get refreshing => _refreshing;
@@ -16,9 +17,10 @@ class Events extends ChangeNotifier {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
       _allEvents = [...platform.events, ...events];
-      _events = _allEvents
-          .where((Event event) => eventFilter.checkFood(event.description))
-          .toList();
+      _allEvents.forEach((event) {
+        event.matches = eventFilter.checkMatces(event.description);
+      });
+      _events = _allEvents.where((event) => event.matches.length > 0).toList();
       _refreshing = _refreshing || platform.refreshing;
     });
   }

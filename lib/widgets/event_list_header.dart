@@ -24,8 +24,13 @@ class EventListHeader extends StatelessWidget {
                     onPressed: eventsData.refreshing ? null : onRefresh,
                     child: Text('Refresh'),
                   ),
+                  Text(eventsData.refreshing ? 'refreshing' : 'not refreshing'),
                   Text(
-                      'num events: ${eventsData.events.length}, ${eventsData.refreshing ? 'refreshing' : 'not refreshing'}'),
+                    '#events: ${eventsData.allEvents.length}',
+                  ),
+                  Text(
+                    '#matching events: ${eventsData.events.length}',
+                  ),
                 ],
               ),
               Container(

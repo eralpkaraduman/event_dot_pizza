@@ -12,7 +12,7 @@ class MeetupPlatformEvents with ChangeNotifier implements PlatformEvents {
   bool get refreshing => _refreshing;
   List<Event> get events => [..._events];
 
-  MeetupPlatformEvents({String accessToken, List<Event> events}) {
+  MeetupPlatformEvents(String accessToken, List<Event> events) {
     print('Provider:MeetupPlatformEvents:Updated');
     this._accessToken = accessToken;
     this._events = events;

@@ -28,8 +28,8 @@ class App extends StatelessWidget {
         ChangeNotifierProxyProvider<MeetupPlatformSession,
             MeetupPlatformEvents>(
           builder: (_, session, prev) => MeetupPlatformEvents(
-            accessToken: session.accessToken,
-            events: prev != null ? prev.events : [],
+            session.accessToken,
+            prev != null ? prev.events : [],
           ),
         ),
         ChangeNotifierProxyProvider<MeetupPlatformEvents, Events>(

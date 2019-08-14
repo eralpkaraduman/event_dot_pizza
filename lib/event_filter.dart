@@ -35,10 +35,32 @@ class EventFilter {
   static RegExp _createMatcher(List<String> wordList) =>
       new RegExp('(${wordList.join('|')})');
 
-  bool checkFood(String qualifier) {
-    List<RegExpMatch> matches = _foodWordMatcher.allMatches(qualifier).toList();
-    matches.forEach((match) => print(
-        'match: ${match.input.substring(match.start, match.end)} ${match.start}-${match.end}'));
-    return matches.length > 0;
+  List<EventFilterMatch> _applyMatcher(
+    RegExp matcher,
+    EventFilterMatchType type,
+    String qualifier,
+  ) {
+    return matcher
+        .allMatches(qualifier)
+        .map((match) => EventFilterMatch(type, match.start, match.end))
+        .toList();
   }
+
+  List<EventFilterMatch> checkMatces(String test) => [
+        ..._applyMatcher(_drinkWordMatcher, EventFilterMatchType.Drink, test),
+        ..._applyMatcher(_foodWordMatcher, EventFilterMatchType.Food, test),
+      ];
+}
+
+enum EventFilterMatchType { Food, Drink }
+
+const Map<EventFilterMatchType, String> EventFilterMatchTypeEmojis = {
+  EventFilterMatchType.Food: '🍕',
+  EventFilterMatchType.Drink: '🍺',
+};
+
+class EventFilterMatch {
+  int start, end;
+  EventFilterMatchType type;
+  EventFilterMatch(this.type, this.start, this.end);
 }

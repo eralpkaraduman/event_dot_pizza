@@ -1,3 +1,4 @@
+import 'package:event_dot_pizza/event_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/event.dart';
@@ -17,14 +18,14 @@ class EventListItem extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        'Venue Name Here',
+        event.venueName,
         style: const TextStyle(
           fontSize: 18,
         ),
       ),
       isThreeLine: false,
       trailing: Text(
-        '🍕',
+        event.matchTypes.map((t) => EventFilterMatchTypeEmojis[t]).join(' '),
         style: const TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
