@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/events.dart';
 import '../providers/event.dart';
+import '../widgets/event_description.dart';
 
 class EventDetailPageArgs {
   final String id;
@@ -30,8 +31,20 @@ class EventDetailPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8.0),
             child: event == null
-                ? Center(child: Text('Unknown Event, Go Back.'))
-                : Text(event.description),
+                ? Center(
+                    child: Text('Unknown Event, Go Back.'),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        '📍 ${event.venueName}',
+                        style: const TextStyle(
+                            fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
+                      EventDescription(event.description, event.matches),
+                    ],
+                  ),
           ),
         ),
       ),

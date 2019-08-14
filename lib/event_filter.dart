@@ -5,16 +5,19 @@ class EventFilter {
     "pizzas",
     "snack",
     "snacks",
-    "taco",
     "tacos",
+    "taco",
     "hotdog",
     "hotdogs",
     "hot dog",
     "hot dogs",
     "meal",
+    "meals",
     "food",
     "taste",
-    "tasting"
+    "tasting",
+    "burger",
+    "burgers"
   ];
 
   RegExp _drinkWordMatcher;
@@ -25,6 +28,8 @@ class EventFilter {
     "drinks",
     "wine",
     "wines",
+    "refreshment",
+    "refreshments",
   ];
 
   EventFilter() {
@@ -33,7 +38,7 @@ class EventFilter {
   }
 
   static RegExp _createMatcher(List<String> wordList) =>
-      new RegExp('(${wordList.join('|')})');
+      new RegExp('\\b(${wordList.join('|')})\\b');
 
   List<EventFilterMatch> _applyMatcher(
     RegExp matcher,
@@ -41,7 +46,7 @@ class EventFilter {
     String qualifier,
   ) {
     return matcher
-        .allMatches(qualifier)
+        .allMatches(qualifier.toLowerCase())
         .map((match) => EventFilterMatch(type, match.start, match.end))
         .toList();
   }
