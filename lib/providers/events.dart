@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
+import '../event_filter.dart';
 import './platform_events.dart';
 import './event.dart';
 
 class Events extends ChangeNotifier {
+  List<Event> _allEvents = [];
   List<Event> _events = [];
   List<Event> get events => [..._events];
-  List<Event> get foodEvents => _events.where((event) => true);
 
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  Events({List<PlatformEvents> platforms}) {
+  Events(List<PlatformEvents> platforms, EventFilter filter) {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
-      _events = [...platform.events, ...events];
+      _allEvents = [...platform.events, ...events];
+      _events = _allEvents
+          .where((Event event) => filter.checkFood(event.description))
+          .toList();
       _refreshing = _refreshing || platform.refreshing;
     });
   }
