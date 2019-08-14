@@ -12,12 +12,12 @@ class Events extends ChangeNotifier {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  Events(List<PlatformEvents> platforms, EventFilter filter) {
+  Events(List<PlatformEvents> platforms, EventFilter eventFilter) {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
       _allEvents = [...platform.events, ...events];
       _events = _allEvents
-          .where((Event event) => filter.checkFood(event.description))
+          .where((Event event) => eventFilter.checkFood(event.description))
           .toList();
       _refreshing = _refreshing || platform.refreshing;
     });
