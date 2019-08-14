@@ -1,31 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/events.dart';
+import '../providers/event.dart';
 
-class EventDetailPageArguments {
+class EventDetailPageArgs {
   final String id;
-  final String platform; // TODO: Move to enum
-  EventDetailPageArguments({this.id, this.platform});
+  EventDetailPageArgs(this.id);
 }
 
 class EventDetailPage extends StatelessWidget {
   static const routeName = "eventDetail";
+
   @override
   Widget build(BuildContext context) {
-    final EventDetailPageArguments args =
-        ModalRoute.of(context).settings.arguments;
-    final event = Provider.of<Events>(
-      context,
-      listen: false,
-    ).find(
-      id: args.id,
-      platform: args.platform,
-    );
-    // TODO: handle when event wasnt found
+    final EventDetailPageArgs args = ModalRoute.of(context).settings.arguments;
+    final Events events = Provider.of<Events>(context, listen: false);
+    final Event event = events.find(args.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          event.name,
+          event?.name ?? 'Unknown Event',
           overflow: TextOverflow.ellipsis,
           softWrap: true,
           maxLines: 2,
@@ -35,7 +29,9 @@ class EventDetailPage extends StatelessWidget {
         child: SafeArea(
           child: Container(
             padding: const EdgeInsets.all(8.0),
-            child: Text(event.description),
+            child: event == null
+                ? Center(child: Text('Unknown Event, Go Back.'))
+                : Text(event.description),
           ),
         ),
       ),

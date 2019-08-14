@@ -33,10 +33,7 @@ class EventListItem extends StatelessWidget {
       onTap: () {
         Navigator.of(context).pushNamed(
           EventDetailPage.routeName,
-          arguments: EventDetailPageArguments(
-            id: event.id,
-            platform: event.platform,
-          ),
+          arguments: EventDetailPageArgs(event.id),
         );
       },
     );
