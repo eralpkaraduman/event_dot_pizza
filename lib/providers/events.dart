@@ -24,7 +24,8 @@ class Events extends ChangeNotifier {
   }
 
   Event find({String id, String platform}) {
-    return _events
-        .firstWhere((event) => event.platform == platform && event.id == id);
+    return _allEvents.firstWhere(
+      (event) => event.platform == platform && event.id == id,
+    );
   }
 }
