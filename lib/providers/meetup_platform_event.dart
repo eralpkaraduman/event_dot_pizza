@@ -21,12 +21,16 @@ class MeetupPlatformEvent extends Event {
 
   factory MeetupPlatformEvent.fromJson(Map<String, dynamic> json) {
     Map<String, dynamic> venueJson = json['venue'] ?? {};
+    Map<String, dynamic> groupJson = json['group'] ?? {};
+    String eventName = groupJson['name'] + ' : ' + json['name'];
+    print(json);
     return MeetupPlatformEvent(
-      platformId: json['id'].toString(),
-      name: json['name'].toString(),
-      link: json['link'].toString(),
-      description: parseHtmlText(json['description'].toString()),
-      venueName: venueJson['name']?.toString() ?? 'Unknown Venue',
+      platformId: json['id'],
+      name: eventName,
+      link: json['link'],
+      description:
+          eventName + ' ' + parseHtmlText(json['description'].toString()),
+      venueName: venueJson['name'] ?? 'Unknown Venue',
     );
   }
 }

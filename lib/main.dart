@@ -40,8 +40,8 @@ class App extends StatelessWidget {
         builder: (_, session, platform0, __) => MaterialApp(
           title: 'Event.Pizza',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-            accentColor: Colors.blueAccent,
+            primarySwatch: Colors.deepOrange,
+            accentColor: Colors.deepOrangeAccent,
           ),
           home: session.anyPlatformConnected
               ? EventsPage()
