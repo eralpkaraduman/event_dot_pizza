@@ -1,4 +1,4 @@
-import 'package:event_dot_pizza/event_filter.dart';
+import '../dictionary_matcher.dart';
 import 'package:flutter/foundation.dart';
 import '../platform_type.dart';
 

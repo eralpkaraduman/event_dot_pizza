@@ -1,6 +1,6 @@
-import 'package:event_dot_pizza/event_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../dictionary_matcher.dart';
 import '../providers/event.dart';
 import '../pages/event_detail_page.dart';
 

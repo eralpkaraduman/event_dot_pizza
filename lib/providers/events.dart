@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../event_filter.dart';
+import '../dictionary_matcher.dart' as matcher;
 import './platform_events.dart';
 import './event.dart';
 
@@ -13,12 +12,12 @@ class Events extends ChangeNotifier {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  Events(List<PlatformEvents> platforms, EventFilter eventFilter) {
+  Events(List<PlatformEvents> platforms) {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
       _allEvents = [...platform.events, ...events];
       _allEvents.forEach((event) {
-        event.matches = eventFilter.checkMatces(event.description);
+        event.matches = matcher.getMatces(event.description);
       });
       _events = _allEvents.where((event) => event.matches.length > 0).toList();
       _refreshing = _refreshing || platform.refreshing;

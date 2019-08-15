@@ -1,7 +1,6 @@
-import 'package:event_dot_pizza/platform_type.dart';
-
-import './event.dart';
+import '../platform_type.dart';
 import '../utils.dart';
+import './event.dart';
 
 class MeetupPlatformEvent extends Event {
   MeetupPlatformEvent({

@@ -1,4 +1,3 @@
-import 'package:event_dot_pizza/event_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/meetup_platform_events.dart';
@@ -13,7 +12,6 @@ import './pages/welcome_page.dart';
 import './pages/event_detail_page.dart';
 
 void main() => runApp(App());
-final eventFilter = EventFilter();
 
 class App extends StatelessWidget {
   @override
@@ -33,7 +31,7 @@ class App extends StatelessWidget {
           ),
         ),
         ChangeNotifierProxyProvider<MeetupPlatformEvents, Events>(
-          builder: (_, platform0, __) => Events([platform0], eventFilter),
+          builder: (_, platform0, __) => Events([platform0]),
         ),
       ],
       child: Consumer2<Session, MeetupPlatformSession>(

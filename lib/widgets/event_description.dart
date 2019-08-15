@@ -1,4 +1,4 @@
-import 'package:event_dot_pizza/event_filter.dart';
+import '../dictionary_matcher.dart';
 import 'package:flutter/material.dart';
 
 const _matchTextStyle = TextStyle(
@@ -19,18 +19,29 @@ class EventDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     int segmentStartIndex = 0;
     List<TextSpan> segments = [];
-    for (EventFilterMatch match in _matches) {
+    EventFilterMatch currentMatch;
+    int previousSegmentEndIndex;
+    for (int i = 0; i < _matches.length; i++) {
+      currentMatch = _matches[i];
+      previousSegmentEndIndex = i == 0 ? 0 : _matches[i - 1].end;
+      // Add the text before the match in normal style
+      if (currentMatch.start > previousSegmentEndIndex) {
+        segments.add(TextSpan(
+          text: description.substring(
+            previousSegmentEndIndex,
+            currentMatch.start,
+          ),
+        ));
+      }
+      // Add the found match in special style
       segments.add(TextSpan(
-        text: description.substring(segmentStartIndex, match.start),
-      ));
-      segments.add(TextSpan(
-        text: description.substring(match.start, match.end),
+        text: description.substring(currentMatch.start, currentMatch.end),
         style: _matchTextStyle,
       ));
+      // Add the emoji for match type
       segments.add(TextSpan(
-        text: EventFilterMatchTypeEmojis[match.type],
+        text: EventFilterMatchTypeEmojis[currentMatch.type],
       ));
-      segmentStartIndex = match.end;
     }
     segments.add(TextSpan(
       text: description.substring(segmentStartIndex, description.length - 1),
