@@ -18,9 +18,9 @@ class EventListItem extends StatelessWidget {
         ),
       ),
       subtitle: Text(
-        event.venueName,
+        '${event.formattedLocalDateTime} ${event.venueName}',
         style: const TextStyle(
-          fontSize: 18,
+          fontSize: 16,
         ),
       ),
       isThreeLine: false,
@@ -31,12 +31,10 @@ class EventListItem extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
       ),
-      onTap: () {
-        Navigator.of(context).pushNamed(
-          EventDetailPage.routeName,
-          arguments: EventDetailPageArgs(event.id),
-        );
-      },
+      onTap: () => Navigator.of(context).pushNamed(
+        EventDetailPage.routeName,
+        arguments: EventDetailPageArgs(event.id),
+      ),
     );
   }
 }

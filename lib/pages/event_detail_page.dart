@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/events.dart';
 import '../providers/event.dart';
 import '../widgets/event_description.dart';
+import './event_url_page.dart';
 
 class EventDetailPageArgs {
   final String id;
@@ -31,9 +32,7 @@ class EventDetailPage extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8.0),
             child: event == null
-                ? Center(
-                    child: Text('Unknown Event, Go Back.'),
-                  )
+                ? Center(child: Text('Unknown Event, Go Back.'))
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
@@ -41,6 +40,18 @@ class EventDetailPage extends StatelessWidget {
                         '📍 ${event.venueName}',
                         style: const TextStyle(
                             fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '🗓 ${event.formattedLocalDateTime}',
+                        style: const TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      RaisedButton(
+                        child: Text('Open Original Event Page'),
+                        onPressed: () => Navigator.of(context).pushNamed(
+                          EventUrlPage.routeName,
+                          arguments: EventUrlPageArgs(event.link),
+                        ),
                       ),
                       EventDescription(event.description, event.matches),
                     ],

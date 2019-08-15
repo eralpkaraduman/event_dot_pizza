@@ -43,11 +43,9 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
               child: WebView(
                 initialUrl: MeetupPlatformApi.authURI,
                 javascriptMode: JavascriptMode.unrestricted,
-                onPageFinished: (String url) {
-                  setState(() {
-                    _loading = false;
-                  });
-                },
+                onPageFinished: (_) => setState(() {
+                  _loading = false;
+                }),
                 navigationDelegate: (NavigationRequest request) {
                   Map<String, String> params = parseRedirectParams(request.url);
                   if (params.containsKey('error')) {

@@ -15,6 +15,7 @@ class Event with ChangeNotifier {
   final PlatformType platform;
   final String description;
   final String venueName;
+  final String formattedLocalDateTime;
 
   Event(
     this.platformId,
@@ -23,6 +24,7 @@ class Event with ChangeNotifier {
     this.link,
     this.description,
     this.venueName,
+    this.formattedLocalDateTime,
   ) {
     this.id = '${platform.index}-$platformId';
   }
