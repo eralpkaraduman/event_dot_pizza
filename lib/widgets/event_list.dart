@@ -13,9 +13,15 @@ class EventList extends StatelessWidget {
   // TODO: Implement pull to refresh https://api.flutter.dev/flutter/material/RefreshIndicator-class.html
   Widget build(BuildContext context) {
     print('EventList:build');
+    final EdgeInsets safePadding = MediaQuery.of(context).padding;
     return Consumer<Events>(
       builder: (_, eventsData, __) => ListView.separated(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        padding: EdgeInsets.fromLTRB(
+          0,
+          10.0,
+          0,
+          safePadding.bottom,
+        ),
         itemCount: eventsData.events.length,
         separatorBuilder: (_, __) => const Divider(
           height: 1,

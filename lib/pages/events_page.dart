@@ -38,25 +38,13 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: Container(
-        decoration: new BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-        ),
-        child: SafeArea(
-          child: Container(
-            decoration: new BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                EventListHeader(onRefresh: _refresh),
-                Expanded(child: EventList(onRefresh: _refresh))
-              ],
-            ),
-          ),
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          EventListHeader(onRefresh: _refresh),
+          Expanded(child: EventList(onRefresh: _refresh))
+        ],
       ),
     );
   }
