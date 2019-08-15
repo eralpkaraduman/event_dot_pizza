@@ -1,4 +1,4 @@
-package com.example.event_dot_pizza;
+package company.nicework.eventdotpizza;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
