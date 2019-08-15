@@ -16,12 +16,7 @@ class EventList extends StatelessWidget {
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
     return Consumer<Events>(
       builder: (_, eventsData, __) => ListView.separated(
-        padding: EdgeInsets.fromLTRB(
-          0,
-          10.0,
-          0,
-          safePadding.bottom,
-        ),
+        padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
         itemCount: eventsData.events.length,
         separatorBuilder: (_, __) => const Divider(
           height: 1,
