@@ -48,7 +48,7 @@ class App extends StatelessWidget {
                   future: () async {
                     print('App:Initializing');
                     print('App:WaitingForNoReason');
-                    await Future.delayed(const Duration(seconds: 1));
+                    await Future.delayed(const Duration(seconds: 3));
                     print('App:RecoveringStoredSession');
                     await platform0.tryToConnectFromPrefs();
                     print('App:InitializationComplete');

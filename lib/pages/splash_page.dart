@@ -6,7 +6,26 @@ class SplashPage extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text('Hold On...'),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                child: Image(image: AssetImage('assets/images/intro.jpeg')),
+                width: 200,
+                height: 200,
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'HOLD ON...',
+                  style: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
