@@ -42,25 +42,25 @@ class App extends StatelessWidget {
             primarySwatch: Colors.deepOrange,
             accentColor: Colors.deepOrangeAccent,
           ),
-          home: session.anyPlatformConnected
-              ? EventsPage()
-              : FutureBuilder(
-                  future: () async {
-                    print('App:Initializing');
-                    print('App:WaitingForNoReason');
-                    await Future.delayed(const Duration(seconds: 3));
-                    print('App:RecoveringStoredSession');
-                    await platform0.tryToConnectFromPrefs();
-                    print('App:InitializationComplete');
-                  }(),
-                  builder: (_, snap) {
-                    if (snap.connectionState == ConnectionState.waiting) {
-                      return SplashPage();
-                    } else {
-                      return WelcomePage();
-                    }
-                  },
-                ),
+          home: FutureBuilder(
+            future: () async {
+              print('App:Initializing');
+              print('App:WaitingForNoReason');
+              await Future.delayed(const Duration(seconds: 1));
+              print('App:RecoveringStoredSession');
+              await platform0.tryToConnectFromPrefs();
+              print('App:InitializationComplete');
+            }(),
+            builder: (_, snap) {
+              if (snap.connectionState == ConnectionState.waiting) {
+                return SplashPage();
+              } else {
+                return session.anyPlatformConnected
+                    ? EventsPage()
+                    : WelcomePage();
+              }
+            },
+          ),
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             MeetupAuthPage.routeName: (_) => MeetupAuthPage(),

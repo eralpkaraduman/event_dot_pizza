@@ -8,6 +8,7 @@ class ConnectPlatformsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('ConnectPlatformsPage:Updated');
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect Platforms'),

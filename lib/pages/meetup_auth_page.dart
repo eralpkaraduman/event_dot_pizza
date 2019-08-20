@@ -27,7 +27,14 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
   }
 
   @override
+  void initState() {
+    print('ConnectPlatformsPage:InitState');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    print('ConnectPlatformsPage:Build');
     MeetupPlatformSession meetupPlatform =
         Provider.of<MeetupPlatformSession>(context, listen: false);
     return Scaffold(

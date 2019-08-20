@@ -13,7 +13,6 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
 
   MeetupPlatformSession() {
     print('Provider:MeetupPlatformSession:Updated');
-    scheduleMicrotask(tryToConnectFromPrefs);
   }
 
   connect(String accessToken) {
