@@ -17,7 +17,6 @@ class MeetupPlatformEvent extends Event {
     Map<String, dynamic> venueJson = json['venue'] ?? {};
     Map<String, dynamic> groupJson = json['group'] ?? {};
     String eventName = groupJson['name'] + ' : ' + json['name'];
-    print(json);
     return MeetupPlatformEvent(
         platformId: json['id'],
         name: eventName,
