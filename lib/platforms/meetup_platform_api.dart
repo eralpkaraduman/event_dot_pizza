@@ -4,6 +4,7 @@ import '../utils.dart';
 import '../providers/meetup_platform_event.dart';
 
 class MeetupPlatformApi {
+  static const String kACCESS_TOKEN = 'access_token';
   static const String CONSUMER_KEY = '96rf1kn6pobffcejakptjgarrf';
   static const String REDIRECT_URI =
       'event.pizza://handle_authorization_redirect/meetup';

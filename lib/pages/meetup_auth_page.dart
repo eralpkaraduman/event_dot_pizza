@@ -1,3 +1,4 @@
+import 'package:event_dot_pizza/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,9 @@ class MeetupAuthPage extends StatefulWidget {
 }
 
 class _MeetupAuthPageState extends State<MeetupAuthPage> {
-  bool _loading = true;
+  bool _loading = false;
+  MeetupPlatformSession _meetupPlatform;
+  WebViewController _webViewController;
 
   Map<String, String> parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();
@@ -29,14 +32,35 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
   @override
   void initState() {
     print('ConnectPlatformsPage:InitState');
+    _meetupPlatform =
+        Provider.of<MeetupPlatformSession>(context, listen: false);
+    setState(() => _loading = true);
     super.initState();
+  }
+
+  NavigationDecision navigationDelegate(request) {
+    Map<String, String> params = parseRedirectParams(request.url);
+    if (params.containsKey('error')) {
+      print('errored');
+      Navigator.pop(context);
+      return NavigationDecision.prevent;
+    } else if (params.containsKey(MeetupPlatformApi.kACCESS_TOKEN)) {
+      print('contains token');
+      _meetupPlatform.connect(params[MeetupPlatformApi.kACCESS_TOKEN]);
+      Navigator.popUntil(
+        context,
+        ModalRoute.withName(Navigator.defaultRouteName),
+      );
+      return NavigationDecision.prevent;
+    } else {
+      return NavigationDecision.navigate;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     print('ConnectPlatformsPage:Build');
-    MeetupPlatformSession meetupPlatform =
-        Provider.of<MeetupPlatformSession>(context, listen: false);
+    // TODO: Add UI For Back/Forward navigation (there's example in webview_flutter repo)
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect Meetup.Com'),
@@ -45,31 +69,12 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
-            Opacity(
-              opacity: _loading ? 0 : 1,
-              child: WebView(
-                initialUrl: MeetupPlatformApi.authURI,
-                javascriptMode: JavascriptMode.unrestricted,
-                onPageFinished: (_) => setState(() {
-                  _loading = false;
-                }),
-                navigationDelegate: (NavigationRequest request) {
-                  Map<String, String> params = parseRedirectParams(request.url);
-                  if (params.containsKey('error')) {
-                    Navigator.pop(context);
-                    return NavigationDecision.prevent;
-                  } else if (params.containsKey('access_token')) {
-                    meetupPlatform.connect(params['access_token']);
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(Navigator.defaultRouteName),
-                    );
-                    return NavigationDecision.prevent;
-                  } else {
-                    return NavigationDecision.navigate;
-                  }
-                },
-              ),
+            WebView(
+              userAgent: getUserAgent(),
+              initialUrl: MeetupPlatformApi.authURI,
+              javascriptMode: JavascriptMode.unrestricted,
+              onPageFinished: (_) => setState(() => _loading = false),
+              navigationDelegate: navigationDelegate,
             ),
             Visibility(
               visible: _loading,
