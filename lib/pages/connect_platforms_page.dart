@@ -33,7 +33,7 @@ class ConnectPlatformsPage extends StatelessWidget {
                     onPressed: () =>
                         Navigator.pushNamed(context, MeetupAuthPage.routeName),
                   ),
-                )
+                ),
               ],
             ),
           ),
