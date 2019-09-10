@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import '../widgets/share_button.dart';
 
 class EventUrlPageArgs {
   final String url;
-  EventUrlPageArgs(this.url);
+  final String name;
+  EventUrlPageArgs(this.url, this.name);
 }
 
 class EventUrlPage extends StatefulWidget {
@@ -22,11 +24,17 @@ class _EventUrlPageState extends State<EventUrlPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          args.url,
+          args.name,
           overflow: TextOverflow.ellipsis,
           softWrap: true,
           maxLines: 2,
         ),
+        actions: <Widget>[
+          new ShareButton(
+            url: args.url,
+            subject: args.name,
+          )
+        ],
       ),
       body: Stack(
         alignment: Alignment.center,
