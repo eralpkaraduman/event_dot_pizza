@@ -9,21 +9,26 @@ const _matchTextStyle = TextStyle(
 const _commonTextStyle = TextStyle(fontSize: 18.0);
 
 class EventDescription extends StatelessWidget {
+  EventDescription({
+    Key key,
+    @required this.description,
+    @required this.matches,
+    String desciption,
+  }) : super(key: key);
+
   final String description;
-  final List<EventFilterMatch> _matches;
-  EventDescription(this.description, this._matches) {
-    this._matches.sort((a, b) => a.start.compareTo(b.start));
-  }
+  final List<EventFilterMatch> matches;
 
   @override
   Widget build(BuildContext context) {
+    this.matches.sort((a, b) => a.start.compareTo(b.start));
     int segmentStartIndex = 0;
     List<TextSpan> segments = [];
     EventFilterMatch currentMatch;
     int previousSegmentEndIndex;
-    for (int i = 0; i < _matches.length; i++) {
-      currentMatch = _matches[i];
-      previousSegmentEndIndex = i == 0 ? 0 : _matches[i - 1].end;
+    for (int i = 0; i < matches.length; i++) {
+      currentMatch = matches[i];
+      previousSegmentEndIndex = i == 0 ? 0 : matches[i - 1].end;
       // Add the text before the match in normal style
       if (currentMatch.start > previousSegmentEndIndex) {
         segments.add(TextSpan(

@@ -5,9 +5,12 @@ import '../providers/event.dart';
 import './event_list_item.dart';
 
 class EventList extends StatelessWidget {
-  final Function onRefresh;
+  EventList({
+    Key key,
+    @required this.onRefresh,
+  }) : super(key: key);
 
-  EventList({this.onRefresh});
+  final Function onRefresh;
 
   @override
   // TODO: Implement pull to refresh https://api.flutter.dev/flutter/material/RefreshIndicator-class.html
