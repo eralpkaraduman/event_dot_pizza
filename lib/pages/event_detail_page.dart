@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/events.dart';
 import '../providers/event.dart';
 import '../widgets/event_description.dart';
+import '../widgets/share_button.dart';
 import './event_url_page.dart';
 
 class EventDetailPageArgs {
@@ -18,14 +19,21 @@ class EventDetailPage extends StatelessWidget {
     final EventDetailPageArgs args = ModalRoute.of(context).settings.arguments;
     final Events events = Provider.of<Events>(context, listen: false);
     final Event event = events.find(args.id);
+    final eventName = event?.name ?? 'Unknown Event';
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          event?.name ?? 'Unknown Event',
+          eventName,
           overflow: TextOverflow.ellipsis,
           softWrap: true,
           maxLines: 2,
         ),
+        actions: <Widget>[
+          new ShareButton(
+            url: event.link,
+            subject: eventName,
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: SafeArea(
@@ -50,10 +58,12 @@ class EventDetailPage extends StatelessWidget {
                         child: Text('Open Original Event Page'),
                         onPressed: () => Navigator.of(context).pushNamed(
                           EventUrlPage.routeName,
-                          arguments: EventUrlPageArgs(event.link),
+                          arguments: EventUrlPageArgs(event.link, event.name),
                         ),
                       ),
-                      EventDescription(event.description, event.matches),
+                      EventDescription(
+                          description: event.description,
+                          matches: event.matches),
                     ],
                   ),
           ),
