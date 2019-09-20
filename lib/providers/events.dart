@@ -17,7 +17,7 @@ class Events extends ChangeNotifier {
     platforms.forEach((platform) {
       _allEvents = [...platform.events, ...events];
       _allEvents.forEach((event) {
-        event.matches = matcher.getMatces(event.description);
+        event.matches = matcher.getMatches(event.description);
       });
       _events = _allEvents.where((event) => event.matches.length > 0).toList();
       _refreshing = _refreshing || platform.refreshing;

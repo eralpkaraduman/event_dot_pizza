@@ -1,4 +1,4 @@
-List<EventFilterMatch> getMatces(String test) => [
+List<EventFilterMatch> getMatches(String test) => [
       ..._applyMatcher(
         _drinkWordMatcher,
         EventFilterMatchType.Drink,
@@ -42,10 +42,10 @@ const List<String> _foodWordList = [
   // FR
   "aliments",
   "aliment",
-  "boisson",
-  "boissons",
-  "rafraîchissement",
-  "rafraîchissements",
+  // TR
+  "yemek",
+  "iftar",
+  "ikram",
 ];
 
 const _foodOccurances = ["🍔", "🍕", "🌭", "🌮"];
@@ -58,7 +58,16 @@ const List<String> _drinkWordList = [
   "wine",
   "wines",
   "refreshment",
-  "refreshments"
+  "refreshments",
+  // FR
+  "boisson",
+  "boissons",
+  "rafraîchissement",
+  "rafraîchissements",
+  // TR
+  "içecek",
+  "içki",
+  "bira",
 ];
 
 const _drinkOccurances = ["🍺", "🍻", "🍷", "🍾", "🍸", "☕️"];
