@@ -1,3 +1,5 @@
+import 'package:event_dot_pizza/pages/city_selection_page.dart';
+import 'package:event_dot_pizza/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './providers/meetup_platform_events.dart';
@@ -68,7 +70,9 @@ class App extends StatelessWidget {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             MeetupAuthPage.routeName: (_) => MeetupAuthPage(),
             EventDetailPage.routeName: (_) => EventDetailPage(),
-            EventUrlPage.routeName: (_) => EventUrlPage()
+            EventUrlPage.routeName: (_) => EventUrlPage(),
+            CitySelectionPage.routeName: (_) => CitySelectionPage(),
+            SettingsPage.routeName: (_) => SettingsPage()
           },
         ),
       ),

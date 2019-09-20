@@ -1,8 +1,8 @@
 import 'dart:async';
 
+import 'package:event_dot_pizza/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './connect_platforms_page.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_list_header.dart';
 import '../providers/meetup_platform_events.dart';
@@ -50,7 +50,7 @@ class _EventsPageState extends State<EventsPage> {
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () =>
-                Navigator.pushNamed(context, ConnectPlatformsPage.routeName),
+                Navigator.pushNamed(context, SettingsPage.routeName),
           )
         ],
       ),
