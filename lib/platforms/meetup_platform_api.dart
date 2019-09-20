@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../utils.dart';
 import '../providers/meetup_platform_event.dart';
+import '../services/location_service.dart';
 
 class MeetupPlatformApi {
   static const String kACCESS_TOKEN = 'access_token';
@@ -22,6 +23,11 @@ class MeetupPlatformApi {
       // TODO: standardize error throwing
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
     }
+
+    // TODO: uncomment code below to use the the actual position
+    //    double lat = LocationService().position.latitude;
+    //    double lon = LocationService().position.longitude;
+
     const lat = '60.192059'; // TODO: use actual location instead
     const lon = '24.945831';
     http.Response response = await http.get(

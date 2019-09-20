@@ -6,6 +6,7 @@ import './connect_platforms_page.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_list_header.dart';
 import '../providers/meetup_platform_events.dart';
+import 'package:event_dot_pizza/services/location_service.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -18,10 +19,25 @@ class _EventsPageState extends State<EventsPage> {
   void initState() {
     super.initState();
     scheduleMicrotask(() => _refresh());
+//    suggestedCities();
   }
 
-  _refresh() {
-    Provider.of<MeetupPlatformEvents>(context).refresh();
+  suggestedCities() async {
+    var cities =
+        await Provider.of<LocationService>(context).getSuggestedCites("hels");
+    cities.forEach((city) {
+      print(city as String);
+      //      var placeMarkers =
+      //          await Geolocator().placemarkFromAddress(city as String);
+      //      placeMarkers.forEach((place) => print(place.position.toString()));
+    });
+
+    await Provider.of<LocationService>(context).getCityPosition("helsinki");
+  }
+
+  _refresh() async {
+    await Provider.of<MeetupPlatformEvents>(context).refresh();
+    suggestedCities();
   }
 
   @override

@@ -11,6 +11,7 @@ import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
 import './pages/event_detail_page.dart';
 import './pages/event_url_page.dart';
+import 'services/location_service.dart';
 
 void main() => runApp(App());
 
@@ -34,6 +35,8 @@ class App extends StatelessWidget {
         ChangeNotifierProxyProvider<MeetupPlatformEvents, Events>(
           builder: (_, platform0, __) => Events([platform0]),
         ),
+        ChangeNotifierProvider<LocationService>(
+            builder: (context) => LocationService())
       ],
       child: Consumer2<Session, MeetupPlatformSession>(
         builder: (_, session, platform0, __) => MaterialApp(
