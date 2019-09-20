@@ -13,6 +13,13 @@ class Location {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'city': city,
+        'localized_country_name': country,
+        'lat': lat,
+        'lon': lon,
+      };
+
   equalsTo(Location other) {
     if (other == null) {
       return false;

@@ -52,7 +52,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select City'),
+        title: Text('Select Your City'),
       ),
       body: SafeArea(
         child: Column(
@@ -61,7 +61,8 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
             Padding(
               padding: EdgeInsets.all(10),
               child: TextField(
-                decoration: InputDecoration(hintText: 'Enter your city'),
+                decoration:
+                    InputDecoration(hintText: 'Type the name of your city'),
                 autofocus: true,
                 textCapitalization: TextCapitalization.words,
                 autocorrect: false,

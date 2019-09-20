@@ -24,7 +24,10 @@ class App extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(value: MeetupPlatformSession()),
         ChangeNotifierProxyProvider<MeetupPlatformSession, Session>(
-          builder: (_, platform0, __) => Session(platforms: [platform0]),
+          builder: (_, platform0, prev) => Session(
+            platforms: [platform0],
+            location: prev != null ? prev.location : null,
+          ),
         ),
         ChangeNotifierProxyProvider<MeetupPlatformSession,
             MeetupPlatformEvents>(
@@ -49,17 +52,22 @@ class App extends StatelessWidget {
               print('App:Initializing');
               print('App:WaitingForNoReason');
               await Future.delayed(const Duration(seconds: 1));
-              print('App:RecoveringStoredSession');
+
+              print('App:RecoveringStoredSession:Platform0');
               await platform0.tryToConnectFromPrefs();
+
+              print('App:RecoveringStoredSession:Location');
+              await session.tryToLoadLocationFromPrefs();
+
               print('App:InitializationComplete');
             }(),
             builder: (_, snap) {
               if (snap.connectionState == ConnectionState.waiting) {
                 return SplashPage();
               } else {
-                return session.anyPlatformConnected
-                    ? EventsPage()
-                    : WelcomePage();
+                bool showWelcome = session.anyPlatformConnected == false ||
+                    session.location == null;
+                return showWelcome ? WelcomePage() : EventsPage();
               }
             },
           ),

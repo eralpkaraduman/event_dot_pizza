@@ -19,16 +19,16 @@ class MeetupPlatformApi {
   static const _findLocationsUri = "$_baseUri/find/locations";
 
   static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents(
-      String accessToken) async {
+      double lat, double lon, String accessToken) async {
     if (isNullOrEmpty(accessToken)) {
       // TODO: standardize error throwing
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
     }
-    const lat = '60.192059'; // TODO: use actual location instead
-    const lon = '24.945831';
+    print('?lat=$lat&lon=$lon');
     http.Response response = await http.get(
-        _upcomingEventsUri + '?lat=$lat&lon=$lon',
-        headers: {'Authorization': 'Bearer $accessToken'});
+      _upcomingEventsUri + '?lat=$lat&lon=$lon',
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
 
     if (response.statusCode == 401) {
       // TODO: standardize error throwing
@@ -67,10 +67,6 @@ class MeetupPlatformApi {
       List<Location> locations =
           decodedResponse.map((locData) => Location.fromJson(locData)).toList();
       return locations;
-      // List<MeetupPlatformEvent> events = (decodedResponse['events'] as List)
-      //     .map((data) => MeetupPlatformEvent.fromJson(data))
-      //     .toList();
-      // return events;
     } catch (e) {
       // TODO: standardize error throwing
       print(e);

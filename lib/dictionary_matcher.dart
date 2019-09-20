@@ -39,6 +39,13 @@ const List<String> _foodWordList = [
   "tasting",
   "burger",
   "burgers",
+  // FR
+  "aliments",
+  "aliment",
+  "boisson",
+  "boissons",
+  "rafraîchissement",
+  "rafraîchissements",
 ];
 
 const _foodOccurances = ["🍔", "🍕", "🌭", "🌮"];

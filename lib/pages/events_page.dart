@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:event_dot_pizza/models/location.dart';
 import 'package:event_dot_pizza/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_list_header.dart';
 import '../providers/meetup_platform_events.dart';
+import '../providers/session.dart';
+import '../models/location.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -21,7 +24,11 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   _refresh() {
-    Provider.of<MeetupPlatformEvents>(context).refresh();
+    Location location = Provider.of<Session>(context, listen: false).location;
+    Provider.of<MeetupPlatformEvents>(context).refresh(
+      lat: location.lat,
+      lon: location.lon,
+    );
   }
 
   @override
