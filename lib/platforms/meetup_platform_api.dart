@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../utils.dart';
 import '../providers/meetup_platform_event.dart';
+import '../models/location.dart';
 
 class MeetupPlatformApi {
   static const String kACCESS_TOKEN = 'access_token';
@@ -13,8 +14,9 @@ class MeetupPlatformApi {
       '&response_type=token' +
       '&redirect_uri=$REDIRECT_URI';
 
-  static const _upcomingEventsUri =
-      "https://api.meetup.com/find/upcoming_events";
+  static const _baseUri = "https://api.meetup.com";
+  static const _upcomingEventsUri = "$_baseUri/find/upcoming_events";
+  static const _findLocationsUri = "$_baseUri/find/locations";
 
   static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents(
       String accessToken) async {
@@ -35,8 +37,6 @@ class MeetupPlatformApi {
 
     if (response.statusCode != 200) {
       // TODO: standardize error throwing
-      print(
-          'MeetupPlatformApi::fetchUpcomingEvents:StatusCode:${response.statusCode}');
       throw 'MeetupPlatformApi::fetchUpcomingEvents:StatusCode:${response.statusCode}';
     }
 
@@ -49,8 +49,31 @@ class MeetupPlatformApi {
     } catch (e) {
       // TODO: standardize error throwing
       print(e);
-      print(
-          'MeetupPlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse');
+      throw 'MeetupPlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse';
+    }
+  }
+
+  static Future<List<Location>> findLocations(String query) async {
+    http.Response response =
+        await http.get(_findLocationsUri + '?query=$query');
+
+    if (response.statusCode != 200) {
+      // TODO: standardize error throwing
+      throw 'MeetupPlatformApi::findLocations:StatusCode:${response.statusCode}';
+    }
+
+    try {
+      List<dynamic> decodedResponse = jsonDecode(response.body);
+      List<Location> locations =
+          decodedResponse.map((locData) => Location.fromJson(locData)).toList();
+      return locations;
+      // List<MeetupPlatformEvent> events = (decodedResponse['events'] as List)
+      //     .map((data) => MeetupPlatformEvent.fromJson(data))
+      //     .toList();
+      // return events;
+    } catch (e) {
+      // TODO: standardize error throwing
+      print(e);
       throw 'MeetupPlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse';
     }
   }
