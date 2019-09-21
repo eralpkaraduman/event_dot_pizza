@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import '../providers/events.dart';
 
 class EventListHeader extends StatelessWidget {
-  final Function onRefresh;
+  EventListHeader({
+    Key key,
+    @required this.onRefresh,
+  }) : super(key: key);
 
-  EventListHeader({this.onRefresh});
+  final Function onRefresh;
 
   @override
   Widget build(BuildContext context) {
