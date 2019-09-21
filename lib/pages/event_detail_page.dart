@@ -30,7 +30,7 @@ class EventDetailPage extends StatelessWidget {
           maxLines: 2,
         ),
         actions: <Widget>[
-          new ShareButton(
+          ShareButton(
             url: event.link,
             subject: eventName,
           )

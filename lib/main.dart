@@ -14,6 +14,7 @@ import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
 import './pages/event_detail_page.dart';
 import './pages/event_url_page.dart';
+import './pages/about_page.dart';
 
 void main() => runApp(App());
 
@@ -78,7 +79,8 @@ class App extends StatelessWidget {
             EventDetailPage.routeName: (_) => EventDetailPage(),
             EventUrlPage.routeName: (_) => EventUrlPage(),
             CitySelectionPage.routeName: (_) => CitySelectionPage(),
-            SettingsPage.routeName: (_) => SettingsPage()
+            SettingsPage.routeName: (_) => SettingsPage(),
+            AboutPage.routeName: (_) => AboutPage()
           },
         ),
       ),
