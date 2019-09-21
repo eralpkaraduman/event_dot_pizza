@@ -16,16 +16,20 @@ class CitySelectionPage extends StatefulWidget {
 
 class _CitySelectionPageState extends State<CitySelectionPage> {
   void handleOnCityInputChanged(String text) {}
+  bool _loading = false;
   final cityInputOnChange = new BehaviorSubject<String>();
   List<Location> locations = [];
+  final TextEditingController inputController = TextEditingController();
 
   void updateCityList(String query) async {
+    setState(() => _loading = true);
     try {
       List<Location> locs = await MeetupPlatformApi.findLocations(query);
       this.setState(() => locations = locs);
     } catch (e) {
       throw "Failed to update city options";
     }
+    setState(() => _loading = false);
   }
 
   @override
@@ -41,7 +45,11 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   void _onCitySelected(Location location) {
     Session session = Provider.of<Session>(context, listen: false);
     session.location = location;
-    Navigator.pop(context);
+  }
+
+  void _clearInput() {
+    inputController.clear();
+    setState(() => locations = []);
   }
 
   @override
@@ -66,16 +74,39 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                decoration:
-                    InputDecoration(hintText: 'Type the name of your city'),
-                autofocus: true,
-                textCapitalization: TextCapitalization.words,
-                autocorrect: false,
-                onChanged: (text) => cityInputOnChange.add(text),
-              ),
-            ),
+                padding: EdgeInsets.all(10),
+                child: Stack(
+                  alignment: AlignmentDirectional.centerEnd,
+                  children: <Widget>[
+                    TextField(
+                      decoration: InputDecoration(
+                          hintText: 'Type the name of your city'),
+                      autofocus: true,
+                      controller: inputController,
+                      textCapitalization: TextCapitalization.words,
+                      autocorrect: false,
+                      onChanged: (text) => cityInputOnChange.add(text),
+                    ),
+                    SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: _loading
+                          ? AbsorbPointer(
+                              child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ))
+                          : Visibility(
+                              visible: inputController.text.length > 0,
+                              child: IconButton(
+                                padding: EdgeInsets.all(0),
+                                color: Theme.of(context).accentColor,
+                                icon: Icon(Icons.clear),
+                                onPressed: _clearInput,
+                              ),
+                            ),
+                    )
+                  ],
+                )),
             // for (var loc in locations) Text("${loc.city}, ${loc.country}"),
             Expanded(
               child: ListView.separated(
