@@ -9,12 +9,12 @@ class LocationService extends ChangeNotifier {
       "http://gd.geobytes.com/AutoCompleteCity?callback=?&q=";
   Position _position;
   List<String> _suggestedCites = List<String>();
+  bool _isBusy = false;
 
-//  LocationService();
-
+  // MARK: - Public APIs
   void generateSuggestedCites(String keyword) async {
     if (keyword.length < 3) {
-      clean();
+      cleanCities();
       return;
     }
     http.Response response = await http.get(_cityApi + keyword.toLowerCase());
@@ -39,24 +39,38 @@ class LocationService extends ChangeNotifier {
 
   List<String> get suggestedCites => _suggestedCites;
 
-  clean() {
+  cleanCities() {
     _suggestedCites = [];
     notifyListeners();
   }
 
+  cleanLocation() {
+    _position = null;
+  }
+
   Future<bool> setCityPosition(String city) async {
     bool success = true;
+    _setBusy(true);
+
     try {
       List<Placemark> places = await Geolocator().placemarkFromAddress(city);
       places.forEach((p) => print(p.position.toString()));
       this._position = places.first.position;
-      notifyListeners();
+      _setBusy(false);
       return success;
     } on PlatformException catch (e) {
       print(e);
+      _setBusy(false);
       return !success;
     }
   }
 
   Position get position => _position;
+  bool get isBusy => _isBusy;
+
+  // MARK: - private APIs
+  _setBusy(bool state) {
+    _isBusy = state;
+    notifyListeners();
+  }
 }

@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_list_header.dart';
 import '../providers/meetup_platform_events.dart';
-import 'package:event_dot_pizza/services/location_service.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -15,8 +14,6 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
-  LocationService _service;
-
   @override
   void initState() {
     super.initState();
