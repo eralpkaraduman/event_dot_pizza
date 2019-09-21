@@ -23,11 +23,12 @@ class MeetupPlatformEvents with ChangeNotifier implements PlatformEvents {
   /// Calling this before app wasnt built yet will cause problems.
   /// Because it calls `notifyListeners()` right away.
   /// It is better if this is called inside `scheduleMicrotask()` callback.
-  Future<void> refresh() async {
+  Future<void> refresh({@required double lat, @required double lon}) async {
     _refreshing = true;
     notifyListeners();
     try {
-      _events = await MeetupPlatformApi.fetchUpcomingEvents(_accessToken);
+      _events =
+          await MeetupPlatformApi.fetchUpcomingEvents(lat, lon, _accessToken);
     } catch (e) {
       print('Provider:MeetupPlatformEvents:FailedToRefresh');
       print(e);
