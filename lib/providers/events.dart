@@ -20,6 +20,7 @@ class Events extends ChangeNotifier {
         event.matches = matcher.getMatches(event.description);
       });
       _events = _allEvents.where((event) => event.matches.length > 0).toList();
+      _events.sort((a, b) => a.time.compareTo(b.time));
       _refreshing = _refreshing || platform.refreshing;
     });
   }
