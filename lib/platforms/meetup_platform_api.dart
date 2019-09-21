@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../utils.dart';
 import '../providers/meetup_platform_event.dart';
-import '../services/location_service.dart';
+import 'package:geolocator/geolocator.dart';
 
 class MeetupPlatformApi {
   static const String kACCESS_TOKEN = 'access_token';
@@ -18,18 +18,18 @@ class MeetupPlatformApi {
       "https://api.meetup.com/find/upcoming_events";
 
   static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents(
-      String accessToken) async {
+      Position location, String accessToken) async {
     if (isNullOrEmpty(accessToken)) {
       // TODO: standardize error throwing
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
     }
 
-    // TODO: uncomment code below to use the the actual position
-    //    double lat = LocationService().position.latitude;
-    //    double lon = LocationService().position.longitude;
+    print("LOCATION: $location");
 
-    const lat = '60.192059'; // TODO: use actual location instead
-    const lon = '24.945831';
+    // TODO: uncomment code below to use the the actual position
+    String lat = location.latitude.toString();
+    String lon = location.longitude.toString();
+
     http.Response response = await http.get(
         _upcomingEventsUri + '?lat=$lat&lon=$lon',
         headers: {'Authorization': 'Bearer $accessToken'});

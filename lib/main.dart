@@ -61,7 +61,7 @@ class App extends StatelessWidget {
                 return SplashPage();
               } else {
                 return session.anyPlatformConnected
-                    ? EventsPage()
+                    ? CitySelectionPage()
                     : WelcomePage();
               }
             },
@@ -72,7 +72,8 @@ class App extends StatelessWidget {
             EventDetailPage.routeName: (_) => EventDetailPage(),
             EventUrlPage.routeName: (_) => EventUrlPage(),
             CitySelectionPage.routeName: (_) => CitySelectionPage(),
-            SettingsPage.routeName: (_) => SettingsPage()
+            SettingsPage.routeName: (_) => SettingsPage(),
+            EventsPage.routeName: (_) => EventsPage()
           },
         ),
       ),

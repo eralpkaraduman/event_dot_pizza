@@ -7,17 +7,16 @@ import 'package:flutter/material.dart';
 class LocationService extends ChangeNotifier {
   final String _cityApi =
       "http://gd.geobytes.com/AutoCompleteCity?callback=?&q=";
-  Position position;
+  Position _position;
+  List<String> _suggestedCites = List<String>();
 
-  LocationService({this.position});
+//  LocationService();
 
-  Future<List<dynamic>> getSuggestedCites(String keyword) async {
-    var emptyCityList = List<String>();
-
+  void generateSuggestedCites(String keyword) async {
     if (keyword.length < 3) {
-      return emptyCityList;
+      clean();
+      return;
     }
-
     http.Response response = await http.get(_cityApi + keyword.toLowerCase());
     if (response.statusCode == 200) {
       print(response.headers);
@@ -30,27 +29,34 @@ class LocationService extends ChangeNotifier {
       print(trimmedString);
 
       try {
-        List<dynamic> decodedResponse = jsonDecode(trimmedString);
-        return decodedResponse;
+        _suggestedCites = List<String>.from(jsonDecode(trimmedString));
+        notifyListeners();
       } catch (e) {
         print(e.toString());
-        return emptyCityList;
       }
-    } else {
-      return emptyCityList;
-    }
+    } else {}
   }
 
-  Future<bool> getCityPosition(String city) async {
+  List<String> get suggestedCites => _suggestedCites;
+
+  clean() {
+    _suggestedCites = [];
+    notifyListeners();
+  }
+
+  Future<bool> setCityPosition(String city) async {
     bool success = true;
     try {
       List<Placemark> places = await Geolocator().placemarkFromAddress(city);
       places.forEach((p) => print(p.position.toString()));
-      this.position = places.first.position;
+      this._position = places.first.position;
+      notifyListeners();
       return success;
     } on PlatformException catch (e) {
       print(e);
       return !success;
     }
   }
+
+  Position get position => _position;
 }

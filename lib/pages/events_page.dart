@@ -15,29 +15,16 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  LocationService _service;
+
   @override
   void initState() {
     super.initState();
     scheduleMicrotask(() => _refresh());
-//    suggestedCities();
-  }
-
-  suggestedCities() async {
-    var cities =
-        await Provider.of<LocationService>(context).getSuggestedCites("hels");
-    cities.forEach((city) {
-      print(city as String);
-      //      var placeMarkers =
-      //          await Geolocator().placemarkFromAddress(city as String);
-      //      placeMarkers.forEach((place) => print(place.position.toString()));
-    });
-
-    await Provider.of<LocationService>(context).getCityPosition("helsinki");
   }
 
   _refresh() async {
-    await Provider.of<MeetupPlatformEvents>(context).refresh();
-    suggestedCities();
+    await Provider.of<MeetupPlatformEvents>(context).refresh(context);
   }
 
   @override
