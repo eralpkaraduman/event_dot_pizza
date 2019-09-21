@@ -87,23 +87,33 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                       autocorrect: false,
                       onChanged: (text) => cityInputOnChange.add(text),
                     ),
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: _loading
-                          ? AbsorbPointer(
-                              child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                            ))
-                          : Visibility(
-                              visible: inputController.text.length > 0,
-                              child: IconButton(
-                                padding: EdgeInsets.all(0),
-                                color: Theme.of(context).accentColor,
-                                icon: Icon(Icons.clear),
-                                onPressed: _clearInput,
-                              ),
-                            ),
+                    AnimatedCrossFade(
+                      duration: Duration(milliseconds: 600),
+                      crossFadeState: _loading
+                          ? CrossFadeState.showFirst
+                          : CrossFadeState.showSecond,
+                      firstChild: Container(
+                          width: 40,
+                          height: 40,
+                          padding: EdgeInsets.all(5),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 3,
+                          )),
+                      secondChild: SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Visibility(
+                          // maintainState: true,
+                          // maintainAnimation: true,
+                          visible: inputController.text.length > 0,
+                          child: IconButton(
+                            padding: EdgeInsets.all(0),
+                            color: Theme.of(context).accentColor,
+                            icon: Icon(Icons.clear),
+                            onPressed: _clearInput,
+                          ),
+                        ),
+                      ),
                     )
                   ],
                 )),
