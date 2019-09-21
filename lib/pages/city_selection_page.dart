@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../platforms/meetup_platform_api.dart';
 import '../models/location.dart';
 import '../providers/session.dart';
+import '../widgets/city_list_item.dart';
 
 class CitySelectionPage extends StatefulWidget {
   static const routeName = "citySelection";
@@ -35,6 +36,12 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
         .listen(this.updateCityList);
 
     super.initState();
+  }
+
+  void _onCitySelected(Location location) {
+    Session session = Provider.of<Session>(context, listen: false);
+    session.location = location;
+    Navigator.pop(context);
   }
 
   @override
@@ -76,6 +83,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                 itemCount: renderLocs.length,
                 separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (_, index) => CityListItem(
+                  onTap: _onCitySelected,
                   location: renderLocs[index],
                 ),
               ),
@@ -83,24 +91,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class CityListItem extends StatelessWidget {
-  final Location location;
-  const CityListItem({Key key, @required this.location}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Session session = Provider.of<Session>(context, listen: true);
-    bool selected = location.equalsTo(session.location);
-    return ListTile(
-      title: Text(location.city),
-      subtitle: Text(location.country),
-      onTap: () => session.location = location,
-      selected: selected,
-      trailing: selected ? Icon(Icons.pin_drop) : null,
     );
   }
 }

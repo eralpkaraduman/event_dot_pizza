@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/events.dart';
-import '../providers/event.dart';
+import '../models/event.dart';
 import '../widgets/event_description.dart';
 import '../widgets/share_button.dart';
 import './event_url_page.dart';
@@ -19,6 +19,7 @@ class EventDetailPage extends StatelessWidget {
     final EventDetailPageArgs args = ModalRoute.of(context).settings.arguments;
     final Events events = Provider.of<Events>(context, listen: false);
     final Event event = events.find(args.id);
+    // TODO: hande if event is not found
     final eventName = event?.name ?? 'Unknown Event';
     return Scaffold(
       appBar: AppBar(

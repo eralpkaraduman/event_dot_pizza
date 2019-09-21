@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/platform_session.dart';
+import '../providers/meetup_platform_session.dart';
+import '../providers/session.dart';
 import '../dictionary_matcher.dart' as matcher;
-import './platform_events.dart';
-import './event.dart';
+import '../models/location.dart';
+import '../models/event.dart';
 
 class Events extends ChangeNotifier {
   List<Event> _allEvents = [];
@@ -12,7 +16,7 @@ class Events extends ChangeNotifier {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  Events(List<PlatformEvents> platforms) {
+  Events({@required List<PlatformSession> platforms}) {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
       _allEvents = [...platform.events, ...events];

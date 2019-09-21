@@ -9,27 +9,31 @@ import './platform_session.dart';
 const String kSelectedLocationJson = 'selectedLocationJson';
 
 class Session extends ChangeNotifier {
-  bool anyPlatformConnected;
-
   Location _location;
   Location get location => _location;
   set location(Location newLocation) {
     _location = newLocation;
     print('Provider:Session:location:Updated');
+    _saveLocationToPrefs();
     notifyListeners();
-    scheduleMicrotask(() => _saveLocationToPrefs());
   }
 
-  Session(
-      {@required List<PlatformSession> platforms,
-      @required Location location}) {
+  bool _anyPlatformConnected;
+  bool get anyPlatformConnected => _anyPlatformConnected;
+  bool get ready => _location != null && anyPlatformConnected;
+
+  Session({
+    @required List<PlatformSession> platforms,
+    @required Location location,
+  }) {
     print('Provider:Session:Updated');
-    anyPlatformConnected =
+    _anyPlatformConnected =
         platforms.where((platform) => platform.isConnected).length > 0;
-    location = _location;
+    _location = location;
   }
 
   Future<void> _saveLocationToPrefs() async {
+    print('Session::saveLocationToPrefs');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!isNullOrEmpty(_location)) {
       try {
@@ -42,23 +46,27 @@ class Session extends ChangeNotifier {
     }
   }
 
-  Future<void> tryToLoadLocationFromPrefs() async {
-    print('tryToLoadLocationFromPrefs');
-    if (_location != null) {
-      return;
-    }
+  _tryToLoadLocationFromPrefs() async {
+    print('Session::tryToLoadLocationFromPrefs');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey(kSelectedLocationJson)) {
-      return;
+    if (isNullOrEmpty(_location) && prefs.containsKey(kSelectedLocationJson)) {
+      Location loadedLocation;
+      try {
+        loadedLocation = Location.fromJson(jsonDecode(
+          prefs.getString(kSelectedLocationJson),
+        ));
+      } catch (_) {
+        print('MeetupPlatformSession::tryToConnectFromPrefs:failed');
+      }
+      if (loadedLocation != null) {
+        _location = loadedLocation;
+        notifyListeners();
+      }
     }
-    try {
-      _location = Location.fromJson(jsonDecode(
-        prefs.getString(kSelectedLocationJson),
-      ));
-    } catch (_) {
-      print('Failed to load stored location setting');
-      _location = null;
-    }
-    notifyListeners();
+  }
+
+  Future<void> tryToLoadFromPrefs() async {
+    print('Session:tryToLoadFromPrefs');
+    await _tryToLoadLocationFromPrefs();
   }
 }

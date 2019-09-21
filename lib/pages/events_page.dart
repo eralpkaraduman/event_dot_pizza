@@ -1,32 +1,46 @@
 import 'dart:async';
+
+import 'package:event_dot_pizza/models/location.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/location.dart';
+import '../providers/meetup_platform_session.dart';
+import '../providers/session.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list.dart';
 import '../widgets/event_list_header.dart';
-import '../providers/meetup_platform_events.dart';
-import '../providers/session.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
+
   @override
   _EventsPageState createState() => _EventsPageState();
 }
 
 class _EventsPageState extends State<EventsPage> {
+  Location _lastLoadedLocation;
   @override
   void initState() {
+    _refresh();
     super.initState();
-    scheduleMicrotask(() => _refresh());
   }
 
-  _refresh() {
-    Location location = Provider.of<Session>(context, listen: false).location;
-    Provider.of<MeetupPlatformEvents>(context).refresh(
-      lat: location.lat,
-      lon: location.lon,
-    );
+  void _refresh() => scheduleMicrotask(() {
+        Location location = Provider.of<Session>(context).location;
+        this.setState(() {
+          _lastLoadedLocation = location;
+        });
+        Provider.of<MeetupPlatformSession>(context).refreshEvents(location);
+      });
+
+  @override
+  void didUpdateWidget(EventsPage oldWidget) {
+    Location currentLocation =
+        Provider.of<Session>(context, listen: false).location;
+    if (_lastLoadedLocation != null &&
+        !_lastLoadedLocation.equalsTo(currentLocation)) {
+      _refresh();
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -47,8 +61,12 @@ class _EventsPageState extends State<EventsPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          EventListHeader(onRefresh: _refresh),
-          Expanded(child: EventList(onRefresh: _refresh))
+          EventListHeader(
+            onRefresh: _refresh,
+          ),
+          Expanded(
+            child: EventList(),
+          ),
         ],
       ),
     );

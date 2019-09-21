@@ -1,8 +1,7 @@
 import '../dictionary_matcher.dart';
-import 'package:flutter/foundation.dart';
 import '../platform_type.dart';
 
-class Event with ChangeNotifier {
+class Event {
   // Does this need to be be ChangeNotifier, remove from providers if not
   String id;
   List<EventFilterMatch> matches = [];

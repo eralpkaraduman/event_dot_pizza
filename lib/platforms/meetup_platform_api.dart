@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../utils.dart';
-import '../providers/meetup_platform_event.dart';
+import '../models/meetup_platform_event.dart';
 import '../models/location.dart';
 
 class MeetupPlatformApi {
@@ -18,15 +19,16 @@ class MeetupPlatformApi {
   static const _upcomingEventsUri = "$_baseUri/find/upcoming_events";
   static const _findLocationsUri = "$_baseUri/find/locations";
 
-  static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents(
-      double lat, double lon, String accessToken) async {
+  static Future<List<MeetupPlatformEvent>> fetchUpcomingEvents({
+    @required Location location,
+    @required String accessToken,
+  }) async {
     if (isNullOrEmpty(accessToken)) {
       // TODO: standardize error throwing
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
     }
-    print('?lat=$lat&lon=$lon');
     http.Response response = await http.get(
-      _upcomingEventsUri + '?lat=$lat&lon=$lon',
+      _upcomingEventsUri + '?lat=${location.lat}&lon=${location.lon}',
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
