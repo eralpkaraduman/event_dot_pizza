@@ -28,7 +28,8 @@ class MeetupPlatformApi {
       throw 'MeetupPlatformApi:FetchUpcomingEvents:NullOrEmptyAccessToken';
     }
     http.Response response = await http.get(
-      _upcomingEventsUri + '?lat=${location.lat}&lon=${location.lon}',
+      _upcomingEventsUri +
+          '?lat=${location.lat}&lon=${location.lon}&radius=100&page=1000',
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
