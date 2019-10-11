@@ -25,7 +25,7 @@ class MeetupPlatformApi {
     const lat = '60.192059'; // TODO: use actual location instead
     const lon = '24.945831';
     http.Response response = await http.get(
-        _upcomingEventsUri + '?lat=$lat&lon=$lon',
+        _upcomingEventsUri + '?lat=$lat&lon=$lon&radius=100&page=1000',
         headers: {'Authorization': 'Bearer $accessToken'});
 
     if (response.statusCode == 401) {
