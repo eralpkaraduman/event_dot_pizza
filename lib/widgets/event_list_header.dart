@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import '../providers/events.dart';
 
 class EventListHeader extends StatelessWidget {
-  final Function onRefresh;
+  EventListHeader({
+    Key key,
+    @required this.onRefresh,
+  }) : super(key: key);
 
-  EventListHeader({this.onRefresh});
+  final Function onRefresh;
 
   @override
   Widget build(BuildContext context) {
     print('flutter: EventListHeader:build');
     return Consumer<Events>(
-      builder: (_, eventsData, __) => Container(
+      builder: (_, eventsProvider, __) => Container(
           color: Theme.of(context).secondaryHeaderColor,
           padding: const EdgeInsets.all(8.0),
           child: SafeArea(
@@ -24,22 +27,23 @@ class EventListHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     RaisedButton(
-                      onPressed: eventsData.refreshing ? null : onRefresh,
+                      onPressed:
+                          eventsProvider.refreshing ? null : this.onRefresh,
                       child: Text('Refresh'),
                     ),
-                    Text(eventsData.refreshing
+                    Text(eventsProvider.refreshing
                         ? 'refreshing'
                         : 'not refreshing'),
                     Text(
-                      '#events: ${eventsData.allEvents.length}',
+                      '#events: ${eventsProvider.allEvents.length}',
                     ),
                     Text(
-                      '#matching events: ${eventsData.events.length}',
+                      '#matching events: ${eventsProvider.events.length}',
                     ),
                   ],
                 ),
                 Container(
-                  child: eventsData.refreshing
+                  child: eventsProvider.refreshing
                       ? CircularProgressIndicator()
                       : null,
                   padding: const EdgeInsets.all(8.0),

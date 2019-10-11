@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../dictionary_matcher.dart';
-import '../providers/event.dart';
+import '../models/event.dart';
 import '../pages/event_detail_page.dart';
 
 class EventListItem extends StatelessWidget {
+  const EventListItem({Key key, @required this.event}) : super(key: key);
+  final Event event;
+
   @override
   Widget build(BuildContext context) {
-    final event = Provider.of<Event>(context, listen: false);
     return ListTile(
       title: Text(
         event.name,

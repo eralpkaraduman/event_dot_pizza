@@ -14,7 +14,6 @@ class MeetupAuthPage extends StatefulWidget {
 class _MeetupAuthPageState extends State<MeetupAuthPage> {
   bool _loading = false;
   MeetupPlatformSession _meetupPlatform;
-  WebViewController _webViewController;
 
   Map<String, String> parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();

@@ -1,4 +1,4 @@
-package company.nicework.eventdotpizza;
+package company.nicework.eventdotpizza2;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
