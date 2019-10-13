@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "21500103369",
+    "firebase_url": "https://eventdotpizza.firebaseio.com",
+    "project_id": "eventdotpizza",
+    "storage_bucket": "eventdotpizza.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21500103369:android:ef46ad6092a153b6921b18",
+        "android_client_info": {
+          "package_name": "company.nicework.eventdotpizza2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21500103369-2e62t3q1atcgcftnfnp993d10c8baniq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgH6eInRQ-ZnFBiWoAypz1zQhwbD1MXnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21500103369-2e62t3q1atcgcftnfnp993d10c8baniq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "21500103369-maft9f8u7jhdoj2t4gta3h421au2kp0p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "company.nicework.eventdotpizza"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
