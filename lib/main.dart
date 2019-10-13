@@ -4,6 +4,8 @@ import 'package:event_dot_pizza/pages/city_selection_page.dart';
 import 'package:event_dot_pizza/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import './providers/meetup_platform_session.dart';
 import './providers/events.dart';
 import './providers/session.dart';
@@ -19,6 +21,10 @@ import './pages/about_page.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver firebaseAnalyticsObserver =
+      FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     print('App:Build');
@@ -73,6 +79,7 @@ class App extends StatelessWidget {
                     }
                   },
                 ),
+          navigatorObservers: [firebaseAnalyticsObserver],
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             MeetupAuthPage.routeName: (_) => MeetupAuthPage(),
