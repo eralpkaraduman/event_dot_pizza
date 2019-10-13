@@ -45,15 +45,11 @@ class EventDetailPage extends StatelessWidget {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        '📍 ${event.venueName}',
-                        style: const TextStyle(
-                            fontSize: 24.0, fontWeight: FontWeight.bold),
-                      ),
+                      Text('📍 ${event.venueName}',
+                          style: Theme.of(context).textTheme.headline),
                       Text(
                         '🗓 ${event.formattedLocalDateTime}',
-                        style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline,
                       ),
                       RaisedButton(
                         child: Text('Open Original Event Page'),
@@ -63,8 +59,9 @@ class EventDetailPage extends StatelessWidget {
                         ),
                       ),
                       EventDescription(
-                          description: event.description,
-                          matches: event.matches),
+                        description: event.description,
+                        matches: event.matches,
+                      ),
                     ],
                   ),
           ),

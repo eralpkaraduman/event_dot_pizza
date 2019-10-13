@@ -18,10 +18,7 @@ class SplashPage extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 child: Text(
                   'HOLD ON...',
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context).textTheme.headline,
                 ),
               ),
             ],

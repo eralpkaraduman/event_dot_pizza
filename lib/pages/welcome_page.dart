@@ -19,6 +19,7 @@ class WelcomePage extends StatelessWidget {
           children: <Widget>[
             Text(
               'I rely on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
+              style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),
             RaisedButton(
@@ -40,6 +41,7 @@ class WelcomePage extends StatelessWidget {
           children: <Widget>[
             Text(
               'I need to know which city you are at, so I can show you the closest events.',
+              style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),
             RaisedButton(
@@ -63,12 +65,13 @@ class WelcomePage extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'Hi! 👋',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 21),
+                  style: Theme.of(context).textTheme.headline,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
                     'Before we begin, we need to set a coupe of things;',
+                    style: Theme.of(context).textTheme.subhead,
                   ),
                 ),
                 location,

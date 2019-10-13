@@ -11,27 +11,30 @@ class EventListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(
-        event.name,
-        // TODO: move text styles to a constant somewhere
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      subtitle: Text(
-        '${event.formattedLocalDateTime} ${event.venueName}',
-        style: const TextStyle(
-          fontSize: 16,
-        ),
+      title: Text(event.name, style: Theme.of(context).textTheme.title),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              event.formattedLocalDateTime,
+              style: Theme.of(context).textTheme.body1,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              '@ ${event.venueName}',
+              style: Theme.of(context).textTheme.body1,
+            ),
+          )
+        ],
       ),
       isThreeLine: false,
       trailing: Text(
         event.matchTypes.map((t) => EventFilterMatchTypeEmojis[t]).join(' '),
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.title,
       ),
       onTap: () => Navigator.of(context).pushNamed(
         EventDetailPage.routeName,
