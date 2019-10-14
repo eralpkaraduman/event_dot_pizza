@@ -22,11 +22,14 @@ class Session extends ChangeNotifier {
   bool get anyPlatformConnected => _anyPlatformConnected;
   bool get ready => _location != null && anyPlatformConnected;
 
+  List<PlatformSession> _platforms;
+
   Session({
     @required List<PlatformSession> platforms,
     @required Location location,
   }) {
     print('Provider:Session:Updated');
+    _platforms = platforms;
     _anyPlatformConnected =
         platforms.where((platform) => platform.isConnected).length > 0;
     _location = location;
@@ -68,5 +71,9 @@ class Session extends ChangeNotifier {
   Future<void> tryToLoadFromPrefs() async {
     print('Session:tryToLoadFromPrefs');
     await _tryToLoadLocationFromPrefs();
+    for (var platform in _platforms) {
+      print("Session:tryToLoadFromPrefs:Platform:${platform.runtimeType}");
+      await platform.tryToConnectFromPrefs();
+    }
   }
 }

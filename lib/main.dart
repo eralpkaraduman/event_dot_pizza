@@ -53,9 +53,8 @@ class App extends StatelessWidget {
           ),
         ),
       ],
-      child: Consumer2<Session, MeetupPlatformSession>(
-        // Remove MeetupPlatformSession
-        builder: (_, session, platform0, __) => MaterialApp(
+      child: Consumer<Session>(
+        builder: (_, session, __) => MaterialApp(
           title: 'Event.Pizza',
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,
@@ -70,8 +69,6 @@ class App extends StatelessWidget {
                     await Future.delayed(const Duration(seconds: 1));
                     print('App:RecoveringStoredSession');
                     await session.tryToLoadFromPrefs();
-                    print('App:RecoveringStoredSession:Meetup');
-                    await platform0.tryToConnectFromPrefs();
                     print('App:InitializationComplete');
                   }(),
                   builder: (context, snap) {
