@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import './meetup_auth_page.dart';
+import './eventbrite_auth_page.dart';
 import '../providers/meetup_platform_session.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {
@@ -32,6 +33,15 @@ class ConnectPlatformsPage extends StatelessWidget {
                     child: Text('Connect Meetup.com'),
                     onPressed: () =>
                         Navigator.pushNamed(context, MeetupAuthPage.routeName),
+                  ),
+                ),
+                Visibility(
+//                  visible: !meetupPlatform.isConnected,
+                  visible: true,
+                  child: RaisedButton(
+                    child: Text('Connect Eventbrite'),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, EventbriteAuthPage.routeName),
                   ),
                 ),
               ],

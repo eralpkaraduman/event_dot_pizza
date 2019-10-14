@@ -2,22 +2,22 @@ import 'package:event_dot_pizza/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:provider/provider.dart';
-import '../providers/meetup_platform_session.dart';
-import '../platforms/meetup_platform_api.dart';
+import '../providers/eventbrite_platform_session.dart';
+import '../platforms/eventbrite_platform_api.dart';
 
-class MeetupAuthPage extends StatefulWidget {
-  static const routeName = "meetupAuth";
+class EventbriteAuthPage extends StatefulWidget {
+  static const routeName = "eventbriteAuth";
   @override
-  _MeetupAuthPageState createState() => _MeetupAuthPageState();
+  _EventbriteAuthPage createState() => _EventbriteAuthPage();
 }
 
-class _MeetupAuthPageState extends State<MeetupAuthPage> {
+class _EventbriteAuthPage extends State<EventbriteAuthPage> {
   bool _loading = false;
-  MeetupPlatformSession _meetupPlatform;
+  EventbritePlatformSession _eventbritePlatform;
 
   Map<String, String> parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();
-    if (url.startsWith(MeetupPlatformApi.REDIRECT_URI)) {
+    if (url.startsWith(EventbritePlatformApi.REDIRECT_URI)) {
       String query = url.split('#')[1];
       List<String> params = query.split('&');
       for (String params in params) {
@@ -30,9 +30,9 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
 
   @override
   void initState() {
-    print('MeetupAuthPage:InitState');
-    _meetupPlatform =
-        Provider.of<MeetupPlatformSession>(context, listen: false);
+    print('EventbriteAuthPage:InitState');
+    _eventbritePlatform =
+        Provider.of<EventbritePlatformSession>(context, listen: false);
     setState(() => _loading = true);
     super.initState();
   }
@@ -43,9 +43,9 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
       print('errored');
       Navigator.pop(context);
       return NavigationDecision.prevent;
-    } else if (params.containsKey(MeetupPlatformApi.kACCESS_TOKEN)) {
+    } else if (params.containsKey(EventbritePlatformApi.kACCESS_TOKEN)) {
       print('contains token');
-      _meetupPlatform.connect(params[MeetupPlatformApi.kACCESS_TOKEN]);
+      _eventbritePlatform.connect(params[EventbritePlatformApi.kACCESS_TOKEN]);
       Navigator.popUntil(
         context,
         ModalRoute.withName(Navigator.defaultRouteName),
@@ -58,11 +58,11 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('MeetupAuthPage:Build');
+    print('EventbriteAuthPage:Build');
     // TODO: Add UI For Back/Forward navigation (there's example in webview_flutter repo)
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connect Meetup.Com'),
+        title: Text('Connect Eventbrite'),
       ),
       body: SafeArea(
         child: Stack(
@@ -70,7 +70,7 @@ class _MeetupAuthPageState extends State<MeetupAuthPage> {
           children: <Widget>[
             WebView(
               userAgent: getUserAgent(),
-              initialUrl: MeetupPlatformApi.authURI,
+              initialUrl: EventbritePlatformApi.authURI,
               javascriptMode: JavascriptMode.unrestricted,
               onPageFinished: (_) => setState(() => _loading = false),
               navigationDelegate: navigationDelegate,
