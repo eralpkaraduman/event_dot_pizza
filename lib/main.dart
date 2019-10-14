@@ -7,11 +7,13 @@ import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import './providers/meetup_platform_session.dart';
+import './providers/eventbrite_platform_session.dart';
 import './providers/events.dart';
 import './providers/session.dart';
 import './pages/connect_platforms_page.dart';
 import './pages/events_page.dart';
 import './pages/meetup_auth_page.dart';
+import './pages/eventbrite_auth_page.dart';
 import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
 import './pages/event_detail_page.dart';
@@ -35,20 +37,27 @@ class App extends StatelessWidget {
           builder: (_) => MeetupPlatformSession(),
         ),
 
+        // EVENTBRITE PLATFORM SESSION PROVIDER
+        ChangeNotifierProvider<EventbritePlatformSession>(
+          builder: (_) => EventbritePlatformSession(),
+        ),
+
         // SESSION PROXY PROVIDER
-        ChangeNotifierProxyProvider<MeetupPlatformSession, Session>(
-          builder: (_, platform0, prev) {
+        ChangeNotifierProxyProvider2<MeetupPlatformSession,
+            EventbritePlatformSession, Session>(
+          builder: (_, platform0, platform1, prev) {
             return Session(
-              platforms: [platform0],
+              platforms: [platform0, platform1],
               location: prev != null ? prev.location : null,
             );
           },
         ),
 
         // EVENTS PROVIDER
-        ChangeNotifierProxyProvider2<MeetupPlatformSession, Session, Events>(
-          builder: (_, platform0, session, __) => Events(
-            platforms: [platform0],
+        ChangeNotifierProxyProvider3<MeetupPlatformSession,
+            EventbritePlatformSession, Session, Events>(
+          builder: (_, platform0, platform1, session, __) => Events(
+            platforms: [platform0, platform1],
             location: session.location,
           ),
         ),
@@ -85,6 +94,7 @@ class App extends StatelessWidget {
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             MeetupAuthPage.routeName: (_) => MeetupAuthPage(),
+            EventbriteAuthPage.routeName: (_) => EventbriteAuthPage(),
             EventDetailPage.routeName: (_) => EventDetailPage(),
             EventUrlPage.routeName: (_) => EventUrlPage(),
             CitySelectionPage.routeName: (_) => CitySelectionPage(),

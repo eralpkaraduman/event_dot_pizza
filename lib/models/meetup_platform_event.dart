@@ -1,10 +1,8 @@
 import '../platform_type.dart';
 import '../utils.dart';
 import './event.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 class MeetupPlatformEvent extends Event {
-  static DateFormat _dateFormater = DateFormat("EEE, MMM d, ''yy h:mm a");
   MeetupPlatformEvent({
     String platformId,
     String name,
@@ -29,8 +27,8 @@ class MeetupPlatformEvent extends Event {
           eventName + ' ' + parseHtmlText(json['description'].toString()),
       venueName: venueJson['name'] ?? 'Unknown Venue',
       formattedLocalDateTime:
-          _dateFormater.format(DateTime.fromMillisecondsSinceEpoch(time)),
-      time: json['time'] as int,
+          Event.dateFormater.format(DateTime.fromMillisecondsSinceEpoch(time)),
+      time: time,
     );
   }
 }

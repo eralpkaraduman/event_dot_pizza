@@ -1,7 +1,9 @@
 import '../dictionary_matcher.dart';
 import '../platform_type.dart';
+import 'package:intl/intl.dart' show DateFormat;
 
 class Event {
+  static DateFormat dateFormater = DateFormat("EEE, MMM d, ''yy h:mm a");
   String id;
   List<EventFilterMatch> matches = [];
   List<EventFilterMatchType> get matchTypes {
