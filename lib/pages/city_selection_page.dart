@@ -103,8 +103,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                         width: 40,
                         height: 40,
                         child: Visibility(
-                          // maintainState: true,
-                          // maintainAnimation: true,
                           visible: inputController.text.length > 0,
                           child: IconButton(
                             padding: EdgeInsets.all(0),
@@ -117,7 +115,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
                     )
                   ],
                 )),
-            // for (var loc in locations) Text("${loc.city}, ${loc.country}"),
             Expanded(
               child: ListView.separated(
                 padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),

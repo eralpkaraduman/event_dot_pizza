@@ -2,7 +2,6 @@ import '../dictionary_matcher.dart';
 import '../platform_type.dart';
 
 class Event {
-  // Does this need to be be ChangeNotifier, remove from providers if not
   String id;
   List<EventFilterMatch> matches = [];
   List<EventFilterMatchType> get matchTypes {

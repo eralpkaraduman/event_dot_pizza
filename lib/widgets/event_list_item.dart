@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../dictionary_matcher.dart';
 import '../models/event.dart';
 import '../pages/event_detail_page.dart';

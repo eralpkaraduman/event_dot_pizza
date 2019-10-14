@@ -31,7 +31,9 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         // MEETUP PLATFORM SESSION PROVIDER
-        ChangeNotifierProvider.value(value: MeetupPlatformSession()),
+        ChangeNotifierProvider<MeetupPlatformSession>(
+          builder: (_) => MeetupPlatformSession(),
+        ),
 
         // SESSION PROXY PROVIDER
         ChangeNotifierProxyProvider<MeetupPlatformSession, Session>(
@@ -44,8 +46,11 @@ class App extends StatelessWidget {
         ),
 
         // EVENTS PROVIDER
-        ChangeNotifierProxyProvider<MeetupPlatformSession, Events>(
-          builder: (_, platform0, __) => Events(platforms: [platform0]),
+        ChangeNotifierProxyProvider2<MeetupPlatformSession, Session, Events>(
+          builder: (_, platform0, session, __) => Events(
+            platforms: [platform0],
+            location: session.location,
+          ),
         ),
       ],
       child: Consumer2<Session, MeetupPlatformSession>(
