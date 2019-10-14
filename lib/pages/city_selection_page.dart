@@ -45,6 +45,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   void _onCitySelected(Location location) {
     Session session = Provider.of<Session>(context, listen: false);
     session.location = location;
+    Navigator.pop(context);
   }
 
   void _clearInput() {
