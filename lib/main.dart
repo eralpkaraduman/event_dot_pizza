@@ -43,17 +43,19 @@ class App extends StatelessWidget {
         ),
 
         // SESSION PROXY PROVIDER
-        ChangeNotifierProxyProvider<MeetupPlatformSession, Session>(
-          builder: (_, platform0, prev) {
+        ChangeNotifierProxyProvider2<MeetupPlatformSession,
+            EventbritePlatformSession, Session>(
+          builder: (_, platform0, platform1, prev) {
             return Session(
-              platforms: [platform0],
+              platforms: [platform0, platform1],
               location: prev != null ? prev.location : null,
             );
           },
         ),
 
         // EVENTS PROVIDER
-        ChangeNotifierProxyProvider3<MeetupPlatformSession, EventbritePlatformSession, Session, Events>(
+        ChangeNotifierProxyProvider3<MeetupPlatformSession,
+            EventbritePlatformSession, Session, Events>(
           builder: (_, platform0, platform1, session, __) => Events(
             platforms: [platform0, platform1],
             location: session.location,
