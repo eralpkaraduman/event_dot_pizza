@@ -62,37 +62,6 @@ class ConnectPlatformsPage extends StatelessWidget {
                           ),
                   ),
                 ),
-
-                // Visibility(
-                //   visible: meetupPlatform.isConnected,
-                //   child: RaisedButton(
-                //       color: Theme.of(context).errorColor,
-                //       child: Text('Disconnect Meetup.com'),
-                //       onPressed: () => meetupPlatform.disconnect()),
-                // ),
-                // Visibility(
-                //   visible: !meetupPlatform.isConnected,
-                //   child: RaisedButton(
-                //     child: Text('Connect Meetup.com'),
-                //     onPressed: () =>
-                //         Navigator.pushNamed(context, MeetupAuthPage.routeName),
-                //   ),
-                // ),
-                // Visibility(
-                //   visible: eventbritePlatform.isConnected,
-                //   child: RaisedButton(
-                //       color: Theme.of(context).errorColor,
-                //       child: Text('Disconnect Eventbrite'),
-                //       onPressed: () => eventbritePlatform.disconnect()),
-                // ),
-                // Visibility(
-                //   visible: !eventbritePlatform.isConnected,
-                //   child: RaisedButton(
-                //     child: Text('Connect Eventbrite'),
-                //     onPressed: () => Navigator.pushNamed(
-                //         context, EventbriteAuthPage.routeName),
-                //   ),
-                // ),
               ],
             ),
           ),
