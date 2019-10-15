@@ -48,12 +48,13 @@ class App extends StatelessWidget {
           builder: (_, platform0, platform1, prev) {
             return Session(
               platforms: [platform0, platform1],
-              location: prev != null ? prev.location : null,
+              location: prev?.location,
+              themeBrightness: prev?.themeBrightness,
             );
           },
         ),
 
-        // EVENTS PROVIDER
+        // EVENTS PROXY PROVIDER
         ChangeNotifierProxyProvider3<MeetupPlatformSession,
             EventbritePlatformSession, Session, Events>(
           builder: (_, platform0, platform1, session, __) => Events(
@@ -66,6 +67,8 @@ class App extends StatelessWidget {
         builder: (_, session, __) => MaterialApp(
           title: 'Event.Pizza',
           theme: ThemeData(
+            brightness: session.themeBrightness,
+            toggleableActiveColor: Colors.deepOrangeAccent,
             primarySwatch: Colors.deepOrange,
             accentColor: Colors.deepOrangeAccent,
           ),

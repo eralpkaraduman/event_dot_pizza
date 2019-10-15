@@ -12,7 +12,7 @@ class AsyncVersionText extends StatelessWidget {
       future: PackageInfo.fromPlatform(),
       builder: (_, snap) {
         if (snap.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Text("...");
         } else {
           return Text(
               "Version: ${snap.data.version} Build:${snap.data.buildNumber}");

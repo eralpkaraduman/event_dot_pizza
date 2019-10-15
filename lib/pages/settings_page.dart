@@ -14,24 +14,38 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     print('Settings:Updated');
     Session session = Provider.of<Session>(context, listen: true);
+    bool isDarkThemeOn = session.themeBrightness == Brightness.dark;
 
     final List<SettingItem> settings = [
       SettingItem(
         name: 'Connect Platforms',
-        route: ConnectPlatformsPage.routeName,
+        onTap: () =>
+            Navigator.of(context).pushNamed(ConnectPlatformsPage.routeName),
       ),
       SettingItem(
         name: 'Select City',
-        route: CitySelectionPage.routeName,
+        onTap: () =>
+            Navigator.of(context).pushNamed(CitySelectionPage.routeName),
         subtitle: session.location != null
             ? Text('${session.location.city}, ${session.location.country}')
             : null,
       ),
       SettingItem(
         name: 'About',
-        route: AboutPage.routeName,
+        onTap: () => Navigator.of(context).pushNamed(AboutPage.routeName),
         subtitle: AsyncVersionText(),
       ),
+      SettingItem(
+        name: 'Dark Theme',
+        onTap: () => session.themeBrightness =
+            isDarkThemeOn ? Brightness.light : Brightness.dark,
+        trailing: Switch.adaptive(
+          activeColor: Theme.of(context).toggleableActiveColor,
+          value: isDarkThemeOn,
+          onChanged: (dark) => session.themeBrightness =
+              dark ? Brightness.dark : Brightness.light,
+        ),
+      )
     ];
 
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
@@ -48,8 +62,8 @@ class SettingsPage extends StatelessWidget {
           return ListTile(
             title: Text(setting.name),
             subtitle: setting.subtitle != null ? setting.subtitle : null,
-            trailing: Icon(Icons.keyboard_arrow_right),
-            onTap: () => Navigator.of(context).pushNamed(setting.route),
+            trailing: setting.trailing ?? Icon(Icons.keyboard_arrow_right),
+            onTap: setting.onTap,
           );
         },
       ),
