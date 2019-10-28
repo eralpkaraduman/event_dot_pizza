@@ -26,7 +26,6 @@ dependencies:
   cupertino_icons: ^0.1.2
   webview_flutter: ^0.3.13
   shared_preferences: ^0.5.3+4
-  provider: ^3.0.0+1
   http: ^0.12.0+2
   html: ^0.14.0+2
   url_launcher: ^5.1.2
@@ -35,6 +34,7 @@ dependencies:
   package_info: ^0.4.0+6
   firebase_analytics: ^5.0.2
   intl: ^0.16.0
+  provider: ^3.0.0+1
 
 dev_dependencies:
   flutter_test:
