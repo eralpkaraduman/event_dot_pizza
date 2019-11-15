@@ -15,7 +15,7 @@ jobs:
       with:
         submodules: true
         token: ${{ secrets.GITHUB_PAT }}
-    - run: (cd android/secrets && ls -la)
+    - run: ruby --version
         
     
       
