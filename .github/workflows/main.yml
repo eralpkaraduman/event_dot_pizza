@@ -15,6 +15,9 @@ jobs:
       with:
         submodules: true
         token: ${{ secrets.GITHUB_PAT }}
+    - run: (cd android/secrets && ls -la)
+        
+    
       
 #     - name: Run a one-line script
 #       run: echo Hello, world!
