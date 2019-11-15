@@ -1,0 +1,8 @@
+app_identifier "company.nicework.eventdotpizza" # The bundle identifier of your app
+apple_id "eralp@nicework.company" # Your Apple email address
+
+team_id "76YFR39J99" # Developer Portal Team ID
+itc_team_id "76YFR39J99" # Developer Portal Team ID
+
+# you can even provide different app identifiers, Apple IDs and team names per lane:
+# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md
