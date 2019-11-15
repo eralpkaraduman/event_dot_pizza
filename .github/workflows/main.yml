@@ -13,7 +13,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
       with:
-        submodules: recursive
+        submodules: true
         token: ${{ secrets.GITHUB_PAT }}
       
 #     - name: Run a one-line script
