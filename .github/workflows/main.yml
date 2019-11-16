@@ -28,8 +28,7 @@ jobs:
       - name: "Flutter: Install"
         uses: subosito/flutter-action@v1
         with:
-          flutter-version: "1.9.x"
-          channel: "master"
+          flutter-version: '1.10.15-pre.94'
 
       - name: "Flutter: Get Dependencies"
         run: flutter pub get
