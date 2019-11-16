@@ -39,7 +39,7 @@ jobs:
         run: flutter build apk --release
 
       - name: "Android: Upload Beta"
-        run: (cd android && bundle exec fastlane)
+        run: (cd android && bundle exec fastlane beta)
 # Set env variable
 # FASTLANE_PASSWORD=
 
