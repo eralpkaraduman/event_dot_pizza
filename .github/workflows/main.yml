@@ -40,19 +40,17 @@ jobs:
 
       - name: "Android: Upload Beta"
         run: (cd android && fastlane)
-      # Set env variable
-      # FASTLANE_PASSWORD=
+# Set env variable
+# FASTLANE_PASSWORD=
 
-      # Build ios
+# Build ios
 
-      # build .app
-      # flutter build ios --release --no-codesign
+# build .app
+# flutter build ios --release --no-codesign
 
-      # Run fastlane
-      # (cd ios && bundle exec fastlane)
+# Run fastlane
+# (cd ios && bundle exec fastlane)
 
-      - name: "Flutter: Build Android"
-      - run: flutter build appbundle --release
 #     - name: Run a one-line script
 #       run: echo Hello, world!
 #     - name: Run a multi-line script
