@@ -10,35 +10,34 @@ jobs:
     runs-on: macOS-latest
 
     steps:
-    - name: Clone With Submodules
+      - name: Clone With Submodules
       - uses: actions/checkout@v1
         with:
           submodules: true
           token: ${{ secrets.GITHUB_PAT }}
 
-    - name: Install Fastlane
-    - run: gem "fastlane"
+      - name: Install Fastlane
+      - run: gem "fastlane"
 
-    - name: Install Java
-    - uses: actions/setup-java@v1
-      with:
-        java-version: '12.x'
+      - name: Install Java
+      - uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
 
-    - name: 'Flutter: Install'
-    - uses: subosito/flutter-action@v1
-      with:
-        flutter-version: '1.10.x'
-        channel: 'master'
+      - name: "Flutter: Install"
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "1.10.x"
+          channel: "master"
 
-    - name: 'Flutter: Get Dependencies'
-    - run: flutter pub get
+      - name: "Flutter: Get Dependencies"
+      - run: flutter pub get
 
-    - name: 'Flutter: Tests'
-    - run: flutter test
+      - name: "Flutter: Tests"
+      - run: flutter test
 
-    - name: 'Flutter: Build Android'
-    - run: flutter build appbundle --release
-
+      - name: "Flutter: Build Android"
+      - run: flutter build appbundle --release
 #     - name: Run a one-line script
 #       run: echo Hello, world!
 #     - name: Run a multi-line script
