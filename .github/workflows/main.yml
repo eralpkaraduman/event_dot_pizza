@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.GITHUB_PAT }}
 
       - name: Install Fastlane
-        run: gem install fastlane
+        run: bundle update
 
       - name: Install Java
         uses: actions/setup-java@v1
@@ -39,7 +39,7 @@ jobs:
         run: flutter build apk --release
 
       - name: "Android: Upload Beta"
-        run: (cd android && fastlane)
+        run: (cd android && bundle exec fastlane)
 # Set env variable
 # FASTLANE_PASSWORD=
 
