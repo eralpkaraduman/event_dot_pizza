@@ -24,7 +24,6 @@ jobs:
         with:
           java-version: "12.x"
 
-
       - name: "Flutter: Install"
         uses: subosito/flutter-action@v1
         with:
@@ -33,12 +32,26 @@ jobs:
       - name: "Flutter: Get Dependencies"
         run: flutter pub get
 
-      - name: "Flutter: Tests"
-        run: flutter test
+#       - name: "Flutter: Running Tests"
+#         run: flutter test
 
       - name: "Flutter: Build Android"
         run: flutter build appbundle --release
+      
+      - name: "Android: Upload Beta"
+        run: (cd android && fastlane)
 
+
+# Set env variable
+# FASTLANE_PASSWORD=
+
+# Build ios
+
+# build .app
+# flutter build ios --release --no-codesign
+
+# Run fastlane
+# (cd ios && bundle exec fastlane)
 
 
 #     - name: Run a one-line script
