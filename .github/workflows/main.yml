@@ -36,7 +36,7 @@ jobs:
       #         run: flutter test
 
       - name: "Flutter: Build Android"
-        run: flutter build appbundle --release
+        run: flutter build apk --release
 
       - name: "Android: Upload Beta"
         run: (cd android && fastlane)
