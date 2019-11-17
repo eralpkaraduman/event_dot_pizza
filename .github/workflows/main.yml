@@ -51,7 +51,6 @@ jobs:
         run: (cd ios && bundle exec fastlane build)
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GITHUB_PAT }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
       - name: "IOS: Upload build"
