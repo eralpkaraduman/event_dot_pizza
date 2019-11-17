@@ -45,6 +45,7 @@ jobs:
 # Set env variable
 # FASTLANE_PASSWORD= robot@nicework.company apple id password
 # MATCH_GIT_BASIC_AUTHORIZATION= ${{ secrets.GITHUB_PAT }}
+# MATCH_PASSWORD = encryption password used by sigh
 
 # Build ios
 
