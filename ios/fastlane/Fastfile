@@ -38,24 +38,31 @@ platform :ios do
   #   # You can also use other beta testing services here (run `fastlane actions`)
   # end
 
-  lane :beta do
-    get_certificates(
-      development: false,
-      username: "robot@nicework.company",
-      team_id: "76Y FR39J99",
-      team_name: "NiceWork OU",
-      platform: "ios"
+  lane :update_credentials do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: 'company.nicework.eventdotpizza',
+      username: 'robot@nicework.company',
+      team_id: '76YFR39J99',
+      team_name: 'NiceWork OU',
+      git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
     )
-    get_provisioning_profile(
-      adhoc: false,
-      development: false,
-      app_identifier: 'company.nicework.eventdotpizza'
-      output_path: 'secrets'
-      cert_owner_name: 'Robot Nicework'
-      filename: 'appstore.mobileprovision'
-      platform: 'ios'
+  end
+
+  lane :build do
+    sync_code_signing(
+      readonly: true,
+      
+      type: "appstore",
+      app_identifier: 'company.nicework.eventdotpizza',
+      username: 'robot@nicework.company',
+      team_id: '76YFR39J99',
+      team_name: 'NiceWork OU',
+      git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
+      verbose: true
     )
-    # disable_automatic_code_signing(path: "Runner.xcworkspace")
+    
+    disable_automatic_code_signing(path: "Runner.xcodeproj")
     # build_app
   
     # upload_to_testflight
@@ -63,14 +70,25 @@ platform :ios do
     # On iOS an extra build is required since flutter build builds an
     # .app rather than archiving .ipas for release.
 
-    # build_app(
-    #   scheme: "Runner",
-    #   export_options: {
-    #     method: "app-store",
-    #   }
-    # )
-    # enable_automatic_code_signing(path: "Runner.xcworkspace")
-    # upload_to_testflight(skip_submission: true)
+
+    build_app(
+      scheme: "Runner",
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING']
+      }
+    )
+    enable_automatic_code_signing(path: "Runner.xcodeproj")
+  end
+
+  lane :upload do
+    upload_to_testflight(
+      # ipa: 'Runner.ipa',
+      username: 'robot@nicework.company',
+      skip_submission: true,
+      skip_waiting_for_build_processing: true,
+      reject_build_waiting_for_review: true
+    )
   end
 
   # desc "Deploy a new version to the App Store"
