@@ -32,29 +32,32 @@ jobs:
       - name: "Flutter: Get Dependencies"
         run: flutter pub get
 
-      #       - name: "Flutter: Running Tests"
-      #         run: flutter test
+#       - name: "Flutter: Running Tests"
+#         run: flutter test
+
+#       - name: "Android: Run Platform Tests"
+#         run: (cd android && bundle exec fastlane test)
+
+#       - name: "IOS: Run Platform Tests"
+#         run: (cd ios && bundle exec fastlane test)
 
       - name: "Flutter: Build Android"
         run: flutter build apk --release --split-per-abi
-
+      
       - name: "Android: Upload Beta"
-        run: (cd android && bundle exec fastlane beta)
-# Set env variable
-# FASTLANE_PASSWORD=
+        run: (cd android && bundle exec fastlane upload)
 
-# Build ios
+      - name: "Flutter: Build Ios"
+        run: flutter build ios --release --no-codesign
 
-# build .app
-# flutter build ios --release --no-codesign
-
-# Run fastlane
-# (cd ios && bundle exec fastlane)
-
-#     - name: Run a one-line script
-#       run: echo Hello, world!
-#     - name: Run a multi-line script
-#       run: |
-#         echo Add other actions to build,
-#         echo test, and deploy your project.
-
+      - name: "IOS: Create Signed Build"
+        run: (cd ios && bundle exec fastlane build)
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GITHUB_PAT }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+        
+      - name: "IOS: Upload build"
+        run: (cd ios && bundle exec fastlane upload)
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
