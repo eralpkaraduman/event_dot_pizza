@@ -39,17 +39,38 @@ platform :ios do
   # end
 
   lane :beta do
+    get_certificates(
+      development: false,
+      username: "robot@nicework.company",
+      team_id: "76Y FR39J99",
+      team_name: "NiceWork OU",
+      platform: "ios"
+    )
+    get_provisioning_profile(
+      adhoc: false,
+      development: false,
+      app_identifier: 'company.nicework.eventdotpizza'
+      output_path: 'secrets'
+      cert_owner_name: 'Robot Nicework'
+      filename: 'appstore.mobileprovision'
+      platform: 'ios'
+    )
+    # disable_automatic_code_signing(path: "Runner.xcworkspace")
+    # build_app
+  
+    # upload_to_testflight
+
     # On iOS an extra build is required since flutter build builds an
     # .app rather than archiving .ipas for release.
 
-    #sync_code_signing(type: "appstore")    # see code signing guide for more information
-    build_app(
-      scheme: "Runner",
-      export_options: {
-        method: "app-store",
-      }
-    )
-    upload_to_testflight(skip_submission: true)
+    # build_app(
+    #   scheme: "Runner",
+    #   export_options: {
+    #     method: "app-store",
+    #   }
+    # )
+    # enable_automatic_code_signing(path: "Runner.xcworkspace")
+    # upload_to_testflight(skip_submission: true)
   end
 
   # desc "Deploy a new version to the App Store"
