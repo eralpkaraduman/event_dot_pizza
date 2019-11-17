@@ -40,9 +40,9 @@ jobs:
 
 #       - name: "IOS: Run Platform Tests"
 #         run: (cd ios && bundle exec fastlane test)
-      
-      - name: "Android: Upload Beta"
-        run: (cd android && bundle exec fastlane upload)
+
+      - name: "Flutter: Build Android"
+        run: flutter build apk --release --split-per-abi
 
       - name: "Flutter: Build Ios"
         run: flutter build ios --release --no-codesign
@@ -54,10 +54,11 @@ jobs:
           MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.GITHUB_PAT }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
 
-      - name: "Flutter: Build Android"
-        run: flutter build apk --release --split-per-abi
-
       - name: "IOS: Upload build"
         run: (cd ios && bundle exec fastlane upload)
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          
+      - name: "Android: Upload Beta"
+        run: (cd android && bundle exec fastlane upload)
+
