@@ -61,16 +61,7 @@ platform :ios do
       git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
       verbose: true
     )
-    
     disable_automatic_code_signing(path: "Runner.xcodeproj")
-    # build_app
-  
-    # upload_to_testflight
-
-    # On iOS an extra build is required since flutter build builds an
-    # .app rather than archiving .ipas for release.
-
-
     build_app(
       scheme: "Runner",
       export_options: {
@@ -83,24 +74,13 @@ platform :ios do
 
   lane :upload do
     upload_to_testflight(
-      # ipa: 'Runner.ipa',
+      ipa: 'Runner.ipa',
       username: 'robot@nicework.company',
       skip_submission: true,
       skip_waiting_for_build_processing: true,
       reject_build_waiting_for_review: true
     )
   end
-
-  # desc "Deploy a new version to the App Store"
-  # lane :release do
-  #   # match(type: "appstore")
-  #   # snapshot
-  #   gym # Build your app - more options available
-  #   deliver(force: true)
-  #   # frameit
-  # end
-
-  # You can define as many lanes as you want
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
@@ -117,7 +97,6 @@ platform :ios do
     # )
   end
 end
-
 
 # More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
 # All available actions: https://docs.fastlane.tools/actions

@@ -25,11 +25,6 @@ platform :android do
   #   gradle(task: "test")
   # end
 
-  # desc "Submit a new Beta Build to Crashlytics Beta"
-  # lane :beta do
-  #   gradle(task: "assembleRelease")
-  #   crashlytics
-
   lane :upload do
     upload_to_play_store(
       track: 'beta',
