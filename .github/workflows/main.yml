@@ -40,8 +40,11 @@ jobs:
 
       - name: "Android: Upload Beta"
         run: (cd android && bundle exec fastlane beta)
+      
+
 # Set env variable
-# FASTLANE_PASSWORD=
+# FASTLANE_PASSWORD= robot@nicework.company apple id password
+# MATCH_GIT_BASIC_AUTHORIZATION= ${{ secrets.GITHUB_PAT }}
 
 # Build ios
 
