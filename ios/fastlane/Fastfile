@@ -53,7 +53,7 @@ platform :ios do
       include_bitcode: false,
       export_options: {
         method: "app-store",
-        provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING']
+        provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
         compileBitcode: false,
         uploadBitcode: false,
       }
