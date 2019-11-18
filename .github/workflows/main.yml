@@ -17,7 +17,7 @@ jobs:
           token: ${{ secrets.GITHUB_PAT }}
 
       - name: Install Fastlane
-        run: bundle update
+        run: bundle install
 
       - name: Install Java
         uses: actions/setup-java@v1
