@@ -76,3 +76,8 @@
 report.xml
 *.dSYM.zip
 *.ipa
+*.dSYM.zip
+.ipa
+
+# Fastlane
+ios/fastlane/report.xml
