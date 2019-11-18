@@ -50,12 +50,14 @@ platform :ios do
     disable_automatic_code_signing(path: "Runner.xcodeproj")
     build_app(
       scheme: "Runner",
+      silent: true,
       include_bitcode: false,
       export_options: {
         method: "app-store",
         provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
         compileBitcode: false,
         uploadBitcode: false,
+        uploadSymbols: false,
       }
     )
     enable_automatic_code_signing(path: "Runner.xcodeproj")
