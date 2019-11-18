@@ -37,9 +37,19 @@ platform :ios do
   end
 
   lane :build do
+    create_keychain(
+      name: "fastlane",
+      password: "fastlane",
+      default_keychain: false,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
     sync_code_signing(
       readonly: true,
       
+      keychain_name: "fastlane",
+      keychain_password: "fastlane",
       type: "appstore",
       app_identifier: 'company.nicework.eventdotpizza',
       username: 'robot@nicework.company',
@@ -73,24 +83,6 @@ platform :ios do
       reject_build_waiting_for_review: true
     )
   end
-
-  # TRY THIS
-  #
-  # if ENV['CI']
-  #   create_keychain(
-  #       name: "keychain",
-  #       password: "123456",
-  #       default_keychain: true,
-  #       unlock: true,
-  #       timeout: 3600,
-  #       lock_when_sleeps: false
-  #   )
-  #   match(
-  #       keychain_name: "keychain",
-  #       keychain_password: "123456",
-  #       ...
-  #     )
-  # end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
