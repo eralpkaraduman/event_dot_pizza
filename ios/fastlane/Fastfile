@@ -52,6 +52,7 @@ platform :ios do
       scheme: "Runner",
       silent: true,
       include_bitcode: false,
+      disable_xcpretty: true,
       export_options: {
         method: "app-store",
         provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
