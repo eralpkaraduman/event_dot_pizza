@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - integrate-fastlane
+
+jobs:
+  build:
+    runs-on: macOS-latest
+
+    steps:
+      - name: Clone With Submodules
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+          token: ${{ secrets.GITHUB_PAT }}
+
+      - name: Install Fastlane
+        run: bundle update
+
+      - name: Install Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: "12.x"
+
+      - name: "Flutter: Install"
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: "1.9.1+hotfix.6"
+
+      - name: "Flutter: Get Dependencies"
+        run: flutter pub get
+
+#       - name: "Flutter: Running Tests"
+#         run: flutter test
+
+#       - name: "Android: Run Platform Tests"
+#         run: (cd android && bundle exec fastlane test)
+
+#       - name: "IOS: Run Platform Tests"
+#         run: (cd ios && bundle exec fastlane test)
+
+      - name: "Flutter: Build Android"
+        run: flutter build apk --release --split-per-abi
+
+      - name: "Flutter: Build Ios"
+        run: flutter build ios --release --no-codesign
+
+      - name: "IOS: Create Signed Build"
+        run: (cd ios && bundle exec fastlane build)
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+      - name: "IOS: Upload build"
+        run: (cd ios && bundle exec fastlane upload)
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+          
+      - name: "Android: Upload Beta"
+        run: (cd android && bundle exec fastlane upload)
+

@@ -1,0 +1,107 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.28.3"
+
+default_platform :ios
+
+platform :ios do
+  # before_all do
+  #   # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+  # end
+
+  # desc "Runs all the tests"
+  # lane :test do
+  #   scan
+  # end
+
+  lane :update_credentials do
+    sync_code_signing(
+      type: "appstore",
+      app_identifier: 'company.nicework.eventdotpizza',
+      username: 'robot@nicework.company',
+      team_id: '76YFR39J99',
+      team_name: 'NiceWork OU',
+      git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
+    )
+  end
+
+  lane :build do
+    create_keychain(
+      name: "fastlane",
+      password: "fastlane",
+      default_keychain: false,
+      unlock: true,
+      timeout: 3600,
+      lock_when_sleeps: false
+    )
+    sync_code_signing(
+      readonly: true,
+      
+      keychain_name: "fastlane",
+      keychain_password: "fastlane",
+      type: "appstore",
+      app_identifier: 'company.nicework.eventdotpizza',
+      username: 'robot@nicework.company',
+      team_id: '76YFR39J99',
+      team_name: 'NiceWork OU',
+      git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
+    )
+    disable_automatic_code_signing(path: "Runner.xcodeproj")
+    build_app(
+      scheme: "Runner",
+      silent: true, # decreases log verbosity
+      include_bitcode: false,
+      disable_xcpretty: false, # increases log verbosity
+      export_options: {
+        method: "app-store",
+        provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
+        compileBitcode: false,
+        uploadBitcode: false,
+        uploadSymbols: false,
+      }
+    )
+    enable_automatic_code_signing(path: "Runner.xcodeproj")
+  end
+
+  lane :upload do
+    upload_to_testflight(
+      ipa: 'Runner.ipa',
+      username: 'robot@nicework.company',
+      skip_submission: true,
+      skip_waiting_for_build_processing: true,
+      reject_build_waiting_for_review: true
+    )
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer
