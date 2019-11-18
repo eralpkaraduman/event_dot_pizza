@@ -50,9 +50,9 @@ platform :ios do
     disable_automatic_code_signing(path: "Runner.xcodeproj")
     build_app(
       scheme: "Runner",
-      silent: true,
+      # silent: true, # decreases log verbosity
       include_bitcode: false,
-      disable_xcpretty: true,
+      disable_xcpretty: true, # increases log verbosity
       export_options: {
         method: "app-store",
         provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
@@ -73,6 +73,24 @@ platform :ios do
       reject_build_waiting_for_review: true
     )
   end
+
+  # TRY THIS
+  #
+  # if ENV['CI']
+  #   create_keychain(
+  #       name: "keychain",
+  #       password: "123456",
+  #       default_keychain: true,
+  #       unlock: true,
+  #       timeout: 3600,
+  #       lock_when_sleeps: false
+  #   )
+  #   match(
+  #       keychain_name: "keychain",
+  #       keychain_password: "123456",
+  #       ...
+  #     )
+  # end
 
   after_all do |lane|
     # This block is called, only if the executed lane was successful
