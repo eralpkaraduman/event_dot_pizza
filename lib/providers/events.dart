@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import '../providers/platform_session.dart';
 import '../dictionary_matcher.dart' as matcher;
 import '../models/location.dart';
@@ -8,6 +9,10 @@ class Events extends ChangeNotifier {
   List<Event> _allEvents = [];
   List<Event> _events = [];
   List<Event> get events => [..._events];
+  List<Event> get todayEvents => [
+        ..._events.where((event) => event.formattedLocalDateTime
+            .contains(DateFormat('EEE, MMM d').format(DateTime.now())))
+      ];
   List<Event> get allEvents => [..._allEvents];
 
   bool _refreshing = false;
@@ -52,5 +57,9 @@ class Events extends ChangeNotifier {
       print('Event not found: $id');
       return null;
     }
+  }
+
+  List<Event> getEventsByTabIndex(int index) {
+    return index == 0 ? this._events : this.todayEvents;
   }
 }

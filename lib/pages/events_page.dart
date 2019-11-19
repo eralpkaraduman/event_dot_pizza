@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/cupertino.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../providers/events.dart';
@@ -15,6 +16,7 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   Location _lastLoadedLocation;
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -24,6 +26,12 @@ class _EventsPageState extends State<EventsPage> {
 
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +46,22 @@ class _EventsPageState extends State<EventsPage> {
       }
     }
 
+    final BottomNavigationBar bottomNavigationBar = new BottomNavigationBar(
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          title: Text('All'),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_today),
+          title: Text('Today'),
+        ),
+      ],
+      currentIndex: _selectedIndex,
+      selectedItemColor: Colors.red[800],
+      onTap: _onItemTapped,
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza 🍕'),
@@ -49,7 +73,7 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: Consumer<Events>(
+      body: new Consumer<Events>(
         builder: (context, eventsProvider, _) => RefreshIndicator(
           key: _refreshIndicatorKey,
           onRefresh: () async {
@@ -59,14 +83,16 @@ class _EventsPageState extends State<EventsPage> {
           child: ListView.separated(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
-            itemCount: eventsProvider.events.length,
+            itemCount:
+                eventsProvider.getEventsByTabIndex(_selectedIndex).length,
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (_, index) => EventListItem(
-              event: eventsProvider.events[index],
+              event: eventsProvider.getEventsByTabIndex(_selectedIndex)[index],
             ),
           ),
         ),
       ),
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }
