@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/cupertino.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../providers/events.dart';
@@ -26,12 +25,6 @@ class _EventsPageState extends State<EventsPage> {
 
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +52,7 @@ class _EventsPageState extends State<EventsPage> {
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Colors.red[800],
-      onTap: _onItemTapped,
+      onTap: (index) => setState(() => _selectedIndex = index),
     );
 
     return Scaffold(
@@ -73,7 +66,7 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: new Consumer<Events>(
+      body: Consumer<Events>(
         builder: (context, eventsProvider, _) => RefreshIndicator(
           key: _refreshIndicatorKey,
           onRefresh: () async {
