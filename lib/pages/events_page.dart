@@ -51,7 +51,7 @@ class _EventsPageState extends State<EventsPage> {
         ),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.red[800],
+      selectedItemColor: Theme.of(context).accentColor,
       onTap: (index) => setState(() => _selectedIndex = index),
     );
 
