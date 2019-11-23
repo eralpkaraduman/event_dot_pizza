@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../providers/events.dart';
 import '../models/location.dart';
+import '../models/event.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -14,6 +16,7 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
+  static const DATE_FORMAT = 'EEE, MMM d';
   Location _lastLoadedLocation;
   int _selectedIndex = 0;
 
@@ -25,6 +28,18 @@ class _EventsPageState extends State<EventsPage> {
 
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+
+  List<Event> getEventsByTabIndex(index) {
+    final events = Provider.of<Events>(context).events;
+    if (index == 0) {
+      return events;
+    }
+
+    return [
+      ...events.where((event) => event.formattedLocalDateTime
+          .contains(DateFormat(DATE_FORMAT).format(DateTime.now())))
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +91,10 @@ class _EventsPageState extends State<EventsPage> {
           child: ListView.separated(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
-            itemCount:
-                eventsProvider.getEventsByTabIndex(_selectedIndex).length,
+            itemCount: getEventsByTabIndex(_selectedIndex).length,
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (_, index) => EventListItem(
-              event: eventsProvider.getEventsByTabIndex(_selectedIndex)[index],
+              event: getEventsByTabIndex(_selectedIndex)[index],
             ),
           ),
         ),
