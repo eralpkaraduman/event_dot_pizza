@@ -69,21 +69,19 @@ class _EventsPageState extends State<EventsPage> {
           )
         ],
       ),
-      body: Consumer<Events>(
-        builder: (context, eventsProvider, _) => RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () async {
-            Location location = await eventsProvider.refresh();
-            setState(() => _lastLoadedLocation = location);
-          },
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
-            itemCount: events.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
-            itemBuilder: (_, index) => EventListItem(
-              event: events[index],
-            ),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          Location location = await eventsProvider.refresh();
+          setState(() => _lastLoadedLocation = location);
+        },
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
+          itemCount: events.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (_, index) => EventListItem(
+            event: events[index],
           ),
         ),
       ),
