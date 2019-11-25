@@ -42,22 +42,6 @@ class _EventsPageState extends State<EventsPage> {
       }
     }
 
-    final BottomNavigationBar bottomNavigationBar = new BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text('All'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          title: Text('Today'),
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Theme.of(context).accentColor,
-      onTap: (index) => setState(() => _selectedIndex = index),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza 🍕'),
@@ -85,7 +69,21 @@ class _EventsPageState extends State<EventsPage> {
           ),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar,
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            title: Text('All'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            title: Text('Today'),
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).accentColor,
+        onTap: (index) => setState(() => _selectedIndex = index),
+      ),
     );
   }
 }
