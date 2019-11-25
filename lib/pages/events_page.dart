@@ -12,6 +12,17 @@ class EventsPage extends StatefulWidget {
   _EventsPageState createState() => _EventsPageState();
 }
 
+const List<BottomNavigationBarItem> bottomNavigationBarItems = [
+  BottomNavigationBarItem(
+    icon: Icon(Icons.watch_later),
+    title: Text('Anytime'),
+  ),
+  BottomNavigationBarItem(
+    icon: Icon(Icons.calendar_today),
+    title: Text('Today'),
+  ),
+];
+
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   Location _lastLoadedLocation;
@@ -26,14 +37,15 @@ class _EventsPageState extends State<EventsPage> {
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
 
+  Widget listSeperatorBuilder(_, __) => const Divider(height: 1);
+
   @override
   Widget build(BuildContext context) {
     print('EventsPage:Build');
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
+    final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
     final eventsProvider = Provider.of<Events>(context);
-    final events = _selectedIndex == 0
-        ? eventsProvider.events
-        : eventsProvider.todayEvents;
+    final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
 
     if (_lastLoadedLocation != null) {
       if (eventsProvider.location.equalsTo(_lastLoadedLocation) == false) {
@@ -42,52 +54,46 @@ class _EventsPageState extends State<EventsPage> {
       }
     }
 
-    final BottomNavigationBar bottomNavigationBar = new BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home),
-          title: Text('All'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_today),
-          title: Text('Today'),
-        ),
-      ],
-      currentIndex: _selectedIndex,
-      selectedItemColor: Theme.of(context).accentColor,
-      onTap: (index) => setState(() => _selectedIndex = index),
-    );
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza 🍕'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
-            onPressed: () =>
-                Navigator.pushNamed(context, SettingsPage.routeName),
+            onPressed: () => Navigator.pushNamed(
+              context,
+              SettingsPage.routeName,
+            ),
           )
         ],
       ),
-      body: Consumer<Events>(
-        builder: (context, eventsProvider, _) => RefreshIndicator(
-          key: _refreshIndicatorKey,
-          onRefresh: () async {
-            Location location = await eventsProvider.refresh();
-            setState(() => _lastLoadedLocation = location);
-          },
-          child: ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom),
-            itemCount: events.length,
-            separatorBuilder: (_, __) => const Divider(height: 1),
-            itemBuilder: (_, index) => EventListItem(
-              event: events[index],
-            ),
-          ),
+      body: RefreshIndicator(
+        key: _refreshIndicatorKey,
+        onRefresh: () async {
+          Location location = await eventsProvider.refresh();
+          setState(() => _lastLoadedLocation = location);
+        },
+        child: IndexedStack(
+          index: _selectedIndex,
+          sizing: StackFit.expand,
+          children: eventLists.map((list) {
+            return Scrollbar(
+              child: ListView.separated(
+                padding: listEdgeInsets,
+                itemCount: list.length,
+                separatorBuilder: listSeperatorBuilder,
+                itemBuilder: (_, index) => EventListItem(event: list[index]),
+              ),
+            );
+          }).toList(),
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar,
+      bottomNavigationBar: BottomNavigationBar(
+        items: bottomNavigationBarItems,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Theme.of(context).accentColor,
+        onTap: (index) => setState(() => _selectedIndex = index),
+      ),
     );
   }
 }
