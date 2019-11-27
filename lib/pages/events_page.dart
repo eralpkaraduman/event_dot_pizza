@@ -39,6 +39,24 @@ class _EventsPageState extends State<EventsPage> {
 
   Widget listSeperatorBuilder(_, __) => const Divider(height: 1);
 
+  Widget emptyListView() => Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: Center(
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(Icons.calendar_today, size: 100, color: Colors.grey),
+            Text(
+              'No events',
+              textDirection: TextDirection.ltr,
+              style: TextStyle(
+                fontSize: 32,
+                color: Colors.grey,
+              ),
+            ),
+            Text('No events were found!', style: TextStyle(color: Colors.grey)),
+          ]),
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     print('EventsPage:Build');
@@ -77,14 +95,17 @@ class _EventsPageState extends State<EventsPage> {
           index: _selectedIndex,
           sizing: StackFit.expand,
           children: eventLists.map((list) {
-            return Scrollbar(
-              child: ListView.separated(
-                padding: listEdgeInsets,
-                itemCount: list.length,
-                separatorBuilder: listSeperatorBuilder,
-                itemBuilder: (_, index) => EventListItem(event: list[index]),
-              ),
-            );
+            return list.length > 0
+                ? Scrollbar(
+                    child: ListView.separated(
+                      padding: listEdgeInsets,
+                      itemCount: list.length,
+                      separatorBuilder: listSeperatorBuilder,
+                      itemBuilder: (_, index) =>
+                          EventListItem(event: list[index]),
+                    ),
+                  )
+                : emptyListView();
           }).toList(),
         ),
       ),
