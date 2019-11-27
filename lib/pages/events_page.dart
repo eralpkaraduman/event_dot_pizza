@@ -1,3 +1,4 @@
+import 'package:event_dot_pizza/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
@@ -23,6 +24,24 @@ const List<BottomNavigationBarItem> bottomNavigationBarItems = [
   ),
 ];
 
+final Widget emptyListView = Container(
+  decoration: BoxDecoration(color: Colors.white),
+  child: Center(
+    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Icon(Icons.calendar_today, size: 100, color: Colors.grey),
+      Text(
+        'No events',
+        textDirection: TextDirection.ltr,
+        style: TextStyle(
+          fontSize: 32,
+          color: Colors.grey,
+        ),
+      ),
+      Text('No events were found!', style: TextStyle(color: Colors.grey)),
+    ]),
+  ),
+);
+
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   Location _lastLoadedLocation;
@@ -39,29 +58,27 @@ class _EventsPageState extends State<EventsPage> {
 
   Widget listSeperatorBuilder(_, __) => const Divider(height: 1);
 
-  Widget emptyListView() => Container(
-        decoration: BoxDecoration(color: Colors.white),
-        child: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(Icons.calendar_today, size: 100, color: Colors.grey),
-            Text(
-              'No events',
-              textDirection: TextDirection.ltr,
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.grey,
-              ),
-            ),
-            Text('No events were found!', style: TextStyle(color: Colors.grey)),
-          ]),
+  Widget renderList(List<Event> list) {
+    final EdgeInsets safePadding = MediaQuery.of(context).padding;
+    final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
+
+    if (list.length > 0) {
+      return Scrollbar(
+        child: ListView.separated(
+          padding: listEdgeInsets,
+          itemCount: list.length,
+          separatorBuilder: listSeperatorBuilder,
+          itemBuilder: (_, index) => EventListItem(event: list[index]),
         ),
       );
+    }
+
+    return emptyListView;
+  }
 
   @override
   Widget build(BuildContext context) {
     print('EventsPage:Build');
-    final EdgeInsets safePadding = MediaQuery.of(context).padding;
-    final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
 
@@ -94,19 +111,7 @@ class _EventsPageState extends State<EventsPage> {
         child: IndexedStack(
           index: _selectedIndex,
           sizing: StackFit.expand,
-          children: eventLists.map((list) {
-            return list.length > 0
-                ? Scrollbar(
-                    child: ListView.separated(
-                      padding: listEdgeInsets,
-                      itemCount: list.length,
-                      separatorBuilder: listSeperatorBuilder,
-                      itemBuilder: (_, index) =>
-                          EventListItem(event: list[index]),
-                    ),
-                  )
-                : emptyListView();
-          }).toList(),
+          children: eventLists.map(renderList).toList(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
