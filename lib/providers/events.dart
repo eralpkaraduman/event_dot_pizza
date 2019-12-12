@@ -12,8 +12,8 @@ class Events extends ChangeNotifier {
   List<Event> get events => [..._events];
   List<Event> get allEvents => [..._allEvents];
   List<Event> get todayEvents => [
-        ..._events
-            .where((event) => event.formattedLocalDateTime.contains('13 Dec'))
+        ..._events.where((event) => event.formattedLocalDateTime
+            .contains(DateFormat(DATE_FORMAT).format(DateTime.now())))
       ];
 
   bool _refreshing = false;
