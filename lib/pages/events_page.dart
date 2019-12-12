@@ -29,6 +29,7 @@ class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   Location _lastLoadedLocation;
   int _selectedIndex = 0;
+  bool _isNoEventsFound = false;
 
   @override
   void initState() {
@@ -47,19 +48,14 @@ class _EventsPageState extends State<EventsPage> {
 
     return Scrollbar(
       child: ListView.separated(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
         padding: listEdgeInsets,
         itemCount: list.length,
         separatorBuilder: listSeperatorBuilder,
         itemBuilder: (_, index) => EventListItem(event: list[index]),
       ),
     );
-  }
-
-  Widget renderListOrShowNoEventsWidget(List<Event> list) {
-    if (list.length > 0) {
-      return renderList(list);
-    }
-    return NoEventsOverlay();
   }
 
   @override
@@ -94,17 +90,27 @@ class _EventsPageState extends State<EventsPage> {
           Location location = await eventsProvider.refresh();
           setState(() => _lastLoadedLocation = location);
         },
-        child: IndexedStack(
-          index: _selectedIndex,
-          sizing: StackFit.expand,
-          children: eventLists.map(renderListOrShowNoEventsWidget).toList(),
+        child: AnimatedCrossFade(
+          duration: const Duration(seconds: 0),
+          firstChild: NoEventsOverlay(),
+          secondChild: IndexedStack(
+            index: _selectedIndex,
+            sizing: StackFit.expand,
+            children: eventLists.map(renderList).toList(),
+          ),
+          crossFadeState: _isNoEventsFound
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavigationBarItems,
         currentIndex: _selectedIndex,
         selectedItemColor: Theme.of(context).accentColor,
-        onTap: (index) => setState(() => _selectedIndex = index),
+        onTap: (index) {
+          setState(() => _isNoEventsFound = (eventLists[index].length == 0));
+          setState(() => _selectedIndex = index);
+        },
       ),
     );
   }
