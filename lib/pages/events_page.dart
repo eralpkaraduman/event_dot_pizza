@@ -48,14 +48,19 @@ class _EventsPageState extends State<EventsPage> {
 
     return Scrollbar(
       child: ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
         padding: listEdgeInsets,
         itemCount: list.length,
         separatorBuilder: listSeperatorBuilder,
         itemBuilder: (_, index) => EventListItem(event: list[index]),
       ),
     );
+  }
+
+  String getNoEventsMessage(index) {
+    if (index == 0) {
+      return 'No free pizza for you anytime soon';
+    }
+    return 'No free pizza for you today';
   }
 
   @override
@@ -90,17 +95,19 @@ class _EventsPageState extends State<EventsPage> {
           Location location = await eventsProvider.refresh();
           setState(() => _lastLoadedLocation = location);
         },
-        child: AnimatedCrossFade(
-          duration: const Duration(seconds: 0),
-          firstChild: NoEventsOverlay(),
-          secondChild: IndexedStack(
-            index: _selectedIndex,
-            sizing: StackFit.expand,
-            children: eventLists.map(renderList).toList(),
-          ),
-          crossFadeState: _isNoEventsFound
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
+        child: Stack(
+          children: <Widget>[
+            Visibility(
+              visible: _isNoEventsFound,
+              child:
+                  NoEventsOverlay(message: getNoEventsMessage(_selectedIndex)),
+            ),
+            IndexedStack(
+              index: _selectedIndex,
+              sizing: StackFit.expand,
+              children: eventLists.map(renderList).toList(),
+            )
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

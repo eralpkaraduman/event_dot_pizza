@@ -2,6 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NoEventsOverlay extends StatelessWidget {
+  const NoEventsOverlay({
+    Key key,
+    @required this.message,
+  }) : super(key: key);
+
+  final String message;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,7 +24,7 @@ class NoEventsOverlay extends StatelessWidget {
               color: Colors.grey,
             ),
           ),
-          Text('No events were found!', style: TextStyle(color: Colors.grey)),
+          Text(this.message, style: TextStyle(color: Colors.grey)),
         ]),
       ),
     );
