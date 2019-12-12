@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
+import '../widgets/no_events_overlay.dart';
 import '../providers/events.dart';
 import '../models/location.dart';
 
@@ -23,24 +24,6 @@ const List<BottomNavigationBarItem> bottomNavigationBarItems = [
     title: Text('Today'),
   ),
 ];
-
-final Widget emptyListView = Container(
-  decoration: BoxDecoration(color: Colors.white),
-  child: Center(
-    child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Icon(Icons.calendar_today, size: 100, color: Colors.grey),
-      Text(
-        'No events',
-        textDirection: TextDirection.ltr,
-        style: TextStyle(
-          fontSize: 32,
-          color: Colors.grey,
-        ),
-      ),
-      Text('No events were found!', style: TextStyle(color: Colors.grey)),
-    ]),
-  ),
-);
 
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
@@ -62,18 +45,21 @@ class _EventsPageState extends State<EventsPage> {
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
     final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
 
-    if (list.length > 0) {
-      return Scrollbar(
-        child: ListView.separated(
-          padding: listEdgeInsets,
-          itemCount: list.length,
-          separatorBuilder: listSeperatorBuilder,
-          itemBuilder: (_, index) => EventListItem(event: list[index]),
-        ),
-      );
-    }
+    return Scrollbar(
+      child: ListView.separated(
+        padding: listEdgeInsets,
+        itemCount: list.length,
+        separatorBuilder: listSeperatorBuilder,
+        itemBuilder: (_, index) => EventListItem(event: list[index]),
+      ),
+    );
+  }
 
-    return emptyListView;
+  Widget renderListOrShowNoEventsWidget(List<Event> list) {
+    if (list.length > 0) {
+      return renderList(list);
+    }
+    return NoEventsOverlay();
   }
 
   @override
@@ -111,7 +97,7 @@ class _EventsPageState extends State<EventsPage> {
         child: IndexedStack(
           index: _selectedIndex,
           sizing: StackFit.expand,
-          children: eventLists.map(renderList).toList(),
+          children: eventLists.map(renderListOrShowNoEventsWidget).toList(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
