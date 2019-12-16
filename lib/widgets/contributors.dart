@@ -48,11 +48,12 @@ class _ContributorsState extends State<Contributors> {
       children: <Widget>[
         Text('Contributors: $statusMessage'),
         Wrap(
-            spacing: 4.0, // gap between adjacent chips
-            runSpacing: 4.0, // gap between lines
-            children: _contributors
-                .map((contributor) => ContributorChip(contributor))
-                .toList()),
+          spacing: 4.0,
+          runSpacing: 4.0,
+          children: _contributors
+              .map((contributor) => ContributorChip(contributor))
+              .toList(),
+        ),
       ],
     );
   }
