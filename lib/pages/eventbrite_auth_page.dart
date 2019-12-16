@@ -81,6 +81,7 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
       _failed = false;
     });
     await Future.delayed(const Duration(seconds: 1));
+    print(EventbritePlatformApi.authURI);
     if (await canLaunch(EventbritePlatformApi.authURI)) {
       await launch(
         EventbritePlatformApi.authURI,
@@ -92,8 +93,8 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
     }
   }
 
-  void _handleUrlCallback(url) {
-    print(url);
+  void _handleUrlCallback(String url) {
+    print('Handle Auth Callback Url: $url');
     Map<String, String> params = _parseRedirectParams(url);
     if (params.containsKey('error')) {
       this.setState(() => _failed = true);
@@ -110,7 +111,7 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
 
   Map<String, String> _parseRedirectParams(String url) {
     Map<String, String> paramsMap = Map();
-    if (url.startsWith(EventbritePlatformApi.REDIRECT_URI)) {
+    if (url.startsWith(EventbritePlatformApi.CALLBACK_URI)) {
       String query = url.split('#').last;
       List<String> params = query.split('&');
       for (String params in params) {
