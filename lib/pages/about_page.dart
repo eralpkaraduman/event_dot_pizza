@@ -37,10 +37,9 @@ class AboutPage extends StatelessWidget {
         ],
       ),
       body: Scrollbar(
-        child: Scrollable(
-          axisDirection: AxisDirection.down,
-          viewportBuilder: (_, __) {
-            return Padding(
+        child: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
               padding: const EdgeInsets.all(18.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,9 +76,8 @@ class AboutPage extends StatelessWidget {
                   Contributors(),
                 ],
               ),
-            );
-          },
-          // ,
+            ),
+          ),
         ),
       ),
     );
