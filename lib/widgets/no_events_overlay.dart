@@ -15,16 +15,18 @@ class NoEventsOverlay extends StatelessWidget {
       decoration: BoxDecoration(color: Colors.white),
       child: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          Icon(Icons.calendar_today, size: 100, color: Colors.grey),
+          Icon(Icons.calendar_today,
+              size: 100, color: Theme.of(context).accentColor),
           Text(
             'No events',
             textDirection: TextDirection.ltr,
             style: TextStyle(
               fontSize: 32,
-              color: Colors.grey,
+              color: Theme.of(context).accentColor,
             ),
           ),
-          Text(this.message, style: TextStyle(color: Colors.grey)),
+          Text(this.message,
+              style: TextStyle(color: Theme.of(context).accentColor)),
         ]),
       ),
     );
