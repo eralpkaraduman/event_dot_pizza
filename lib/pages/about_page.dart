@@ -16,7 +16,7 @@ This app was created and maintained by Eralp Karaduman, mainly for the purpose o
 
 You can find the source code and contribute to development from the project web site (https://event.pizza)
 
-Special Thanks To QVIK for allowing the time for development and research.
+Special thanks To QVIK for allowing the time for development and research.
 Go to qvik.fi to learn more (they are hiring)
 
 Please share this app with your friends and colleagues by sending the url: https://event.pizza !
