@@ -29,14 +29,22 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            <!-- App Links -->
-            <intent-filter android:autoVerify="true">
+            <!-- Deep Links -->
+            <intent-filter>
               <action android:name="android.intent.action.VIEW" />
               <category android:name="android.intent.category.DEFAULT" />
               <category android:name="android.intent.category.BROWSABLE" />
               <data
-                android:scheme="https"
-                android:host="event.pizza" />
+                android:scheme="event.pizza"
+                android:host="handle_eventbrite_redirect" />
+            </intent-filter>
+            <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <category android:name="android.intent.category.BROWSABLE" />
+              <data
+                android:scheme="event.pizza"
+                android:host="handle_meetup_redirect" />
             </intent-filter>
         </activity>
     </application>
