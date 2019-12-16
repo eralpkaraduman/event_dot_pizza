@@ -1,4 +1,3 @@
-import 'package:event_dot_pizza/models/contributor.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

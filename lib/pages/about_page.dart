@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../widgets/async_version_text.dart';
 import '../widgets/share_button.dart';
 import '../widgets/contributors.dart';
