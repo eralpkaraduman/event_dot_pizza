@@ -39,6 +39,7 @@
       background-repeat: repeat-y repeat-x;
       align-items: center;
       font-size: 1.5em;
+      font-family: sans-serif;
       overflow-wrap: break-word;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
       margin: 0px;
@@ -52,6 +53,14 @@
       border: 20px solid purple;
       margin-top: 50px;
       margin-bottom: 50px;
+      padding: 20px;
+      max-width: 500px;
+    }
+
+    #description {
+      font-size: 0.8em;
+      display: flex;
+      flex-direction: column;
       padding: 20px;
     }
 
@@ -101,9 +110,16 @@
 <body>
   <div id="content">
     <h1>Welcome To Event.Pizza</h1>
-    <marquee>
-      <h2>Join the beta NOW!!!</h2>
-    </marquee>
+    <div id="description">
+      <p>Event.Pizza is an app that helps you find professional gathering events that offer free snacks and drinks. So
+        you can learn new things while not thinking what to eat for dinner!</p>
+      <p>Event.Pizza looks up events happening near you from various 3rd party event organization platforms. Events you
+        may see here are not organized by us.</p>
+      <marquee>
+        <h2>Join the beta NOW!!!</h2>
+      </marquee>
+    </div>
+    <img src="event-pizza-in-the-wild.jpg" />
     <div id="links">
       <a href="https://testflight.apple.com/join/8FHHYgKq">
         <p>Click Here For iOS Beta</p>
