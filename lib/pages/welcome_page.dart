@@ -18,7 +18,7 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'I rely on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
+              'We rely on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
               style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),
@@ -40,7 +40,7 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'I need to know which city you are at, so I can show you the closest events.',
+              'We need to know which city you are at, so I can show you the closest events.',
               style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),

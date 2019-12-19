@@ -104,10 +104,7 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
       this.setState(() => _failed = true);
     } else if (params.containsKey(EventbritePlatformApi.kACCESS_TOKEN)) {
       _eventbritePlatform.connect(params[EventbritePlatformApi.kACCESS_TOKEN]);
-      Navigator.popUntil(
-        context,
-        ModalRoute.withName(Navigator.defaultRouteName),
-      );
+      Navigator.pop(context);
     } else {
       this.setState(() => _failed = true);
     }
