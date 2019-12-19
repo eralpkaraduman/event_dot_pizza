@@ -2,9 +2,10 @@ import 'dart:async';
 import 'package:uni_links/uni_links.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../providers/eventbrite_platform_session.dart';
 import '../platforms/eventbrite_platform_api.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../utils.dart';
 
 class EventbriteAuthPage extends StatefulWidget {
   static const routeName = "eventbriteAuth";
@@ -95,8 +96,11 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
 
   void _handleUrlCallback(String url) {
     print('Handle Auth Callback Url: $url');
-    Map<String, String> params = _parseRedirectParams(url);
-    if (params.containsKey('error')) {
+    Map<String, String> params;
+    if (url.startsWith(EventbritePlatformApi.CALLBACK_URI)) {
+      params = parseRedirectParams(url);
+    }
+    if (params != null && params.containsKey('error')) {
       this.setState(() => _failed = true);
     } else if (params.containsKey(EventbritePlatformApi.kACCESS_TOKEN)) {
       _eventbritePlatform.connect(params[EventbritePlatformApi.kACCESS_TOKEN]);
@@ -107,19 +111,6 @@ class _EventbriteAuthPage extends State<EventbriteAuthPage>
     } else {
       this.setState(() => _failed = true);
     }
-  }
-
-  Map<String, String> _parseRedirectParams(String url) {
-    Map<String, String> paramsMap = Map();
-    if (url.startsWith(EventbritePlatformApi.CALLBACK_URI)) {
-      String query = url.split('#').last;
-      List<String> params = query.split('&');
-      for (String params in params) {
-        List<String> pair = params.split('=');
-        paramsMap[pair.first] = pair.last;
-      }
-    }
-    return paramsMap;
   }
 
   @override
