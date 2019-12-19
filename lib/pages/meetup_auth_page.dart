@@ -107,10 +107,7 @@ class _MeetupAuthPage extends State<MeetupAuthPage>
       this.setState(() => _failed = true);
     } else if (params.containsKey(MeetupPlatformApi.kACCESS_TOKEN)) {
       _meetupPlatform.connect(params[MeetupPlatformApi.kACCESS_TOKEN]);
-      Navigator.popUntil(
-        context,
-        ModalRoute.withName(Navigator.defaultRouteName),
-      );
+      Navigator.pop(context);
     } else {
       this.setState(() => _failed = true);
     }
