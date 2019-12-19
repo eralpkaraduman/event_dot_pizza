@@ -58,9 +58,9 @@ class _EventsPageState extends State<EventsPage> {
 
   String getNoEventsMessage(index) {
     if (index == 0) {
-      return 'No free pizza for you anytime soon';
+      return 'No free pizza for you anytime soon 😢';
     }
-    return 'No free pizza for you today';
+    return 'No free pizza for you today 😢';
   }
 
   @override
