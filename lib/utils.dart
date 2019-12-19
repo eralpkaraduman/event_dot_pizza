@@ -23,3 +23,8 @@ String getUserAgent() {
   }
   throw 'User agent is not determined for the current platform';
 }
+
+Map<String, String> parseRedirectParams(String url) {
+  Uri uri = Uri.dataFromString(url);
+  return uri.queryParameters;
+}

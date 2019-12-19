@@ -9,6 +9,7 @@ class EventbritePlatformApi {
   static const String kACCESS_TOKEN = 'access_token';
   static const String REDIRECT_URI =
       'https://event.pizza/handle_authorization_redirect/eventbrite';
+  static const String CALLBACK_URI = 'event.pizza://handle_eventbrite_redirect';
   static const String API_KEY = 'DIHW55JS4TOM7O5IA5';
   static const String authURI =
       "https://www.eventbrite.com/oauth/authorize?response_type=token&client_id=$API_KEY&redirect_uri=$REDIRECT_URI";

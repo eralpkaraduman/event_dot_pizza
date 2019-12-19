@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import '../providers/platform_session.dart';
 import '../dictionary_matcher.dart' as matcher;
 import '../models/location.dart';
 import '../models/event.dart';
 
 class Events extends ChangeNotifier {
+  static const DATE_FORMAT = 'EEE, MMM d';
   List<Event> _allEvents = [];
   List<Event> _events = [];
   List<Event> get events => [..._events];
   List<Event> get allEvents => [..._allEvents];
+  List<Event> get todayEvents => [
+        ..._events.where((event) => event.formattedLocalDateTime
+            .contains(DateFormat(DATE_FORMAT).format(DateTime.now())))
+      ];
 
   bool _refreshing = false;
   bool get refreshing => _refreshing;
