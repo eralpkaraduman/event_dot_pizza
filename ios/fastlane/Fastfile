@@ -46,8 +46,7 @@ platform :ios do
       lock_when_sleeps: false
     )
     sync_code_signing(
-      readonly: true,
-      
+      # readonly: true,
       keychain_name: "fastlane",
       keychain_password: "fastlane",
       type: "appstore",
