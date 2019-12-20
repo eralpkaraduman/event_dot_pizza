@@ -25,6 +25,8 @@ platform :ios do
   #   scan
   # end
 
+  xcversion(version: "~> 11.3.0")
+
   lane :update_credentials do
     sync_code_signing(
       type: "appstore",
@@ -46,7 +48,7 @@ platform :ios do
       lock_when_sleeps: false
     )
     sync_code_signing(
-      # readonly: true,
+      readonly: true,
       keychain_name: "fastlane",
       keychain_password: "fastlane",
       type: "appstore",
