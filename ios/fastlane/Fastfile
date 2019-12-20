@@ -25,7 +25,7 @@ platform :ios do
   #   scan
   # end
 
-  xcversion(version: "~> 11.3.0")
+  xcversion(version: "11.3")
 
   lane :update_credentials do
     sync_code_signing(
