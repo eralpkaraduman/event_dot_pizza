@@ -47,7 +47,7 @@ jobs:
       #   run: (cd ios && bundle exec fastlane test)
 
       - name: "Set Xcode version"
-        run: xcode-select -switch /Applications/Xcode_11.3.app
+        run: sudo xcode-select -switch /Applications/Xcode_11.3.app
         env:
           DEVELOPER_DIR: /Applications/Xcode_11.3.app/Contents/Developer
 
