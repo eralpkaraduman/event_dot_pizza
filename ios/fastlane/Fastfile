@@ -26,6 +26,7 @@ platform :ios do
   # end
 
   xcversion(version: "11.3")
+  xcode_select "/Applications/Xcode_11.3.app"
 
   lane :update_credentials do
     sync_code_signing(
