@@ -24,6 +24,10 @@ jobs:
         with:
           java-version: "12.x"
 
+      ####################
+      ## FLUTTER STUFFS ##
+      ####################
+
       - name: "Flutter: Install"
         uses: subosito/flutter-action@v1
         with:
@@ -32,17 +36,15 @@ jobs:
       - name: "Flutter: Get Dependencies"
         run: flutter pub get
 
-      #       - name: "Flutter: Running Tests"
-      #         run: flutter test
+      - name: "Flutter: Running Tests"
+        run: flutter test
 
-      #       - name: "Android: Run Platform Tests"
-      #         run: (cd android && bundle exec fastlane test)
+      ################
+      ## IOS STUFFS ##
+      ################
 
-      #       - name: "IOS: Run Platform Tests"
-      #         run: (cd ios && bundle exec fastlane test)
-
-      - name: "Flutter: Build Android"
-        run: flutter build apk --release --split-per-abi
+      # - name: "IOS: Run Platform Tests"
+      #   run: (cd ios && bundle exec fastlane test)
 
       - name: "Flutter: Build Ios"
         run: flutter build ios --release --no-codesign
@@ -52,6 +54,20 @@ jobs:
         env:
           FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+
+      ####################
+      ## ANDROID STUFFS ##
+      ####################
+
+      # - name: "Android: Run Platform Tests"
+      #   run: (cd android && bundle exec fastlane test)
+
+      - name: "Flutter: Build Android"
+        run: flutter build apk --release --split-per-abi
+
+      ###################
+      ## DEPLOY BUILDS ##
+      ###################
 
       - name: "IOS: Upload build"
         run: (cd ios && bundle exec fastlane upload)
