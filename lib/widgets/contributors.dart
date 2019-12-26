@@ -70,6 +70,7 @@ class _ContributorsState extends State<Contributors> {
             .map(
               (c) => Contributor.fromJson(c),
             )
+            .where((c) => c.type != 'Bot')
             .toList();
         this.setState(() => _status = _Status.Loaded);
       });
