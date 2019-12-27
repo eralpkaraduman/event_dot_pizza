@@ -18,7 +18,7 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'We rely on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
+              'We are relying on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
               style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),
