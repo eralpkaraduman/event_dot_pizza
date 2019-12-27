@@ -11,7 +11,7 @@ class MeetupPlatformApi {
   static const String REDIRECT_URI =
       'https://event.pizza/handle_authorization_redirect/meetup';
   static const String CALLBACK_URI = 'event.pizza://handle_meetup_redirect';
-  static const String authURI = 'https://secure.meetup.com/oauth2/authorize' +
+  static const String authUri = 'https://secure.meetup.com/oauth2/authorize' +
       '?client_id=$CONSUMER_KEY' +
       '&response_type=token' +
       '&redirect_uri=$REDIRECT_URI';
