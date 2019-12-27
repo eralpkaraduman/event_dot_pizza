@@ -50,7 +50,5 @@ class EventbritePlatformApi {
       print(e);
       throw 'EventbritePlatformApi::fetchUpcomingEvents:FailedToDecodeJsonResponse';
     }
-
-    return [];
   }
 }

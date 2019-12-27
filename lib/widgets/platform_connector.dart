@@ -1,10 +1,12 @@
-import 'package:event_dot_pizza/providers/platform_session.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../providers/platform_session.dart';
 
 class PlatformConnector extends StatelessWidget {
-  PlatformConnector(this.platform, {Key key}) : super(key: key);
+  PlatformConnector(this.platform, {@required this.onDisconnect, Key key})
+      : super(key: key);
   final PlatformSession platform;
+  final void Function() onDisconnect;
 
   _launchAuthUri() async {
     if (await canLaunch(platform.authUri)) {
@@ -48,7 +50,7 @@ class PlatformConnector extends StatelessWidget {
                 ? Theme.of(context).highlightColor
                 : Theme.of(context).colorScheme.primary,
             onPressed:
-                platform.isConnected ? platform.disconnect : _launchAuthUri,
+                !platform.isConnected ? _launchAuthUri : this.onDisconnect,
             child: Text(
               '${platform.isConnected ? 'Disconnect' : 'Connect'} ${platform.name}',
               style: TextStyle(fontSize: 18),

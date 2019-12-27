@@ -14,8 +14,11 @@ class CityListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Session session = Provider.of<Session>(context, listen: false);
-    bool selected = location.equalsTo(session.location);
+    final sessionLocation = Provider.of<Session>(
+      context,
+      listen: false,
+    ).location;
+    bool selected = this.location.equalsTo(sessionLocation);
     return ListTile(
       title: Text(location.city),
       subtitle: Text(location.country),

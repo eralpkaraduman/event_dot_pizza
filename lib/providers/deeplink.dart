@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:event_dot_pizza/platforms/eventbrite_platform_api.dart';
-import 'package:event_dot_pizza/platforms/meetup_platform_api.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:uni_links/uni_links.dart';
+import '../platforms/eventbrite_platform_api.dart';
+import '../platforms/meetup_platform_api.dart';
 import '../utils.dart';
 
 class Deeplink extends ChangeNotifier {
@@ -19,7 +19,7 @@ class Deeplink extends ChangeNotifier {
 
   Map<String, String> get params => parseRedirectParams(url);
 
-  String get meetupToken {
+  String get meetupAccessToken {
     if (url == null) return null;
     if (url.startsWith(MeetupPlatformApi.CALLBACK_URI)) {
       return params[MeetupPlatformApi.kACCESS_TOKEN];
@@ -27,7 +27,7 @@ class Deeplink extends ChangeNotifier {
     return null;
   }
 
-  String get eventBriteToken {
+  String get eventbriteAccessToken {
     if (url == null) return null;
     if (url.startsWith(EventbritePlatformApi.CALLBACK_URI)) {
       return params[EventbritePlatformApi.kACCESS_TOKEN];

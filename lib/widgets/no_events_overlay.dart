@@ -20,7 +20,7 @@ class NoEventsOverlay extends StatelessWidget {
           Icon(Icons.calendar_today,
               size: 100, color: Theme.of(context).accentColor),
           Text(
-            'No events',
+            'No Events Found 😢',
             textDirection: TextDirection.ltr,
             style: TextStyle(
               fontSize: 32,

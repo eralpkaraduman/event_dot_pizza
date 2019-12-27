@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/session.dart';
 import '../providers/eventbrite_platform_session.dart';
+import '../providers/meetup_platform_session.dart';
 import '../widgets/platform_connector.dart';
 import '../widgets/body_text_with_padding.dart';
-import '../providers/meetup_platform_session.dart';
 
 class ConnectPlatformsPage extends StatelessWidget {
   static const routeName = "connectPlatforms";
 
   @override
   Widget build(BuildContext context) {
-    print('ConnectPlatformsPage:Updated');
-
     final meetupPlatform = Provider.of<MeetupPlatformSession>(context);
     final eventbritePlatform = Provider.of<EventbritePlatformSession>(context);
     final session = Provider.of<Session>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Connect Platforms'),
@@ -37,8 +34,14 @@ class ConnectPlatformsPage extends StatelessWidget {
                     : 'You need to log in to at least one of them to continue.',
                 bold: true,
               ),
-              PlatformConnector(meetupPlatform),
-              PlatformConnector(eventbritePlatform),
+              PlatformConnector(
+                meetupPlatform,
+                onDisconnect: () => session.setMeetupAccessToken(null),
+              ),
+              PlatformConnector(
+                eventbritePlatform,
+                onDisconnect: () => session.setEventbriteAccessToken(null),
+              ),
               Spacer(),
               Visibility(
                 visible: session.anyPlatformConnected,

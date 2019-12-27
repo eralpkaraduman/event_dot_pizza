@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'package:event_dot_pizza/models/location.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../platforms/meetup_platform_api.dart';
 import '../utils.dart';
+import '../models/location.dart';
 import '../models/event.dart';
 import './platform_session.dart';
-
-const String kMeetupAccessToken = 'meetupAccessToken';
 
 class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
   String name = 'Meetup.Com';
@@ -20,22 +17,7 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
   List<Event> get events => [..._events];
   String get authUri => MeetupPlatformApi.authUri;
 
-  MeetupPlatformSession(String credential) {
-    _accessToken = credential;
-    print('Provider:MeetupPlatformSession:Updated');
-  }
-
-  void connect(String accessToken) {
-    _accessToken = accessToken;
-    notifyListeners();
-    scheduleMicrotask(() => _saveToPrefs());
-  }
-
-  void disconnect() {
-    _accessToken = null;
-    notifyListeners();
-    scheduleMicrotask(() => _saveToPrefs());
-  }
+  MeetupPlatformSession(this._accessToken);
 
   /// Refreshes Meetup Platform Events.
   ///
@@ -55,32 +37,13 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
       print(e);
     }
     _refreshing = false;
-    notifyListeners();
+    try {
+      notifyListeners();
+    } catch (_) {}
   }
 
   void clearEvents() {
     _events = [];
     notifyListeners();
-  }
-
-  Future<void> tryToConnectFromPrefs() async {
-    print('MeetupPlatformSession::tryToConnectFromPrefs');
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (isNullOrEmpty(_accessToken) && prefs.containsKey(kMeetupAccessToken)) {
-      String loadedToken = prefs.getString(kMeetupAccessToken);
-      if (!isNullOrEmpty(loadedToken)) {
-        _accessToken = loadedToken;
-        notifyListeners();
-      }
-    }
-  }
-
-  Future<void> _saveToPrefs() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (!isNullOrEmpty(_accessToken)) {
-      prefs.setString(kMeetupAccessToken, _accessToken);
-    } else {
-      prefs.remove(kMeetupAccessToken);
-    }
   }
 }

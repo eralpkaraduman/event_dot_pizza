@@ -1,11 +1,14 @@
-import 'package:event_dot_pizza/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/scheduler.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../widgets/no_events_overlay.dart';
+import '../providers/meetup_platform_session.dart';
+import '../providers/eventbrite_platform_session.dart';
+import '../providers/session.dart';
 import '../providers/events.dart';
+import '../models/event.dart';
 import '../models/location.dart';
 
 class EventsPage extends StatefulWidget {
@@ -25,17 +28,15 @@ const List<BottomNavigationBarItem> bottomNavigationBarItems = [
   ),
 ];
 
+const noEventsOverlayMessages = [
+  'No free pizza for you anytime soon!',
+  'No free pizza for you today!'
+];
+
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-  Location _lastLoadedLocation;
-  int _selectedIndex = 0;
-  bool _isNoEventsFound = false;
 
-  @override
-  void initState() {
-    super.initState();
-    _triggerRefresh();
-  }
+  int _selectedTabIndex = 0;
 
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
@@ -56,25 +57,16 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 
-  String getNoEventsMessage(index) {
-    if (index == 0) {
-      return 'No free pizza for you anytime soon 😢';
-    }
-    return 'No free pizza for you today 😢';
-  }
-
   @override
   Widget build(BuildContext context) {
     print('EventsPage:Build');
+    final location = Provider.of<Session>(context).location;
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
+    final notRefreshing = !eventsProvider.refreshing;
+    final numberOfEvents = eventLists[_selectedTabIndex].length;
 
-    if (_lastLoadedLocation != null) {
-      if (eventsProvider.location.equalsTo(_lastLoadedLocation) == false) {
-        print('EventsPage:CityChangeDetected');
-        _triggerRefresh();
-      }
-    }
+    _triggerRefresh();
 
     return Scaffold(
       appBar: AppBar(
@@ -92,18 +84,21 @@ class _EventsPageState extends State<EventsPage> {
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: () async {
-          Location location = await eventsProvider.refresh();
-          setState(() => _lastLoadedLocation = location);
+          await Provider.of<MeetupPlatformSession>(context)
+              .refreshEvents(location);
+          await Provider.of<EventbritePlatformSession>(context)
+              .refreshEvents(location);
         },
         child: Stack(
           children: <Widget>[
             Visibility(
-              visible: _isNoEventsFound,
-              child:
-                  NoEventsOverlay(message: getNoEventsMessage(_selectedIndex)),
+              visible: notRefreshing && numberOfEvents == 0,
+              child: NoEventsOverlay(
+                message: noEventsOverlayMessages[_selectedTabIndex],
+              ),
             ),
             IndexedStack(
-              index: _selectedIndex,
+              index: _selectedTabIndex,
               sizing: StackFit.expand,
               children: eventLists.map(renderList).toList(),
             )
@@ -112,12 +107,9 @@ class _EventsPageState extends State<EventsPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: bottomNavigationBarItems,
-        currentIndex: _selectedIndex,
+        currentIndex: _selectedTabIndex,
         selectedItemColor: Theme.of(context).accentColor,
-        onTap: (index) {
-          setState(() => _isNoEventsFound = (eventLists[index].length == 0));
-          setState(() => _selectedIndex = index);
-        },
+        onTap: (index) => setState(() => _selectedTabIndex = index),
       ),
     );
   }

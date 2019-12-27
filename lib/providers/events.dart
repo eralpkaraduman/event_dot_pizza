@@ -19,8 +19,6 @@ class Events extends ChangeNotifier {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
 
-  List<PlatformSession> _platforms = [];
-
   Location _location;
   Location get location => _location;
 
@@ -30,7 +28,6 @@ class Events extends ChangeNotifier {
   }) {
     print('Provider:Events:Updated');
     platforms.forEach((platform) {
-      _platforms = platforms;
       _location = location;
       _allEvents = [...platform.events, ...events];
       _allEvents.forEach((event) {
@@ -40,15 +37,6 @@ class Events extends ChangeNotifier {
       _events.sort((a, b) => a.time.compareTo(b.time));
       _refreshing = _refreshing || platform.refreshing;
     });
-  }
-
-  Future<Location> refresh() async {
-    if (_location != null) {
-      for (var platform in _platforms) {
-        await platform.refreshEvents(_location);
-      }
-    }
-    return location;
   }
 
   Event find(String id) {
