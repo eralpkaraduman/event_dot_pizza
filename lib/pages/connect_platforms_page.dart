@@ -1,13 +1,10 @@
-import 'package:event_dot_pizza/providers/eventbrite_platform_session.dart';
-import 'package:event_dot_pizza/providers/session.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import './meetup_auth_page.dart';
-import './eventbrite_auth_page.dart';
+import '../providers/session.dart';
+import '../providers/eventbrite_platform_session.dart';
+import '../widgets/platform_connector.dart';
+import '../widgets/body_text_with_padding.dart';
 import '../providers/meetup_platform_session.dart';
-
-TextStyle textStyle = TextStyle(fontSize: 18);
-TextStyle boldTextStyle = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
 class ConnectPlatformsPage extends StatelessWidget {
   static const routeName = "connectPlatforms";
@@ -15,16 +12,10 @@ class ConnectPlatformsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('ConnectPlatformsPage:Updated');
-    final positiveColor = Theme.of(context).colorScheme.primary;
-    final negativeColor = Theme.of(context).highlightColor;
 
-    final MeetupPlatformSession meetupPlatform =
-        Provider.of<MeetupPlatformSession>(context);
-    final EventbritePlatformSession eventbritePlatform =
-        Provider.of<EventbritePlatformSession>(context);
-
-    final bool anyPlatformConnected =
-        Provider.of<Session>(context).anyPlatformConnected;
+    final meetupPlatform = Provider.of<MeetupPlatformSession>(context);
+    final eventbritePlatform = Provider.of<EventbritePlatformSession>(context);
+    final session = Provider.of<Session>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -37,73 +28,32 @@ class ConnectPlatformsPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Text(
-                'We rely on external event organization platforms to show nearby events to you. Them more you connect the more events you see.',
-                style: textStyle,
+              BodyTextWithPadding(
+                'We are relying on external event organization platforms to show nearby events to you. Them more you connect the more events you see.',
               ),
-              SizedBox(height: 20),
-              anyPlatformConnected
-                  ? Text(
-                      'Great, you have a connected platform! You can continue using Event.Pizza. Connect more platforms now or anytime from the settings screen.',
-                      style: boldTextStyle,
-                    )
-                  : Text(
-                      'You need to log in to at least one of them to continue.',
-                      style: boldTextStyle,
-                    ),
-              SizedBox(height: 20),
-              Text(
-                'Meetup.com: ${meetupPlatform.isConnected ? 'Connected ✅' : 'Not Connected ❌'}',
-                style: textStyle,
+              BodyTextWithPadding(
+                session.anyPlatformConnected
+                    ? 'Great, you have a connected platform! You can continue using Event.Pizza. Connect more platforms now or anytime from the settings screen.'
+                    : 'You need to log in to at least one of them to continue.',
+                bold: true,
               ),
-              RaisedButton(
-                color:
-                    meetupPlatform.isConnected ? negativeColor : positiveColor,
-                onPressed: () => meetupPlatform.isConnected
-                    ? meetupPlatform.disconnect()
-                    : Navigator.pushNamed(
-                        context,
-                        MeetupAuthPage.routeName,
-                      ),
-                child: Text(
-                  '${meetupPlatform.isConnected ? 'Disconnect' : 'Connect'} Meetup.Com',
-                  style: textStyle,
-                ),
-              ),
-              SizedBox(height: 20),
-              Text(
-                'Eventbrite: ${eventbritePlatform.isConnected ? 'Connected ✅' : 'Not Connected ❌'}',
-                style: textStyle,
-              ),
-              RaisedButton(
-                color: eventbritePlatform.isConnected
-                    ? negativeColor
-                    : positiveColor,
-                onPressed: () => eventbritePlatform.isConnected
-                    ? eventbritePlatform.disconnect()
-                    : Navigator.pushNamed(
-                        context,
-                        EventbriteAuthPage.routeName,
-                      ),
-                child: Text(
-                  '${eventbritePlatform.isConnected ? 'Disconnect' : 'Connect'} Eventbrite',
-                  style: textStyle,
-                ),
-              ),
+              PlatformConnector(meetupPlatform),
+              PlatformConnector(eventbritePlatform),
               Spacer(),
-              anyPlatformConnected
-                  ? RaisedButton(
-                      color: positiveColor,
-                      onPressed: () => Navigator.popUntil(
-                        context,
-                        ModalRoute.withName(Navigator.defaultRouteName),
-                      ),
-                      child: Text(
-                        'CONTINUE',
-                        style: textStyle,
-                      ),
-                    )
-                  : SizedBox(),
+              Visibility(
+                visible: session.anyPlatformConnected,
+                child: RaisedButton(
+                  color: Theme.of(context).colorScheme.primary,
+                  onPressed: () => Navigator.popUntil(
+                    context,
+                    ModalRoute.withName(Navigator.defaultRouteName),
+                  ),
+                  child: Text(
+                    'CONTINUE',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
