@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:event_dot_pizza/pages/city_selection_page.dart';
 import 'package:event_dot_pizza/pages/settings_page.dart';
+import 'package:event_dot_pizza/providers/deeplink.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -12,8 +13,6 @@ import './providers/events.dart';
 import './providers/session.dart';
 import './pages/connect_platforms_page.dart';
 import './pages/events_page.dart';
-import './pages/meetup_auth_page.dart';
-import './pages/eventbrite_auth_page.dart';
 import './pages/splash_page.dart';
 import './pages/welcome_page.dart';
 import './pages/event_detail_page.dart';
@@ -22,25 +21,36 @@ import './pages/about_page.dart';
 
 void main() => runApp(App());
 
-class App extends StatelessWidget {
+class App extends StatelessWidget with WidgetsBindingObserver {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver firebaseAnalyticsObserver =
       FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(_) {
     print('App:Build');
     return MultiProvider(
       providers: [
+        // Deeplink Handler
+        ChangeNotifierProvider<Deeplink>(builder: (_) => Deeplink()),
+
         // MEETUP PLATFORM SESSION PROVIDER
-        ChangeNotifierProvider<MeetupPlatformSession>(
-          builder: (_) => MeetupPlatformSession(),
-        ),
+        ChangeNotifierProxyProvider<Deeplink, MeetupPlatformSession>(
+            builder: (_, deeplink, prev) {
+          String deeplinkToken = deeplink.meetupToken;
+          return MeetupPlatformSession(
+            deeplinkToken != null ? deeplinkToken : prev?.accessToken,
+          );
+        }),
 
         // EVENTBRITE PLATFORM SESSION PROVIDER
-        ChangeNotifierProvider<EventbritePlatformSession>(
-          builder: (_) => EventbritePlatformSession(),
-        ),
+        ChangeNotifierProxyProvider<Deeplink, EventbritePlatformSession>(
+            builder: (_, deeplink, prev) {
+          String deeplinkToken = deeplink.eventBriteToken;
+          return EventbritePlatformSession(
+            deeplinkToken != null ? deeplinkToken : prev?.accessToken,
+          );
+        }),
 
         // SESSION PROXY PROVIDER
         ChangeNotifierProxyProvider2<MeetupPlatformSession,
@@ -96,8 +106,6 @@ class App extends StatelessWidget {
           navigatorObservers: [firebaseAnalyticsObserver],
           routes: {
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
-            MeetupAuthPage.routeName: (_) => MeetupAuthPage(),
-            EventbriteAuthPage.routeName: (_) => EventbriteAuthPage(),
             EventDetailPage.routeName: (_) => EventDetailPage(),
             EventUrlPage.routeName: (_) => EventUrlPage(),
             CitySelectionPage.routeName: (_) => CitySelectionPage(),
