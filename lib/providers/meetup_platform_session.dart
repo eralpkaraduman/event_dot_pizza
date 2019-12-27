@@ -10,6 +10,7 @@ import './platform_session.dart';
 const String kMeetupAccessToken = 'meetupAccessToken';
 
 class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
+  String name = 'Meetup.Com';
   String _accessToken;
   String get accessToken => _accessToken;
   bool get isConnected => !isNullOrEmpty(accessToken);
@@ -17,8 +18,10 @@ class MeetupPlatformSession with ChangeNotifier implements PlatformSession {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
   List<Event> get events => [..._events];
+  String get authUri => MeetupPlatformApi.authUri;
 
-  MeetupPlatformSession() {
+  MeetupPlatformSession(String credential) {
+    _accessToken = credential;
     print('Provider:MeetupPlatformSession:Updated');
   }
 

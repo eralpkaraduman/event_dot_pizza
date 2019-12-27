@@ -10,6 +10,7 @@ import './platform_session.dart';
 const String kEventbriteAccessToken = 'eventbriteAccessToken';
 
 class EventbritePlatformSession with ChangeNotifier implements PlatformSession {
+  String name = 'Eventbrite';
   String _accessToken;
   String get accessToken => _accessToken;
   bool get isConnected => !isNullOrEmpty(accessToken);
@@ -17,8 +18,10 @@ class EventbritePlatformSession with ChangeNotifier implements PlatformSession {
   bool _refreshing = false;
   bool get refreshing => _refreshing;
   List<Event> get events => [..._events];
+  String get authUri => EventbritePlatformApi.authUri;
 
-  EventbritePlatformSession() {
+  EventbritePlatformSession(String credential) {
+    _accessToken = credential;
     print('Provider:EventbritePlatformSession:Updated');
   }
 
@@ -63,7 +66,8 @@ class EventbritePlatformSession with ChangeNotifier implements PlatformSession {
   Future<void> tryToConnectFromPrefs() async {
     print('EventbritePlatformSession::tryToConnectFromPrefs');
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    if (isNullOrEmpty(_accessToken) && prefs.containsKey(kEventbriteAccessToken)) {
+    if (isNullOrEmpty(_accessToken) &&
+        prefs.containsKey(kEventbriteAccessToken)) {
       String loadedToken = prefs.getString(kEventbriteAccessToken);
       if (!isNullOrEmpty(loadedToken)) {
         _accessToken = loadedToken;
