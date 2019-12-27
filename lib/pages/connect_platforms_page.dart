@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../platforms/eventbrite_platform_api.dart';
+import '../platforms/meetup_platform_api.dart';
 import '../providers/session.dart';
-import '../providers/eventbrite_platform_session.dart';
-import '../providers/meetup_platform_session.dart';
 import '../widgets/platform_connector.dart';
 import '../widgets/body_text_with_padding.dart';
 
@@ -11,8 +11,6 @@ class ConnectPlatformsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final meetupPlatform = Provider.of<MeetupPlatformSession>(context);
-    final eventbritePlatform = Provider.of<EventbritePlatformSession>(context);
     final session = Provider.of<Session>(context);
     return Scaffold(
       appBar: AppBar(
@@ -35,11 +33,15 @@ class ConnectPlatformsPage extends StatelessWidget {
                 bold: true,
               ),
               PlatformConnector(
-                meetupPlatform,
+                name: 'Meetup.Com',
+                authUri: MeetupPlatformApi.authUri,
+                isConnected: session.meetupAccessToken != null,
                 onDisconnect: () => session.setMeetupAccessToken(null),
               ),
               PlatformConnector(
-                eventbritePlatform,
+                name: 'EventBrite',
+                authUri: EventbritePlatformApi.authUri,
+                isConnected: session.eventbriteAccessToken != null,
                 onDisconnect: () => session.setEventbriteAccessToken(null),
               ),
               Spacer(),

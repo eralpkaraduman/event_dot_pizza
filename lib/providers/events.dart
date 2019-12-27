@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import '../providers/platform_session.dart';
+import '../providers/session.dart';
 import '../dictionary_matcher.dart' as matcher;
 import '../models/location.dart';
 import '../models/event.dart';
+import '../platforms/meetup_platform_api.dart';
+import '../platforms/eventbrite_platform_api.dart';
 
 class Events extends ChangeNotifier {
   static const DATE_FORMAT = 'EEE, MMM d';
@@ -16,27 +18,12 @@ class Events extends ChangeNotifier {
             .contains(DateFormat(DATE_FORMAT).format(DateTime.now())))
       ];
 
-  bool _refreshing = false;
-  bool get refreshing => _refreshing;
+  String _meetupAccessToken;
+  String _eventbriteAccessToken;
 
-  Location _location;
-  Location get location => _location;
-
-  Events({
-    @required List<PlatformSession> platforms,
-    @required Location location,
-  }) {
-    print('Provider:Events:Updated');
-    platforms.forEach((platform) {
-      _location = location;
-      _allEvents = [...platform.events, ...events];
-      _allEvents.forEach((event) {
-        event.matches = matcher.getMatches(event.description);
-      });
-      _events = _allEvents.where((event) => event.matches.length > 0).toList();
-      _events.sort((a, b) => a.time.compareTo(b.time));
-      _refreshing = _refreshing || platform.refreshing;
-    });
+  Events(Session session) {
+    _meetupAccessToken = session?.meetupAccessToken;
+    _eventbriteAccessToken = session?.eventbriteAccessToken;
   }
 
   Event find(String id) {
@@ -46,5 +33,42 @@ class Events extends ChangeNotifier {
       print('Event not found: $id');
       return null;
     }
+  }
+
+  Future<void> refreshEvents(Location location) async {
+    List<Event> _meetupEvents = [];
+    try {
+      _meetupEvents = await MeetupPlatformApi.fetchUpcomingEvents(
+        location: location,
+        accessToken: _meetupAccessToken,
+      );
+    } catch (e) {
+      print('Provider:Events:MeetupPlatformEvents:FailedToRefresh:$e');
+    }
+
+    List<Event> _eventbriteEvents = [];
+    try {
+      _eventbriteEvents = await EventbritePlatformApi.fetchUpcomingEvents(
+        location: location,
+        accessToken: _eventbriteAccessToken,
+      );
+    } catch (e) {
+      print('Provider:Events:EventbritePlatformEvents:FailedToRefresh:$e');
+    }
+
+    _allEvents = [..._meetupEvents, ..._eventbriteEvents];
+    _allEvents.forEach((event) {
+      event.matches = matcher.getMatches(event.description);
+    });
+    _events = _allEvents.where((event) => event.matches.length > 0).toList();
+    _events.sort((a, b) => a.time.compareTo(b.time));
+
+    notifyListeners();
+  }
+
+  void clearEvents() {
+    _allEvents = [];
+    _events = [];
+    notifyListeners();
   }
 }

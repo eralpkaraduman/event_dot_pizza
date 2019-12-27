@@ -4,12 +4,9 @@ import 'package:flutter/scheduler.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../widgets/no_events_overlay.dart';
-import '../providers/meetup_platform_session.dart';
-import '../providers/eventbrite_platform_session.dart';
 import '../providers/session.dart';
 import '../providers/events.dart';
 import '../models/event.dart';
-import '../models/location.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -35,26 +32,15 @@ const noEventsOverlayMessages = [
 
 class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-
   int _selectedTabIndex = 0;
-
+  bool _refreshing = true;
   void _triggerRefresh() => SchedulerBinding.instance
       .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
 
-  Widget listSeperatorBuilder(_, __) => const Divider(height: 1);
-
-  Widget renderList(List<Event> list) {
-    final EdgeInsets safePadding = MediaQuery.of(context).padding;
-    final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
-
-    return Scrollbar(
-      child: ListView.separated(
-        padding: listEdgeInsets,
-        itemCount: list.length,
-        separatorBuilder: listSeperatorBuilder,
-        itemBuilder: (_, index) => EventListItem(event: list[index]),
-      ),
-    );
+  @override
+  void initState() {
+    _triggerRefresh();
+    super.initState();
   }
 
   @override
@@ -63,11 +49,10 @@ class _EventsPageState extends State<EventsPage> {
     final location = Provider.of<Session>(context).location;
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
-    final notRefreshing = !eventsProvider.refreshing;
     final numberOfEvents = eventLists[_selectedTabIndex].length;
-
-    _triggerRefresh();
-
+    final EdgeInsets safePadding = MediaQuery.of(context).padding;
+    final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
+    final shouldShowEmptyState = !_refreshing && numberOfEvents == 0;
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza 🍕'),
@@ -84,15 +69,14 @@ class _EventsPageState extends State<EventsPage> {
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: () async {
-          await Provider.of<MeetupPlatformSession>(context)
-              .refreshEvents(location);
-          await Provider.of<EventbritePlatformSession>(context)
-              .refreshEvents(location);
+          setState(() => _refreshing = true);
+          await eventsProvider.refreshEvents(location);
+          setState(() => _refreshing = false);
         },
         child: Stack(
           children: <Widget>[
             Visibility(
-              visible: notRefreshing && numberOfEvents == 0,
+              visible: shouldShowEmptyState,
               child: NoEventsOverlay(
                 message: noEventsOverlayMessages[_selectedTabIndex],
               ),
@@ -100,7 +84,19 @@ class _EventsPageState extends State<EventsPage> {
             IndexedStack(
               index: _selectedTabIndex,
               sizing: StackFit.expand,
-              children: eventLists.map(renderList).toList(),
+              children: eventLists
+                  .map(
+                    (eventList) => Scrollbar(
+                      child: ListView.separated(
+                        padding: listEdgeInsets,
+                        itemCount: eventList.length,
+                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        itemBuilder: (_, index) =>
+                            EventListItem(event: eventList[index]),
+                      ),
+                    ),
+                  )
+                  .toList(),
             )
           ],
         ),

@@ -1,22 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../providers/platform_session.dart';
 
 class PlatformConnector extends StatelessWidget {
-  PlatformConnector(this.platform, {@required this.onDisconnect, Key key})
-      : super(key: key);
-  final PlatformSession platform;
+  PlatformConnector({
+    @required this.name,
+    @required this.authUri,
+    @required this.onDisconnect,
+    @required this.isConnected,
+    Key key,
+  }) : super(key: key);
+  final String name;
+  final String authUri;
+  final bool isConnected;
   final void Function() onDisconnect;
 
   _launchAuthUri() async {
-    if (await canLaunch(platform.authUri)) {
+    if (await canLaunch(authUri)) {
       await launch(
-        platform.authUri,
+        authUri,
         forceWebView: false,
         forceSafariVC: false,
       );
     } else {
-      throw 'Could not launch ${platform.authUri}';
+      throw 'Could not launch $authUri';
     }
   }
 
@@ -30,29 +36,28 @@ class PlatformConnector extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text('${platform.name}',
+              Text('${name}',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
               Spacer(),
               Text(
-                '${platform.isConnected ? 'Connected' : 'Not Connected'} ',
+                '${isConnected ? 'Connected' : 'Not Connected'} ',
                 style: TextStyle(fontSize: 18),
               ),
               Icon(
-                platform.isConnected ? Icons.check : Icons.error,
-                color: platform.isConnected
+                isConnected ? Icons.check : Icons.error,
+                color: isConnected
                     ? Theme.of(context).textTheme.body1.color
                     : Theme.of(context).colorScheme.primary,
               )
             ],
           ),
           RaisedButton(
-            color: platform.isConnected
+            color: isConnected
                 ? Theme.of(context).highlightColor
                 : Theme.of(context).colorScheme.primary,
-            onPressed:
-                !platform.isConnected ? _launchAuthUri : this.onDisconnect,
+            onPressed: !isConnected ? _launchAuthUri : this.onDisconnect,
             child: Text(
-              '${platform.isConnected ? 'Disconnect' : 'Connect'} ${platform.name}',
+              '${isConnected ? 'Disconnect' : 'Connect'} $name',
               style: TextStyle(fontSize: 18),
             ),
           ),

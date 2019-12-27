@@ -22,7 +22,6 @@ class App extends StatelessWidget with WidgetsBindingObserver {
 
   @override
   Widget build(_) {
-    print('App:Build');
     return Providers(
       child: Consumer<Session>(
         builder: (context, session, __) => MaterialApp(

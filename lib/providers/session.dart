@@ -4,42 +4,51 @@ import '../models/location.dart';
 import '../models/persistent_data.dart';
 
 class Session extends ChangeNotifier {
-  PersistentData _data;
-  Session(this._data);
+  String _eventbriteAccessToken, _meetupAccessToken;
+  Location _location;
+  int _themeBrightnessIndex;
+  Session(
+    this._eventbriteAccessToken,
+    this._meetupAccessToken,
+    this._location,
+    this._themeBrightnessIndex,
+  );
 
   bool get anyPlatformConnected => [
-        _data.eventbriteAccessToken,
-        _data.meetupAccessToken,
+        eventbriteAccessToken,
+        meetupAccessToken,
       ].any((token) => token != null);
 
-  bool get ready => anyPlatformConnected && _data.location != null;
+  bool get ready => anyPlatformConnected && location != null;
 
   Brightness get themeBrightness {
     final themeBrightnessIndex =
-        _data?.themeBrightnessIndex ?? Brightness.light.index;
+        _themeBrightnessIndex ?? Brightness.light.index;
     return Brightness.values[themeBrightnessIndex];
   }
 
+  int get themeBrightnessIndex => _themeBrightnessIndex;
+
   Future<void> setThemeBrightness(Brightness newBrightness) async {
-    await _data.setThemeBrightnessIndex(newBrightness?.index);
+    await PersistentData.setThemeBrightnessIndex(newBrightness?.index);
     notifyListeners();
   }
 
-  Location get location => _data.location;
+  Location get location => _location;
   Future<void> setLocation(Location newLocation) async {
-    await _data.setLocation(newLocation);
+    await PersistentData.setLocation(newLocation);
     notifyListeners();
   }
 
-  String get meetupAccessToken => _data.meetupAccessToken;
+  String get meetupAccessToken => _meetupAccessToken;
   Future<void> setMeetupAccessToken(String token) async {
-    await _data.setMeetupAccessToken(token);
+    await PersistentData.setMeetupAccessToken(token);
     notifyListeners();
   }
 
-  String get eventbriteAccessToken => _data.meetupAccessToken;
+  String get eventbriteAccessToken => _eventbriteAccessToken;
   Future<void> setEventbriteAccessToken(String token) async {
-    await _data.setEventbriteAccessToken(token);
+    await PersistentData.setEventbriteAccessToken(token);
     notifyListeners();
   }
 }

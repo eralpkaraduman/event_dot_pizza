@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import '../models/persistent_data.dart';
 import './deeplink.dart';
-import './meetup_platform_session.dart';
-import './eventbrite_platform_session.dart';
 import './events.dart';
 import './session.dart';
 
@@ -20,51 +18,43 @@ class Providers extends SingleChildStatelessWidget {
           create: (_) => PersistentData.createFromPrefs(),
         ),
 
-        // Session
-        ChangeNotifierProxyProvider<PersistentData, Session>(
-          create: (_) => Session(null),
-          update: (_, data, prev) => Session(data),
-        ),
-
         ChangeNotifierProvider<Deeplink>(create: (_) => Deeplink()),
 
-        // MeetupPlatformSession
-        ChangeNotifierProxyProvider2<Deeplink, PersistentData,
-            MeetupPlatformSession>(
-          create: (_) => MeetupPlatformSession(null),
-          update: (_, deeplink, data, prev) {
-            final token = prev.accessToken ??
-                deeplink.meetupAccessToken ??
-                data.meetupAccessToken;
-            data.setMeetupAccessToken(token);
-            return MeetupPlatformSession(token);
-          },
-        ),
+        // Session
+        ChangeNotifierProxyProvider2<PersistentData, Deeplink, Session>(
+          create: (_) => Session(null, null, null, null),
+          update: (_, data, deeplink, prev) {
+            final meetupToken = data?.meetupAccessToken ??
+                prev.meetupAccessToken ??
+                deeplink.meetupAccessToken;
 
-        // EventbritePlatformSession
-        ChangeNotifierProxyProvider2<Deeplink, PersistentData,
-            EventbritePlatformSession>(
-          create: (_) => EventbritePlatformSession(null),
-          update: (_, deeplink, data, prev) {
-            final token = prev.accessToken ??
-                deeplink.eventbriteAccessToken ??
-                data.eventbriteAccessToken;
-            data.setEventbriteAccessToken(token);
-            return EventbritePlatformSession(token);
+            if (meetupToken != null) {
+              // TODO: find a smarter way to do this
+              PersistentData.setMeetupAccessToken(meetupToken);
+            }
+
+            final eventbriteToken = data?.eventbriteAccessToken ??
+                prev.eventbriteAccessToken ??
+                deeplink.eventbriteAccessToken;
+
+            if (eventbriteToken != null) {
+              // TODO: find a smarter way to do this
+              PersistentData.setEventbriteAccessToken(eventbriteToken);
+            }
+
+            final location = data?.location ?? prev.location;
+
+            final brightness =
+                data?.themeBrightnessIndex ?? prev.themeBrightnessIndex;
+
+            return Session(eventbriteToken, meetupToken, location, brightness);
           },
         ),
 
         // Events
-        ChangeNotifierProxyProvider3<MeetupPlatformSession,
-            EventbritePlatformSession, PersistentData, Events>(
-          create: (_) => Events(
-            platforms: [],
-            location: null,
-          ),
-          update: (_, meetup, eventbrite, data, __) => Events(
-            platforms: [meetup, eventbrite],
-            location: data.location,
-          ),
+        ChangeNotifierProxyProvider<Session, Events>(
+          create: (_) => Events(null),
+          update: (_, session, __) => Events(session),
         ),
       ],
     );
