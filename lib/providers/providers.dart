@@ -1,6 +1,8 @@
+import 'package:event_dot_pizza/models/location.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
+import '../models/immutable_persistent_data.dart';
 import '../models/persistent_data.dart';
 import './deeplink.dart';
 import './events.dart';
@@ -14,47 +16,57 @@ class Providers extends SingleChildStatelessWidget {
       child: child,
       providers: [
         // PERSISTENT DATA
-        FutureProvider<PersistentData>(
-          create: (_) => PersistentData.createFromPrefs(),
+        FutureProvider<ImmutablePersistentData>(
+          create: (_) => ImmutablePersistentData.loadFromPrefs(),
         ),
 
         ChangeNotifierProvider<Deeplink>(create: (_) => Deeplink()),
 
-        // Session
-        ChangeNotifierProxyProvider2<PersistentData, Deeplink, Session>(
-          create: (_) => Session(null, null, null, null),
-          update: (_, data, deeplink, prev) {
-            final meetupToken = data?.meetupAccessToken ??
-                prev.meetupAccessToken ??
-                deeplink.meetupAccessToken;
+        // SESSION
+        ChangeNotifierProxyProvider2<ImmutablePersistentData, Deeplink,
+            Session>(
+          create: (_) => Session(),
+          update: (_, initialData, deeplink, prev) {
+            String meetupToken = prev.meetupAccessToken;
+            String eventbriteToken = prev.eventbriteAccessToken;
+            Location location = prev.location;
+            int themeBrightnessIndex = prev.themeBrightnessIndex;
 
-            if (meetupToken != null) {
-              // TODO: find a smarter way to do this
-              PersistentData.setMeetupAccessToken(meetupToken);
+            // REHYDRATE STORED DATA
+            if (initialData != null && initialData.expired == false) {
+              meetupToken = initialData.meetupAccessToken;
+              eventbriteToken = initialData.eventbriteAccessToken;
+              location = initialData.location;
+              themeBrightnessIndex = initialData.themeBrightnessIndex;
+              initialData.expired = true;
             }
 
-            final eventbriteToken = data?.eventbriteAccessToken ??
-                prev.eventbriteAccessToken ??
-                deeplink.eventbriteAccessToken;
-
-            if (eventbriteToken != null) {
-              // TODO: find a smarter way to do this
-              PersistentData.setEventbriteAccessToken(eventbriteToken);
+            // AUTH CALLBACKS
+            if (deeplink.url != null) {
+              if (deeplink.meetupAccessToken != null) {
+                meetupToken = deeplink.meetupAccessToken;
+                PersistentData.setMeetupAccessToken(meetupToken);
+              }
+              if (deeplink.eventbriteAccessToken != null) {
+                eventbriteToken = deeplink.eventbriteAccessToken;
+                PersistentData.setEventbriteAccessToken(eventbriteToken);
+              }
+              deeplink.clear();
             }
 
-            final location = data?.location ?? prev.location;
-
-            final brightness =
-                data?.themeBrightnessIndex ?? prev.themeBrightnessIndex;
-
-            return Session(eventbriteToken, meetupToken, location, brightness);
+            return Session(
+              eventbriteAccessToken: eventbriteToken,
+              meetupAccessToken: meetupToken,
+              location: location,
+              themeBrightnessIndex: themeBrightnessIndex,
+            );
           },
         ),
 
         // Events
         ChangeNotifierProxyProvider<Session, Events>(
-          create: (_) => Events(null),
-          update: (_, session, __) => Events(session),
+          create: (_) => Events(null, []),
+          update: (_, session, prev) => Events(session, prev.allEvents),
         ),
       ],
     );

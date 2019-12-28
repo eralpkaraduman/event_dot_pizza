@@ -10,16 +10,16 @@ const String kEventbriteAccessToken = 'eventbriteAccessToken';
 const String kMeetupAccessToken = 'meetupAccessToken';
 
 class PersistentData {
-  PersistentData(
-    this._themeBrightnessIndex,
-    this._location,
-    this._eventbriteAccessToken,
-    this._meetupAccessToken,
-  );
-
   // THEME BRIGHTNESS
-  int _themeBrightnessIndex;
-  int get themeBrightnessIndex => _themeBrightnessIndex;
+  static Future<int> getThemeBrightnessIndex() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    int themeBrightnessIndex;
+    if (prefs.containsKey(kThemeBrightness)) {
+      themeBrightnessIndex = prefs.getInt(kThemeBrightness);
+    }
+    return themeBrightnessIndex;
+  }
+
   static Future<void> setThemeBrightnessIndex(int themeBrightnessIndex) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (themeBrightnessIndex != null) {
@@ -30,8 +30,16 @@ class PersistentData {
   }
 
   // LOCATION
-  Location _location;
-  Location get location => _location;
+  static Future<Location> getLocation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    Location location;
+    if (prefs.containsKey(kSelectedLocationJson)) {
+      location =
+          Location.fromJson(jsonDecode(prefs.getString(kSelectedLocationJson)));
+    }
+    return location;
+  }
+
   static Future<void> setLocation(Location location) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!isNullOrEmpty(location)) {
@@ -43,8 +51,15 @@ class PersistentData {
   }
 
   // EVENTBRITE ACCESS TOKEN
-  String _eventbriteAccessToken;
-  String get eventbriteAccessToken => _eventbriteAccessToken;
+  static Future<String> getEventbriteAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String eventbriteAccessToken;
+    if (prefs.containsKey(kEventbriteAccessToken)) {
+      eventbriteAccessToken = prefs.getString(kEventbriteAccessToken);
+    }
+    return eventbriteAccessToken;
+  }
+
   static Future<void> setEventbriteAccessToken(String accessToken) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!isNullOrEmpty(accessToken)) {
@@ -55,8 +70,15 @@ class PersistentData {
   }
 
   // MEETUP ACCESS TOKEN
-  String _meetupAccessToken;
-  String get meetupAccessToken => _meetupAccessToken;
+  static Future<String> getMeetupAccessToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String meetupAccessToken;
+    if (prefs.containsKey(kMeetupAccessToken)) {
+      meetupAccessToken = prefs.getString(kMeetupAccessToken);
+    }
+    return meetupAccessToken;
+  }
+
   static Future<void> setMeetupAccessToken(String accessToken) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (!isNullOrEmpty(accessToken)) {
@@ -64,36 +86,5 @@ class PersistentData {
     } else {
       await prefs.remove(kMeetupAccessToken);
     }
-  }
-
-  static Future<PersistentData> createFromPrefs() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    int themeBrightnessIndex;
-    if (prefs.containsKey(kThemeBrightness)) {
-      themeBrightnessIndex = prefs.getInt(kThemeBrightness);
-    }
-
-    Location location;
-    if (prefs.containsKey(kSelectedLocationJson)) {
-      location =
-          Location.fromJson(jsonDecode(prefs.getString(kSelectedLocationJson)));
-    }
-
-    String eventbriteAccessToken;
-    if (prefs.containsKey(kEventbriteAccessToken)) {
-      eventbriteAccessToken = prefs.getString(kEventbriteAccessToken);
-    }
-
-    String meetupAccessToken;
-    if (prefs.containsKey(kMeetupAccessToken)) {
-      meetupAccessToken = prefs.getString(kMeetupAccessToken);
-    }
-
-    return PersistentData(
-      themeBrightnessIndex,
-      location,
-      eventbriteAccessToken,
-      meetupAccessToken,
-    );
   }
 }

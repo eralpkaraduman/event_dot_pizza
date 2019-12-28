@@ -61,6 +61,12 @@ class Deeplink extends ChangeNotifier {
     }
   }
 
+  clear() {
+    _lastUrl = null;
+    _launchUrl = null;
+    notifyListeners();
+  }
+
   @override
   dispose() {
     if (_subscription != null) _subscription.cancel();

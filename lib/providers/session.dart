@@ -7,12 +7,17 @@ class Session extends ChangeNotifier {
   String _eventbriteAccessToken, _meetupAccessToken;
   Location _location;
   int _themeBrightnessIndex;
-  Session(
-    this._eventbriteAccessToken,
-    this._meetupAccessToken,
-    this._location,
-    this._themeBrightnessIndex,
-  );
+  Session({
+    String eventbriteAccessToken,
+    String meetupAccessToken,
+    Location location,
+    int themeBrightnessIndex,
+  }) {
+    _eventbriteAccessToken = eventbriteAccessToken;
+    _meetupAccessToken = meetupAccessToken;
+    _location = location;
+    _themeBrightnessIndex = themeBrightnessIndex;
+  }
 
   bool get anyPlatformConnected => [
         eventbriteAccessToken,
@@ -30,24 +35,28 @@ class Session extends ChangeNotifier {
   int get themeBrightnessIndex => _themeBrightnessIndex;
 
   Future<void> setThemeBrightness(Brightness newBrightness) async {
+    _themeBrightnessIndex = newBrightness?.index;
     await PersistentData.setThemeBrightnessIndex(newBrightness?.index);
     notifyListeners();
   }
 
   Location get location => _location;
   Future<void> setLocation(Location newLocation) async {
+    _location = newLocation;
     await PersistentData.setLocation(newLocation);
     notifyListeners();
   }
 
   String get meetupAccessToken => _meetupAccessToken;
   Future<void> setMeetupAccessToken(String token) async {
+    _meetupAccessToken = token;
     await PersistentData.setMeetupAccessToken(token);
     notifyListeners();
   }
 
   String get eventbriteAccessToken => _eventbriteAccessToken;
   Future<void> setEventbriteAccessToken(String token) async {
+    _eventbriteAccessToken = token;
     await PersistentData.setEventbriteAccessToken(token);
     notifyListeners();
   }

@@ -10,20 +10,26 @@ import '../platforms/eventbrite_platform_api.dart';
 class Events extends ChangeNotifier {
   static const DATE_FORMAT = 'EEE, MMM d';
   List<Event> _allEvents = [];
-  List<Event> _events = [];
-  List<Event> get events => [..._events];
   List<Event> get allEvents => [..._allEvents];
+  List<Event> get events {
+    final matchingEvents =
+        _allEvents.where((event) => event.matches.length > 0).toList();
+    matchingEvents.sort((a, b) => a.time.compareTo(b.time));
+    return matchingEvents;
+  }
+
   List<Event> get todayEvents => [
-        ..._events.where((event) => event.formattedLocalDateTime
+        ...events.where((event) => event.formattedLocalDateTime
             .contains(DateFormat(DATE_FORMAT).format(DateTime.now())))
       ];
 
   String _meetupAccessToken;
   String _eventbriteAccessToken;
 
-  Events(Session session) {
+  Events(Session session, List<Event> allEvents) {
     _meetupAccessToken = session?.meetupAccessToken;
     _eventbriteAccessToken = session?.eventbriteAccessToken;
+    _allEvents = allEvents;
   }
 
   Event find(String id) {
@@ -60,15 +66,12 @@ class Events extends ChangeNotifier {
     _allEvents.forEach((event) {
       event.matches = matcher.getMatches(event.description);
     });
-    _events = _allEvents.where((event) => event.matches.length > 0).toList();
-    _events.sort((a, b) => a.time.compareTo(b.time));
 
     notifyListeners();
   }
 
   void clearEvents() {
     _allEvents = [];
-    _events = [];
     notifyListeners();
   }
 }
