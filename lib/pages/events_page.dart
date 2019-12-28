@@ -6,7 +6,7 @@ import '../widgets/event_list_item.dart';
 import '../widgets/no_events_overlay.dart';
 import '../providers/session.dart';
 import '../providers/events.dart';
-import '../models/event.dart';
+import 'package:rxdart/rxdart.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -34,19 +34,23 @@ class _EventsPageState extends State<EventsPage> {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   int _selectedTabIndex = 0;
   bool _refreshing = true;
-  void _triggerRefresh() => SchedulerBinding.instance
-      .addPostFrameCallback((_) => _refreshIndicatorKey.currentState?.show());
+  final _triggerRefreshSubject = new BehaviorSubject<int>();
+  void _triggerRefresh() => _triggerRefreshSubject.add(0);
 
   @override
   void initState() {
-    _triggerRefresh();
+    _triggerRefreshSubject
+        .debounce((_) => TimerStream(true, const Duration(milliseconds: 650)))
+        .listen((_) => _refreshIndicatorKey.currentState?.show());
+    SchedulerBinding.instance.addPostFrameCallback((_) => _triggerRefresh());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     print('EventsPage:Build');
-    final location = Provider.of<Session>(context).location;
+    final session = Provider.of<Session>(context);
+    session.addListener(() => this._triggerRefresh());
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
     final numberOfEvents = eventLists[_selectedTabIndex].length;
@@ -70,7 +74,7 @@ class _EventsPageState extends State<EventsPage> {
         key: _refreshIndicatorKey,
         onRefresh: () async {
           setState(() => _refreshing = true);
-          await eventsProvider.refreshEvents(location);
+          await eventsProvider.refreshEvents(session.location);
           setState(() => _refreshing = false);
         },
         child: Stack(
