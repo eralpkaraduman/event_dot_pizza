@@ -84,3 +84,6 @@ report.xml
 
 # Fastlane
 ios/fastlane/report.xml
+
+# Firebase cloud functions
+functions/secrets.json
