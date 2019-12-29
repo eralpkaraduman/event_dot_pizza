@@ -29,7 +29,9 @@ class Providers extends SingleChildStatelessWidget {
               if (deeplink.eventbriteAccessToken != null)
                 session.eventbriteAccessToken = deeplink.eventbriteAccessToken;
 
-              deeplink.clear();
+              WidgetsBinding.instance.addPostFrameCallback(
+                (_) => deeplink.clear(),
+              );
             }
 
             return session;
