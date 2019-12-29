@@ -1,22 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../models/location.dart';
-import '../models/persistent_data.dart';
+import '../persistent_data.dart';
 
 class Session extends ChangeNotifier {
   String _eventbriteAccessToken, _meetupAccessToken;
   Location _location;
   int _themeBrightnessIndex;
-  Session({
-    String eventbriteAccessToken,
-    String meetupAccessToken,
-    Location location,
-    int themeBrightnessIndex,
-  }) {
-    _eventbriteAccessToken = eventbriteAccessToken;
-    _meetupAccessToken = meetupAccessToken;
-    _location = location;
-    _themeBrightnessIndex = themeBrightnessIndex;
+
+  void loadFromPrefs() async {
+    _eventbriteAccessToken = await PersistentData.getEventbriteAccessToken();
+    _meetupAccessToken = await PersistentData.getMeetupAccessToken();
+    _location = await PersistentData.getLocation();
+    _themeBrightnessIndex = await PersistentData.getThemeBrightnessIndex();
+    notifyListeners();
   }
 
   bool get anyPlatformConnected => [
@@ -41,23 +38,27 @@ class Session extends ChangeNotifier {
   }
 
   Location get location => _location;
-  Future<void> setLocation(Location newLocation) async {
-    _location = newLocation;
-    await PersistentData.setLocation(newLocation);
+  set location(Location newLocation) {
+    if (newLocation != _location) _location = newLocation;
+    PersistentData.setLocation(newLocation);
     notifyListeners();
   }
 
   String get meetupAccessToken => _meetupAccessToken;
-  Future<void> setMeetupAccessToken(String token) async {
-    _meetupAccessToken = token;
-    await PersistentData.setMeetupAccessToken(token);
-    notifyListeners();
+  set meetupAccessToken(String token) {
+    if (_meetupAccessToken != token) {
+      _meetupAccessToken = token;
+      PersistentData.setMeetupAccessToken(token);
+      notifyListeners();
+    }
   }
 
   String get eventbriteAccessToken => _eventbriteAccessToken;
-  Future<void> setEventbriteAccessToken(String token) async {
-    _eventbriteAccessToken = token;
-    await PersistentData.setEventbriteAccessToken(token);
-    notifyListeners();
+  set eventbriteAccessToken(String token) {
+    if (_eventbriteAccessToken != token) {
+      _eventbriteAccessToken = token;
+      PersistentData.setEventbriteAccessToken(token);
+      notifyListeners();
+    }
   }
 }

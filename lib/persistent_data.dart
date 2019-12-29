@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/location.dart';
-import '../utils.dart';
+import './models/location.dart';
+import './utils.dart';
 
 const String kThemeBrightness = 'themeBrightness';
 const String kSelectedLocationJson = 'selectedLocationJson';

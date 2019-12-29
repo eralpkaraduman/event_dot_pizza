@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import '../providers/session.dart';
 import '../dictionary_matcher.dart' as matcher;
 import '../models/location.dart';
 import '../models/event.dart';
@@ -9,6 +8,10 @@ import '../platforms/eventbrite_platform_api.dart';
 
 class Events extends ChangeNotifier {
   static const DATE_FORMAT = 'EEE, MMM d';
+
+  bool _needsRefresh = false;
+  bool get needsRefresh => _needsRefresh;
+
   List<Event> _allEvents = [];
   List<Event> get allEvents => [..._allEvents];
   List<Event> get events {
@@ -24,12 +27,30 @@ class Events extends ChangeNotifier {
       ];
 
   String _meetupAccessToken;
-  String _eventbriteAccessToken;
+  set meetupAccessToken(String token) {
+    if (token != _meetupAccessToken) {
+      _meetupAccessToken = token;
+      _needsRefresh = true;
+      notifyListeners();
+    }
+  }
 
-  Events(Session session, List<Event> allEvents) {
-    _meetupAccessToken = session?.meetupAccessToken;
-    _eventbriteAccessToken = session?.eventbriteAccessToken;
-    _allEvents = allEvents;
+  String _eventbriteAccessToken;
+  set eventbriteAccessToken(String token) {
+    if (token != _eventbriteAccessToken) {
+      _eventbriteAccessToken = token;
+      _needsRefresh = true;
+      notifyListeners();
+    }
+  }
+
+  Location _location;
+  set location(Location location) {
+    if (!location.equalsTo(_location)) {
+      _location = location;
+      _needsRefresh = true;
+      notifyListeners();
+    }
   }
 
   Event find(String id) {
@@ -41,11 +62,11 @@ class Events extends ChangeNotifier {
     }
   }
 
-  Future<void> refreshEvents(Location location) async {
+  Future<void> refreshEvents() async {
     List<Event> _meetupEvents = [];
     try {
       _meetupEvents = await MeetupPlatformApi.fetchUpcomingEvents(
-        location: location,
+        location: _location,
         accessToken: _meetupAccessToken,
       );
     } catch (e) {
@@ -55,7 +76,7 @@ class Events extends ChangeNotifier {
     List<Event> _eventbriteEvents = [];
     try {
       _eventbriteEvents = await EventbritePlatformApi.fetchUpcomingEvents(
-        location: location,
+        location: _location,
         accessToken: _eventbriteAccessToken,
       );
     } catch (e) {
@@ -67,11 +88,7 @@ class Events extends ChangeNotifier {
       event.matches = matcher.getMatches(event.description);
     });
 
-    notifyListeners();
-  }
-
-  void clearEvents() {
-    _allEvents = [];
+    _needsRefresh = false;
     notifyListeners();
   }
 }

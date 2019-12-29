@@ -36,7 +36,6 @@ class Deeplink extends ChangeNotifier {
   }
 
   Deeplink() {
-    print('Provider:Deeplink:Updated');
     _subscription = getLinksStream().listen((String url) {
       if (url != _lastUrl) {
         _lastUrl = url;

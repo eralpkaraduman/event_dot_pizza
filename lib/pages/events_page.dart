@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/scheduler.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
 import '../widgets/no_events_overlay.dart';
-import '../providers/session.dart';
 import '../providers/events.dart';
-import 'package:rxdart/rxdart.dart';
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -30,33 +27,30 @@ const noEventsOverlayMessages = [
   'No free pizza for you today!'
 ];
 
-class _EventsPageState extends State<EventsPage> {
+class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
   final _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
   int _selectedTabIndex = 0;
-  bool _refreshing = true;
-  final _triggerRefreshSubject = new BehaviorSubject<int>();
-  void _triggerRefresh() => _triggerRefreshSubject.add(0);
 
   @override
   void initState() {
-    _triggerRefreshSubject
-        .debounce((_) => TimerStream(true, const Duration(milliseconds: 650)))
-        .listen((_) => _refreshIndicatorKey.currentState?.show());
-    SchedulerBinding.instance.addPostFrameCallback((_) => _triggerRefresh());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _afterInitState());
     super.initState();
+  }
+
+  void _afterInitState() {
+    refreshIfNeeded();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('EventsPage:Build');
-    final session = Provider.of<Session>(context);
-    session.addListener(() => this._triggerRefresh());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _afterBuild());
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
     final numberOfEvents = eventLists[_selectedTabIndex].length;
+    final bool shouldShowNoEventsOverlay =
+        !eventsProvider.needsRefresh && numberOfEvents == 0;
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
     final listEdgeInsets = EdgeInsets.fromLTRB(0, 10.0, 0, safePadding.bottom);
-    final shouldShowEmptyState = !_refreshing && numberOfEvents == 0;
     return Scaffold(
       appBar: AppBar(
         title: Text('Event.Pizza 🍕'),
@@ -72,15 +66,11 @@ class _EventsPageState extends State<EventsPage> {
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
-        onRefresh: () async {
-          setState(() => _refreshing = true);
-          await eventsProvider.refreshEvents(session.location);
-          setState(() => _refreshing = false);
-        },
+        onRefresh: () async => eventsProvider.refreshEvents(),
         child: Stack(
           children: <Widget>[
             Visibility(
-              visible: shouldShowEmptyState,
+              visible: shouldShowNoEventsOverlay,
               child: NoEventsOverlay(
                 message: noEventsOverlayMessages[_selectedTabIndex],
               ),
@@ -112,5 +102,15 @@ class _EventsPageState extends State<EventsPage> {
         onTap: (index) => setState(() => _selectedTabIndex = index),
       ),
     );
+  }
+
+  void _afterBuild() {
+    refreshIfNeeded();
+  }
+
+  void refreshIfNeeded() {
+    if (Provider.of<Events>(context).needsRefresh) {
+      _refreshIndicatorKey?.currentState?.show();
+    }
   }
 }

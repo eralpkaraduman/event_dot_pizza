@@ -12,7 +12,6 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Settings:Updated');
     final session = Provider.of<Session>(context);
     bool isDarkThemeOn = session.themeBrightness == Brightness.dark;
 

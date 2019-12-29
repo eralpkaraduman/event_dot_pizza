@@ -15,7 +15,7 @@ import './pages/about_page.dart';
 
 void main() => runApp(App());
 
-class App extends StatelessWidget with WidgetsBindingObserver {
+class App extends StatelessWidget {
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver firebaseAnalyticsObserver =
       FirebaseAnalyticsObserver(analytics: analytics);

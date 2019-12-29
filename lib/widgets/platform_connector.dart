@@ -36,11 +36,16 @@ class PlatformConnector extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              Text('${name}',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              Text(
+                name,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Spacer(),
               Text(
-                '${isConnected ? 'Connected' : 'Not Connected'} ',
+                isConnected ? 'Connected' : 'Not Connected',
                 style: TextStyle(fontSize: 18),
               ),
               Icon(

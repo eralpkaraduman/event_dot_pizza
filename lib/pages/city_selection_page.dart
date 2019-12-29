@@ -43,7 +43,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   }
 
   void _onCitySelected(Location location) {
-    Provider.of<Session>(context, listen: false).setLocation(location);
+    Provider.of<Session>(context, listen: false).location = location;
     Navigator.pop(context);
   }
 
@@ -54,7 +54,6 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('CitySelectionPage:Build');
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
     final session = Provider.of<Session>(context, listen: false);
 
