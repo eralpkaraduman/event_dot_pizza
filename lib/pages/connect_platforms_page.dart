@@ -34,13 +34,13 @@ class ConnectPlatformsPage extends StatelessWidget {
               ),
               PlatformConnector(
                 name: 'Meetup.Com',
-                authUri: MeetupPlatformApi.authUri,
+                authUri: MeetupPlatformApi.AUTH_URI,
                 isConnected: session.meetupAccessToken != null,
                 onDisconnect: () => session.meetupAccessToken = null,
               ),
               PlatformConnector(
                 name: 'EventBrite',
-                authUri: EventbritePlatformApi.authUri,
+                authUri: EventbritePlatformApi.AUTH_URI,
                 isConnected: session.eventbriteAccessToken != null,
                 onDisconnect: () => session.eventbriteAccessToken = null,
               ),
