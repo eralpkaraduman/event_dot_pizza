@@ -1,14 +1,14 @@
-import 'package:event_dot_pizza/pages/city_selection_page.dart';
 import 'package:flutter/material.dart';
-import './connect_platforms_page.dart';
-import '../providers/session.dart';
 import 'package:provider/provider.dart';
+import '../providers/session.dart';
+import './city_selection_page.dart';
+import './connect_platforms_page.dart';
 
 class WelcomePage extends StatelessWidget {
   static const routeName = "welcome";
   @override
   Widget build(BuildContext context) {
-    Session session = Provider.of<Session>(context, listen: true);
+    final session = Provider.of<Session>(context, listen: true);
 
     Widget platforms = Visibility(
       visible: !session.anyPlatformConnected,
@@ -18,7 +18,7 @@ class WelcomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'We rely on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
+              'We are relying on external event organization platforms to show nearby events to you. You need to log in to at least one of them to continue.',
               style: Theme.of(context).textTheme.subhead,
               textAlign: TextAlign.center,
             ),

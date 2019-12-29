@@ -43,8 +43,7 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
   }
 
   void _onCitySelected(Location location) {
-    Session session = Provider.of<Session>(context, listen: false);
-    session.location = location;
+    Provider.of<Session>(context, listen: false).location = location;
     Navigator.pop(context);
   }
 
@@ -55,9 +54,8 @@ class _CitySelectionPageState extends State<CitySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('CitySelectionPage:Build');
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
-    Session session = Provider.of<Session>(context, listen: false);
+    final session = Provider.of<Session>(context, listen: false);
 
     // Put the selected city at the end of the list if it's not already in the list
     final List<Location> renderLocs = [...locations];

@@ -9,9 +9,9 @@ class MeetupPlatformApi {
   static const String kACCESS_TOKEN = 'access_token';
   static const String CONSUMER_KEY = '96rf1kn6pobffcejakptjgarrf';
   static const String REDIRECT_URI =
-      'https://event.pizza://handle_authorization_redirect/meetup';
+      'https://event.pizza/handle_authorization_redirect/meetup';
   static const String CALLBACK_URI = 'event.pizza://handle_meetup_redirect';
-  static const String authURI = 'https://secure.meetup.com/oauth2/authorize' +
+  static const String authUri = 'https://secure.meetup.com/oauth2/authorize' +
       '?client_id=$CONSUMER_KEY' +
       '&response_type=token' +
       '&redirect_uri=$REDIRECT_URI';

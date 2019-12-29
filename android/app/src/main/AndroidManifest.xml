@@ -34,17 +34,7 @@
               <action android:name="android.intent.action.VIEW" />
               <category android:name="android.intent.category.DEFAULT" />
               <category android:name="android.intent.category.BROWSABLE" />
-              <data
-                android:scheme="event.pizza"
-                android:host="handle_eventbrite_redirect" />
-            </intent-filter>
-            <intent-filter>
-              <action android:name="android.intent.action.VIEW" />
-              <category android:name="android.intent.category.DEFAULT" />
-              <category android:name="android.intent.category.BROWSABLE" />
-              <data
-                android:scheme="event.pizza"
-                android:host="handle_meetup_redirect" />
+              <data android:scheme="event.pizza" />
             </intent-filter>
         </activity>
     </application>

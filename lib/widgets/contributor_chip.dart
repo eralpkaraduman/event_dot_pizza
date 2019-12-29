@@ -1,6 +1,6 @@
-import 'package:event_dot_pizza/models/contributor.dart';
-import 'package:event_dot_pizza/widgets/link_chip.dart';
 import 'package:flutter/material.dart';
+import '../models/contributor.dart';
+import '../widgets/link_chip.dart';
 
 class ContributorChip extends StatelessWidget {
   final Contributor contributor;

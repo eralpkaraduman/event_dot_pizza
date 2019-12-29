@@ -8,7 +8,7 @@ const String _content = '''
 Event.Pizza is an app that helps you find professional gathering events that offer free snacks and drinks.
 So you can learn new things while not thinking what to eat for dinner!
 
-Event.Pizza looks up events happening near you from various 3rd party event organization platforms.
+Event.Pizza looks up events happening near you from various third party event organization platforms.
 Events you may see here are not organized by us.
 
 This app was created and maintained by Eralp Karaduman, mainly for the purpose of exploring the cross platform app development tool Flutter (flutter.dev).
