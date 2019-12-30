@@ -7,7 +7,7 @@
 
 Event.Pizza is an app that helps you find professional gathering events that offer free snacks and drinks. So you can learn new things while not thinking what to eat for dinner!
 
-This app was made to explore [flutter](https://flutter.dev), the cross platform mobile app development framework.
+This app was made to explore [Flutter](https://flutter.dev), the cross platform mobile app development framework.
 
 You are very wellcome to [contribute](https://github.com/eralpkaraduman/event_dot_pizza/blob/development/CONTRIBUTING.md) to development.
 
