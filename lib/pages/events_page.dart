@@ -5,8 +5,8 @@ import '../widgets/event_list_item.dart';
 import '../widgets/event_list_overlay.dart';
 import '../providers/events.dart';
 import '../providers/session.dart';
+import '../providers/navigation_stack.dart';
 import './welcome_page.dart';
-import '../main.dart' show App;
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -41,11 +41,12 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
   }
 
   void _afterInitState() {
+    final navStack = Provider.of<NavigationStack>(context, listen: false);
+    final session = Provider.of<Session>(context);
     Provider.of<Session>(context).addListener(() {
-      if (Provider.of<Session>(context).shouldShowOnboarding) {
-        if (!App.navigationStack.containsNamedRoute(WelcomePage.routeName)) {
-          Navigator.of(context).pushNamed(WelcomePage.routeName);
-        }
+      if (session.shouldShowOnboarding &&
+          !navStack.containsNamedRoute(WelcomePage.routeName)) {
+        Navigator.of(context).pushNamed(WelcomePage.routeName);
       }
     });
     _refreshIfNeeded();
@@ -87,7 +88,11 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
       ),
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
-        onRefresh: () async => eventsProvider.refreshEvents(),
+        onRefresh: () async {
+          if (ready) {
+            await eventsProvider.refreshEvents();
+          }
+        },
         child: Stack(
           children: <Widget>[
             if (!ready) ...[
