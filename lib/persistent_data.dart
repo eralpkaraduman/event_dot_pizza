@@ -87,4 +87,12 @@ class PersistentData {
       await prefs.remove(kMeetupAccessToken);
     }
   }
+
+  static Future<void> clear() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(kMeetupAccessToken);
+    await prefs.remove(kEventbriteAccessToken);
+    await prefs.remove(kSelectedLocationJson);
+    await prefs.remove(kThemeBrightness);
+  }
 }

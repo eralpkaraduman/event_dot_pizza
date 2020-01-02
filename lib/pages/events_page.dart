@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../pages/settings_page.dart';
 import '../widgets/event_list_item.dart';
-import '../widgets/no_events_overlay.dart';
+import '../widgets/event_list_overlay.dart';
 import '../providers/events.dart';
+import '../providers/session.dart';
+import './welcome_page.dart';
+import '../main.dart' show App;
 
 class EventsPage extends StatefulWidget {
   static const routeName = "events";
@@ -38,7 +41,24 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
   }
 
   void _afterInitState() {
-    refreshIfNeeded();
+    Provider.of<Session>(context).addListener(() {
+      if (Provider.of<Session>(context).shouldShowOnboarding) {
+        if (!App.navigationStack.containsNamedRoute(WelcomePage.routeName)) {
+          Navigator.of(context).pushNamed(WelcomePage.routeName);
+        }
+      }
+    });
+    _refreshIfNeeded();
+  }
+
+  void _afterBuild() {
+    _refreshIfNeeded();
+  }
+
+  void _refreshIfNeeded() {
+    if (Provider.of<Events>(context, listen: false).needsRefresh) {
+      _refreshIndicatorKey?.currentState?.show();
+    }
   }
 
   @override
@@ -46,6 +66,7 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) => _afterBuild());
     final eventsProvider = Provider.of<Events>(context);
     final eventLists = [eventsProvider.events, eventsProvider.todayEvents];
+    final ready = Provider.of<Session>(context, listen: false).ready;
     final numberOfEvents = eventLists[_selectedTabIndex].length;
     final bool shouldShowNoEventsOverlay =
         !eventsProvider.needsRefresh && numberOfEvents == 0;
@@ -69,29 +90,42 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
         onRefresh: () async => eventsProvider.refreshEvents(),
         child: Stack(
           children: <Widget>[
-            Visibility(
-              visible: shouldShowNoEventsOverlay,
-              child: NoEventsOverlay(
-                message: noEventsOverlayMessages[_selectedTabIndex],
+            if (!ready) ...[
+              EventListOverlay(
+                icon: Icons.info_outline,
+                title: 'Something Is Missing',
+                message: 'Seems like you haven\'t completed the setup.',
+                buttonTitle: 'Complete Setup',
+                onButtonPressed: () => Navigator.of(context).pushNamed(
+                  WelcomePage.routeName,
+                ),
               ),
-            ),
-            IndexedStack(
-              index: _selectedTabIndex,
-              sizing: StackFit.expand,
-              children: eventLists
-                  .map(
-                    (eventList) => Scrollbar(
-                      child: ListView.separated(
-                        padding: listEdgeInsets,
-                        itemCount: eventList.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
-                        itemBuilder: (_, index) =>
-                            EventListItem(event: eventList[index]),
+            ] else ...[
+              if (shouldShowNoEventsOverlay) ...[
+                EventListOverlay(
+                  icon: Icons.calendar_today,
+                  title: 'No Events Found 😢',
+                  message: noEventsOverlayMessages[_selectedTabIndex],
+                ),
+              ],
+              IndexedStack(
+                index: _selectedTabIndex,
+                sizing: StackFit.expand,
+                children: eventLists
+                    .map(
+                      (eventList) => Scrollbar(
+                        child: ListView.separated(
+                          padding: listEdgeInsets,
+                          itemCount: eventList.length,
+                          separatorBuilder: (_, __) => const Divider(height: 1),
+                          itemBuilder: (_, index) =>
+                              EventListItem(event: eventList[index]),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-            )
+                    )
+                    .toList(),
+              ),
+            ]
           ],
         ),
       ),
@@ -102,15 +136,5 @@ class _EventsPageState extends State<EventsPage> with WidgetsBindingObserver {
         onTap: (index) => setState(() => _selectedTabIndex = index),
       ),
     );
-  }
-
-  void _afterBuild() {
-    refreshIfNeeded();
-  }
-
-  void refreshIfNeeded() {
-    if (Provider.of<Events>(context).needsRefresh) {
-      _refreshIndicatorKey?.currentState?.show();
-    }
   }
 }

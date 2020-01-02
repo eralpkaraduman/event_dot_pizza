@@ -1,3 +1,5 @@
+import 'package:event_dot_pizza/persistent_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../pages/city_selection_page.dart';
@@ -17,22 +19,17 @@ class SettingsPage extends StatelessWidget {
 
     final List<SettingItem> settings = [
       SettingItem(
-        name: 'Connect Platforms',
+        name: 'Event Sources',
         onTap: () =>
             Navigator.of(context).pushNamed(ConnectPlatformsPage.routeName),
       ),
       SettingItem(
-        name: 'Select City',
+        name: 'City',
         onTap: () =>
             Navigator.of(context).pushNamed(CitySelectionPage.routeName),
         subtitle: session.location != null
             ? Text('${session.location.city}, ${session.location.country}')
             : null,
-      ),
-      SettingItem(
-        name: 'About',
-        onTap: () => Navigator.of(context).pushNamed(AboutPage.routeName),
-        subtitle: AsyncVersionText(),
       ),
       SettingItem(
         name: 'Dark Theme',
@@ -44,7 +41,19 @@ class SettingsPage extends StatelessWidget {
           onChanged: (dark) => session
               .setThemeBrightness(dark ? Brightness.dark : Brightness.light),
         ),
-      )
+      ),
+      SettingItem(
+        name: 'About',
+        onTap: () => Navigator.of(context).pushNamed(AboutPage.routeName),
+        subtitle: AsyncVersionText(),
+      ),
+      if (kDebugMode) ...[
+        SettingItem(
+          name: 'Clear All Data',
+          onTap: () => PersistentData.clear(),
+          trailing: SizedBox(),
+        ),
+      ]
     ];
 
     final EdgeInsets safePadding = MediaQuery.of(context).padding;

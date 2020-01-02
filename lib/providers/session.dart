@@ -7,12 +7,14 @@ class Session extends ChangeNotifier {
   String _eventbriteAccessToken, _meetupAccessToken;
   Location _location;
   int _themeBrightnessIndex;
+  bool _initilized = false;
 
   void loadFromPrefs() async {
     _eventbriteAccessToken = await PersistentData.getEventbriteAccessToken();
     _meetupAccessToken = await PersistentData.getMeetupAccessToken();
     _location = await PersistentData.getLocation();
     _themeBrightnessIndex = await PersistentData.getThemeBrightnessIndex();
+    _initilized = true;
     notifyListeners();
   }
 
@@ -22,6 +24,8 @@ class Session extends ChangeNotifier {
       ].any((token) => token != null);
 
   bool get ready => anyPlatformConnected && location != null;
+
+  bool get shouldShowOnboarding => _initilized == true && !ready;
 
   Brightness get themeBrightness {
     final themeBrightnessIndex =
