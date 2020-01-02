@@ -33,3 +33,5 @@ firebase deploy --only functions
 # Update iOS codesigning credentials (if necessary)
 (cd ios && bundle exec fastlane update_credentials)
 ```
+
+![](screenshots/screenshot1.png)![](screenshots/screenshot2.png)
