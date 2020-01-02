@@ -39,11 +39,13 @@ class ConnectPlatformsPage extends StatelessWidget {
                 onDisconnect: () => session.meetupAccessToken = null,
               ),
               PlatformConnector(
+                disabled: true,
                 name: 'EventBrite',
                 authUri: EventbritePlatformApi.AUTH_URI,
                 isConnected: session.eventbriteAccessToken != null,
                 onDisconnect: () => session.eventbriteAccessToken = null,
               ),
+              Text('More event sources will be added soon!'),
               Spacer(),
               if (session.anyPlatformConnected) ...[
                 RaisedButton(
