@@ -38,15 +38,12 @@ class PlatformConnector extends StatelessWidget {
             children: <Widget>[
               Text(
                 name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.subtitle,
               ),
               Spacer(),
               Text(
                 isConnected ? 'Connected' : 'Not Connected',
-                style: TextStyle(fontSize: 18),
+                style: Theme.of(context).textTheme.subtitle,
               ),
               Icon(
                 isConnected ? Icons.check : Icons.error,
@@ -63,7 +60,7 @@ class PlatformConnector extends StatelessWidget {
             onPressed: !isConnected ? _launchAuthUri : this.onDisconnect,
             child: Text(
               '${isConnected ? 'Disconnect' : 'Connect'} $name',
-              style: TextStyle(fontSize: 18),
+              style: Theme.of(context).textTheme.subtitle,
             ),
           ),
         ],

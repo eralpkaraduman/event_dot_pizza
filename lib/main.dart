@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import './providers/providers.dart';
+import './providers/navigation_stack.dart';
 import './providers/session.dart';
 import './pages/city_selection_page.dart';
 import './pages/settings_page.dart';
@@ -16,9 +17,9 @@ import './pages/about_page.dart';
 void main() => runApp(App());
 
 class App extends StatelessWidget {
-  static FirebaseAnalytics analytics = FirebaseAnalytics();
-  static FirebaseAnalyticsObserver firebaseAnalyticsObserver =
-      FirebaseAnalyticsObserver(analytics: analytics);
+  static FirebaseAnalytics _analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver _firebaseAnalyticsObserver =
+      FirebaseAnalyticsObserver(analytics: _analytics);
 
   @override
   Widget build(_) {
@@ -33,15 +34,31 @@ class App extends StatelessWidget {
             accentColor: Colors.deepOrangeAccent,
           ),
           //TODO: implement "darkTheme" property here instead of flipping the theme.brightness https://proandroiddev.com/how-to-dynamically-change-the-theme-in-flutter-698bd022d0f0
-          home: session.ready ? EventsPage() : WelcomePage(),
-          navigatorObservers: [firebaseAnalyticsObserver],
+          navigatorObservers: [
+            _firebaseAnalyticsObserver,
+            Provider.of<NavigationStack>(context, listen: false).observer,
+          ],
+          initialRoute: EventsPage.routeName,
           routes: {
+            EventsPage.routeName: (_) => EventsPage(),
             ConnectPlatformsPage.routeName: (_) => ConnectPlatformsPage(),
             EventDetailPage.routeName: (_) => EventDetailPage(),
             EventUrlPage.routeName: (_) => EventUrlPage(),
             CitySelectionPage.routeName: (_) => CitySelectionPage(),
             SettingsPage.routeName: (_) => SettingsPage(),
-            AboutPage.routeName: (_) => AboutPage()
+            AboutPage.routeName: (_) => AboutPage(),
+          },
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case WelcomePage.routeName:
+                return MaterialPageRoute(
+                  fullscreenDialog: true,
+                  settings: settings,
+                  builder: (_) => WelcomePage(),
+                );
+              default:
+                return null;
+            }
           },
         ),
       ),

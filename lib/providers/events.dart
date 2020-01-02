@@ -45,11 +45,19 @@ class Events extends ChangeNotifier {
   }
 
   Location _location;
-  set location(Location location) {
-    if (!location.equalsTo(_location)) {
-      _location = location;
-      _needsRefresh = true;
-      notifyListeners();
+  set location(Location newLocation) {
+    if (_location != null) {
+      if (!_location.equalsTo(newLocation)) {
+        _location = newLocation;
+        _needsRefresh = true;
+        notifyListeners();
+      }
+    } else {
+      if (newLocation != null) {
+        _location = newLocation;
+        _needsRefresh = true;
+        notifyListeners();
+      }
     }
   }
 
