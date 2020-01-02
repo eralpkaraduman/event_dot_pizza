@@ -14,7 +14,7 @@ class ConnectPlatformsPage extends StatelessWidget {
     final session = Provider.of<Session>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Connect Platforms'),
+        title: Text('Connect Event Sources'),
       ),
       body: SafeArea(
         child: Padding(
@@ -39,26 +39,26 @@ class ConnectPlatformsPage extends StatelessWidget {
                 onDisconnect: () => session.meetupAccessToken = null,
               ),
               PlatformConnector(
+                disabled: true,
                 name: 'EventBrite',
                 authUri: EventbritePlatformApi.AUTH_URI,
                 isConnected: session.eventbriteAccessToken != null,
                 onDisconnect: () => session.eventbriteAccessToken = null,
               ),
+              Text('More event sources will be added soon!'),
               Spacer(),
-              Visibility(
-                visible: session.anyPlatformConnected,
-                child: RaisedButton(
+              if (session.anyPlatformConnected) ...[
+                RaisedButton(
                   color: Theme.of(context).colorScheme.primary,
-                  onPressed: () => Navigator.popUntil(
+                  onPressed: () => Navigator.pop(
                     context,
-                    ModalRoute.withName(Navigator.defaultRouteName),
+                    Provider.of<Session>(context).ready
+                        ? (route) => route.isFirst
+                        : null,
                   ),
-                  child: Text(
-                    'CONTINUE',
-                    style: TextStyle(fontSize: 18),
-                  ),
+                  child: Text('Continue'),
                 ),
-              ),
+              ]
             ],
           ),
         ),

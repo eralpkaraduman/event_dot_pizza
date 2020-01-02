@@ -9,18 +9,15 @@ class BodyTextWithPadding extends StatelessWidget {
 
   final String text;
   final bool bold;
-  final TextStyle textStyle = TextStyle(fontSize: 18);
-  final TextStyle boldTextStyle = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-  );
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Text(
         text,
-        style: bold ? boldTextStyle : textStyle,
+        style: bold
+            ? Theme.of(context).textTheme.title
+            : Theme.of(context).textTheme.subtitle,
       ),
       padding: EdgeInsets.only(bottom: 20),
     );

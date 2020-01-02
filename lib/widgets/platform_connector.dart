@@ -7,11 +7,12 @@ class PlatformConnector extends StatelessWidget {
     @required this.authUri,
     @required this.onDisconnect,
     @required this.isConnected,
+    this.disabled = false,
     Key key,
   }) : super(key: key);
   final String name;
   final String authUri;
-  final bool isConnected;
+  final bool isConnected, disabled;
   final void Function() onDisconnect;
 
   _launchAuthUri() async {
@@ -38,18 +39,19 @@ class PlatformConnector extends StatelessWidget {
             children: <Widget>[
               Text(
                 name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.subtitle,
               ),
               Spacer(),
               Text(
-                isConnected ? 'Connected' : 'Not Connected',
-                style: TextStyle(fontSize: 18),
+                isConnected
+                    ? 'Connected'
+                    : disabled ? 'Not Available' : 'Not Connected',
+                style: Theme.of(context).textTheme.subtitle,
               ),
               Icon(
-                isConnected ? Icons.check : Icons.error,
+                isConnected
+                    ? Icons.check
+                    : disabled ? Icons.block : Icons.error,
                 color: isConnected
                     ? Theme.of(context).textTheme.body1.color
                     : Theme.of(context).colorScheme.primary,
@@ -60,10 +62,12 @@ class PlatformConnector extends StatelessWidget {
             color: isConnected
                 ? Theme.of(context).highlightColor
                 : Theme.of(context).colorScheme.primary,
-            onPressed: !isConnected ? _launchAuthUri : this.onDisconnect,
+            onPressed: !isConnected
+                ? disabled ? null : _launchAuthUri
+                : this.onDisconnect,
             child: Text(
               '${isConnected ? 'Disconnect' : 'Connect'} $name',
-              style: TextStyle(fontSize: 18),
+              style: Theme.of(context).textTheme.subtitle,
             ),
           ),
         ],

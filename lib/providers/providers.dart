@@ -1,3 +1,4 @@
+import 'package:event_dot_pizza/providers/navigation_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -48,6 +49,10 @@ class Providers extends SingleChildStatelessWidget {
             return events;
           },
         ),
+
+        ChangeNotifierProvider<NavigationStack>(
+          create: (_) => NavigationStack(),
+        )
       ],
     );
   }
