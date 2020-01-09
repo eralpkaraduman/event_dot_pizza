@@ -25,6 +25,7 @@ String getUserAgent() {
 }
 
 Map<String, String> parseRedirectParams(String url) {
+  if (url == null) return {};
   Uri uri = Uri.dataFromString(url);
   return uri.queryParameters;
 }

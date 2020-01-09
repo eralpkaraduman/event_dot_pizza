@@ -16,7 +16,6 @@ fastlane_version "2.28.3"
 default_platform :ios
 
 xcversion(version: "11.3")
-xcode_select "/Applications/Xcode_11.3.app"
 
 platform :ios do
   # before_all do
@@ -46,10 +45,9 @@ platform :ios do
       default_keychain: false,
       unlock: true,
       timeout: 3600,
-      lock_when_sleeps: false
+      lock_when_sleeps: false,
     )
     sync_code_signing(
-      readonly: true,
       keychain_name: "fastlane",
       keychain_password: "fastlane",
       type: "appstore",
@@ -59,12 +57,15 @@ platform :ios do
       team_name: 'NiceWork OU',
       git_url: 'https://github.com/eralpkaraduman/event_dot_pizza_fastlane_match.git',
     )
-    disable_automatic_code_signing(path: "Runner.xcodeproj")
     build_app(
       scheme: "Runner",
       silent: true, # decreases log verbosity
+      include_symbols: false,
       include_bitcode: false,
       disable_xcpretty: false, # increases log verbosity
+      export_team_id: '76YFR39J99',
+      export_method: 'app-store',
+      skip_profile_detection: true,
       export_options: {
         method: "app-store",
         provisioningProfiles: ENV['MATCH_PROVISIONING_PROFILE_MAPPING'],
@@ -73,7 +74,6 @@ platform :ios do
         uploadSymbols: false,
       }
     )
-    enable_automatic_code_signing(path: "Runner.xcodeproj")
   end
 
   lane :upload do

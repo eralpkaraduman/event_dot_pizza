@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: macos-latest
 
     steps:
       - name: Clone With Submodules
@@ -38,47 +38,36 @@ jobs:
 
       - name: "Flutter: Running Tests"
         run: flutter test
-
-      ################
-      ## IOS STUFFS ##
-      ################
-
-      # - name: "IOS: Run Platform Tests"
-      #   run: (cd ios && bundle exec fastlane test)
-
-      - name: "Set Xcode version"
-        run: sudo xcode-select -switch /Applications/Xcode_11.3.app
-        env:
-          DEVELOPER_DIR: /Applications/Xcode_11.3.app/Contents/Developer
-
-      - name: "Flutter: Build Ios"
-        run: flutter build ios --release --no-codesign
-
-      - name: "IOS: Create Signed Build"
-        run: (cd ios && bundle exec fastlane build)
-        env:
-          DEVELOPER_DIR: /Applications/Xcode_11.3.app/Contents/Developer
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-
-      ####################
-      ## ANDROID STUFFS ##
-      ####################
-
-      # - name: "Android: Run Platform Tests"
-      #   run: (cd android && bundle exec fastlane test)
-
-      - name: "Flutter: Build Android"
-        run: flutter build apk --release --split-per-abi
-
-      ###################
-      ## DEPLOY BUILDS ##
-      ###################
-
-      - name: "IOS: Upload build"
-        run: (cd ios && bundle exec fastlane upload)
-        env:
-          FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
-
-      - name: "Android: Upload Beta"
-        run: (cd android && bundle exec fastlane upload)
+      # ################
+      # ## IOS STUFFS ##
+      # ################
+      # # - name: "IOS: Run Platform Tests"
+      # #   run: (cd ios && bundle exec fastlane test)
+      # # - name: "Set Xcode version"
+      # #   run: sudo xcode-select -switch /Applications/Xcode_11.3.app
+      # #   env:
+      # #     DEVELOPER_DIR: /Applications/Xcode_11.3.app/Contents/Developer
+      # - name: "Flutter: Build Ios"
+      #   run: flutter build ios --release --no-codesign
+      # - name: "IOS: Create Signed Build"
+      #   run: (cd ios && bundle exec fastlane build)
+      #   env:
+      #     DEVELOPER_DIR: /Applications/Xcode_11.3.app/Contents/Developer
+      #     FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+      #     MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      # ####################
+      # ## ANDROID STUFFS ##
+      # ####################
+      # # - name: "Android: Run Platform Tests"
+      # #   run: (cd android && bundle exec fastlane test)
+      # - name: "Flutter: Build Android"
+      #   run: flutter build apk --release --split-per-abi
+      # ###################
+      # ## DEPLOY BUILDS ##
+      # ###################
+      # - name: "IOS: Upload build"
+      #   run: (cd ios && bundle exec fastlane upload)
+      #   env:
+      #     FASTLANE_PASSWORD: ${{ secrets.FASTLANE_PASSWORD }}
+      # - name: "Android: Upload Beta"
+      #   run: (cd android && bundle exec fastlane upload)

@@ -1,8 +1,10 @@
-import 'package:event_dot_pizza/pages/city_selection_page.dart';
-import 'package:event_dot_pizza/pages/connect_platforms_page.dart';
-import 'package:event_dot_pizza/pages/about_page.dart';
+import 'package:event_dot_pizza/persistent_data.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../pages/city_selection_page.dart';
+import '../pages/connect_platforms_page.dart';
+import '../pages/about_page.dart';
 import '../widgets/async_version_text.dart';
 import '../models/settingItem.dart';
 import '../providers/session.dart';
@@ -12,18 +14,17 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Settings:Updated');
-    Session session = Provider.of<Session>(context, listen: true);
+    final session = Provider.of<Session>(context);
     bool isDarkThemeOn = session.themeBrightness == Brightness.dark;
 
     final List<SettingItem> settings = [
       SettingItem(
-        name: 'Connect Platforms',
+        name: 'Event Sources',
         onTap: () =>
             Navigator.of(context).pushNamed(ConnectPlatformsPage.routeName),
       ),
       SettingItem(
-        name: 'Select City',
+        name: 'City',
         onTap: () =>
             Navigator.of(context).pushNamed(CitySelectionPage.routeName),
         subtitle: session.location != null
@@ -31,21 +32,28 @@ class SettingsPage extends StatelessWidget {
             : null,
       ),
       SettingItem(
+        name: 'Dark Theme',
+        onTap: () => session.setThemeBrightness(
+            isDarkThemeOn ? Brightness.light : Brightness.dark),
+        trailing: Switch.adaptive(
+          activeColor: Theme.of(context).toggleableActiveColor,
+          value: isDarkThemeOn,
+          onChanged: (dark) => session
+              .setThemeBrightness(dark ? Brightness.dark : Brightness.light),
+        ),
+      ),
+      SettingItem(
         name: 'About',
         onTap: () => Navigator.of(context).pushNamed(AboutPage.routeName),
         subtitle: AsyncVersionText(),
       ),
-      SettingItem(
-        name: 'Dark Theme',
-        onTap: () => session.themeBrightness =
-            isDarkThemeOn ? Brightness.light : Brightness.dark,
-        trailing: Switch.adaptive(
-          activeColor: Theme.of(context).toggleableActiveColor,
-          value: isDarkThemeOn,
-          onChanged: (dark) => session.themeBrightness =
-              dark ? Brightness.dark : Brightness.light,
+      if (kDebugMode) ...[
+        SettingItem(
+          name: 'Clear All Data',
+          onTap: () => PersistentData.clear(),
+          trailing: SizedBox(),
         ),
-      )
+      ]
     ];
 
     final EdgeInsets safePadding = MediaQuery.of(context).padding;
