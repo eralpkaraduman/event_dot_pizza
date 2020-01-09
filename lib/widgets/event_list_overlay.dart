@@ -28,19 +28,19 @@ class EventListOverlay extends StatelessWidget {
           Icon(
             icon,
             size: 100,
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).textTheme.caption.color,
           ),
           Text(
             title,
             textDirection: TextDirection.ltr,
             style: TextStyle(
               fontSize: 32,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).textTheme.caption.color,
             ),
           ),
           Text(
             this.message,
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).textTheme.caption.color),
           ),
           if (onButtonPressed != null && buttonTitle != null) ...[
             RaisedButton(
