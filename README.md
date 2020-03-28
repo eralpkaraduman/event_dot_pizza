@@ -9,7 +9,7 @@ Event.Pizza is an app that helps you find professional gathering events that off
 
 This app was made to explore [Flutter](https://flutter.dev), the cross platform mobile app development framework.
 
-You are very wellcome to [contribute](https://github.com/eralpkaraduman/event_dot_pizza/blob/development/CONTRIBUTING.md) to development.
+You are very welcome to [contribute](https://github.com/eralpkaraduman/event_dot_pizza/blob/development/CONTRIBUTING.md) to development.
 
 ```bash
 # Install flutter
